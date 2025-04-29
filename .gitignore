@@ -1,0 +1,49 @@
+# Ignorar chave de API do Google Drive
+apps/formularios/secrets/chave.json
+
+# Arquivos de ambiente
+.env
+
+# Diretório de ambiente virtual
+venv/
+.Venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Arquivos de cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.DS_Store
+
+# Configurações do sistema operacional
+Thumbs.db
+desktop.ini
+
+# Arquivos de IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# Dependências instaladas
+*.egg-info/
+dist/
+build/
+
+# Arquivos gerados por testes
+.coverage
+*.cover
+*.py,cover
+.hypothesis/
+.tox/
+nosetests.xml
+coverage.xml
+*.pytest_cache/

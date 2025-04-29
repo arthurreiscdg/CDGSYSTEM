@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Pedido de Produção ZeroHum</title>
+    <link rel="stylesheet" href="{% static 'css/formZeroHum/style.css' %}">
+</head>
+
+<body>
+    {% include "components/sidebar.html" %}
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="container">
+
+            <form id="formZeroHum" class="form-container" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                <div class="form-header">
+                    <h1>Formulário de Pedido de Produção ZeroHum Excel</h1>
+                    <p>Preencha os detalhes abaixo para solicitar a produção do seu material</p>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Coluna 1: Upload de PDFs -->
+                    <div id="section-upload" class="form-section">
+                        <h3>Upload de PDFs</h3>
+                        <div class="form-group">
+                            <label for="pdfInput" class="file-upload">
+                                <input type="file" name="file" id="pdfInput" accept=".pdf" multiple required>
+                                <span class="file-upload-text">Clique para enviar PDF</span>
+                                <span class="file-upload-subtext">Arraste arquivos ou clique para selecionar</span>
+                            </label>
+                            <span class="error-message">Pelo menos um arquivo PDF é obrigatório</span>
+                        </div>
+                        <ul class="file-list" id="fileList"></ul>
+                    </div>
+
+                    <!-- Modal para visualização do PDF -->
+                    <div id="pdfModal" class="modal-overlay">
+                        <div class="modal pdf-modal">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Visualizando PDF</h2>
+                                <button type="button" class="modal-close" id="closePdfModal">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="modal-body pdf-preview-wrapper">
+                                <iframe id="pdfPreview" class="pdf-preview"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 3: Upload de Excel -->
+                    <div id="section-excel" class="form-section">
+                        <h3>Upload de Excel</h3>
+                        <div class="form-group">
+                            <label for="excelInput" class="file-upload">
+                                <input type="file" name="excel_file" id="excelInput" accept=".xls,.xlsx" required>
+                                <span class="file-upload-text">Clique para enviar Excel</span>
+                                <span class="file-upload-subtext">Arraste arquivos ou clique para selecionar</span>
+                            </label>
+                            <span class="error-message">Pelo menos um arquivo Excel é obrigatório</span>
+                        </div>
+                        <ul class="file-list" id="excelList"></ul>
+                    </div>
+
+                    <!-- Coluna 2: Informações do Trabalho -->
+                    <div id="section-info" class="form-section">
+                        <h3>Informações do Trabalho</h3>
+                        <div class="form-group">
+                            <label for="titulo">Título do material</label>
+                            <input type="text" id="titulo" name="titulo" placeholder="Ex: Apostila de Matemática" required>
+                            <span class="error-message">Este campo é obrigatório</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataEntrega">Data de entrega na escola</label>
+                            <input type="date" id="dataEntrega" name="dataEntrega" required>
+                            <span class="error-message">Selecione uma data válida</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="observacoes">Observações</label>
+                            <textarea id="observacoes" name="observacoes" placeholder="Informações adicionais sobre o trabalho"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 3: Especificações para Produção -->
+                    <div id="section-specs" class="form-section">
+                        <h3>Especificações para Produção</h3>
+
+                        <div class="form-group">
+                            <label for="formato">Formato Final</label>
+                            <select id="formato" name="formato" required>
+                                <option value="a4">A4</option>
+                            </select>
+                            <span class="error-message">Selecione uma opção</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="corImpressao">Cor da Impressão</label>
+                            <select id="corImpressao" name="corImpressao" required>
+                                <option value="pb">Preto e Branco</option>
+                            </select>
+                            <span class="error-message">Selecione uma opção</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="impressao">Impressão</label>
+                            <select id="impressao" name="impressao" required>
+                                <option value="" disabled selected>Selecione o tipo</option>
+                                <option value="frente">Só frente</option>
+                                <option value="frenteVerso">Frente e Verso</option>
+                            </select>
+                            <span class="error-message">Selecione uma opção</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gramatura">Gramatura</label>
+                            <select id="gramatura" name="gramatura" required>
+                                <option value="75g">75g (Padrão)</option>
+                            </select>
+                            <span class="error-message">Selecione uma opção</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="grampos">Grampos</label>
+                            <select id="grampos" name="grampos" required>
+                                <option value="" disabled selected>Selecione a quantidade</option>
+                                <option value="nenhum">Nenhum</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
+                            <span class="error-message">Selecione uma opção</span>
+                        </div>
+                    </div>
+
+
+                    <!-- Dados de Contato -->
+                    <div id="section-contact" class="form-footer">
+                        <h3 class="text-center">Dados de Contato</h3>
+                        <div class="form-group">
+                            <label for="nome">Nome</label>
+                            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                            <span class="error-message">Este campo é obrigatório</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" required>
+                            <span class="error-message">Digite um email válido</span>
+                        </div>
+                        <div class="alert">
+                            Ao enviar este formulário, você concorda em ser contatado sobre seu pedido de produção de documentos.
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">Enviar Pedido</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    {% include "components/modal.html" %}
+</body>
+<script src="{% static 'js/formZeroHum/sidebar.js' %}"></script>
+<script src="{% static 'js/formZeroHum/modal.js' %}"></script>
+<script src="{% static 'js/formZeroHum/script.js' %}"></script>
+<script src="{% static 'js/formZeroHum/script_excel.js' %}"></script>
+
+</html>

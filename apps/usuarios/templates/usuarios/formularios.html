@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulários Disponíveis - PDFlow</title>
+    <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/formularios/forms.css' %}">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .admin-header h1 {
+            color: #2563eb;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-header p {
+            color: #4b5563;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .formularios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .formulario-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .formulario-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .formulario-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        
+        .formulario-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .formulario-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .formulario-description {
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+        
+        .formulario-body {
+            padding: 1.5rem;
+        }
+        
+        .formulario-button {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .formulario-button:hover {
+            background: linear-gradient(to right, #2563eb, #1d4ed8);
+            transform: translateY(-1px);
+        }
+        
+        .formulario-zerohum .formulario-icon {
+            color: #2563eb;
+        }
+        
+        .formulario-elite .formulario-icon {
+            color: #10b981;
+        }
+        
+        .formulario-coleguium .formulario-icon {
+            color: #f59e0b;
+        }
+        
+        .formulario-pensi .formulario-icon {
+            color: #8b5cf6;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Painel do Administrador</h1>
+            <p>Bem-vindo ao painel administrativo do PDFlow. Selecione um dos formulários abaixo para gerenciar ou visualizar.</p>
+        </div>
+        
+        <div class="formularios-grid">
+            {% if 'zerohum' in formularios %}
+            <div class="formulario-card formulario-zerohum">
+                <div class="formulario-header">
+                    <div class="formulario-icon">🚀</div>
+                    <h2 class="formulario-title">ZeroHum</h2>
+                    <p class="formulario-description">Formulário ZeroHum otimizado para velocidade e eficiência no processamento de dados.</p>
+                </div>
+                <div class="formulario-body">
+                    <a href="{% url 'formZeroHum' %}" class="formulario-button">Acessar</a>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if 'elite' in formularios %}
+            <div class="formulario-card formulario-elite">
+                <div class="formulario-header">
+                    <div class="formulario-icon">🏆</div>
+                    <h2 class="formulario-title">Elite</h2>
+                    <p class="formulario-description">Formulário Elite com campos avançados e opções adicionais para processamento prioritário.</p>
+                </div>
+                <div class="formulario-body">
+                    <a href="#" class="formulario-button">Acessar</a>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if 'coleguium' in formularios %}
+            <div class="formulario-card formulario-coleguium">
+                <div class="formulario-header">
+                    <div class="formulario-icon">📝</div>
+                    <h2 class="formulario-title">Coleguium</h2>
+                    <p class="formulario-description">Formulário específico para o sistema Coleguium, com campos personalizados para esta instituição.</p>
+                </div>
+                <div class="formulario-body">
+                    <a href="#" class="formulario-button">Acessar</a>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if 'pensi' in formularios %}
+            <div class="formulario-card formulario-pensi">
+                <div class="formulario-header">
+                    <div class="formulario-icon">📊</div>
+                    <h2 class="formulario-title">Pensi</h2>
+                    <p class="formulario-description">Formulário Pensi com recursos especiais para análise e visualização de dados.</p>
+                </div>
+                <div class="formulario-body">
+                    <a href="#" class="formulario-button">Acessar</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

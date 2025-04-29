@@ -1,0 +1,139 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhooks Recebidos - PDFlow</title>
+    <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/formularios/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/webhooks/webhooks.css' %}">
+</head>
+<body>
+
+    <section class="webhook-management">
+        <div class="container">
+            <div class="webhook-header">
+                <h2>Gerenciamento de Webhooks</h2>
+                <div class="webhook-actions">
+                    <form id="webhookFilterForm" class="row" method="get">
+                        <div class="form-group">
+                            <select class="form-control" id="statusFilter" name="status">
+                                <option value="">Status</option>
+                                <option value="Processing" {% if status_filter == 'Processing' %}selected{% endif %}>Processing</option>
+                                <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Completed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="searchQuery" name="q" placeholder="Buscar..." value="{{ search_query|default:'' }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="selected-actions" id="selected-actions">
+                <div class="selected-count">
+                    <span id="items-selected">0</span> items selected
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="downloadPdfs">
+                        <i class="icon">⬇️</i> Download PDFs
+                    </button>
+                    <button class="btn btn-success" id="changeStatus">
+                        <i class="icon">🔄</i> Change Status
+                    </button>
+                    <button class="btn btn-outline" id="clearSelection">
+                        <i class="icon">✖️</i> Clear Selection
+                    </button>
+                </div>
+            </div>
+
+            <div class="webhooks-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="40">
+                                <input type="checkbox" id="select-all" class="checkbox">
+                            </th>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>PDF Path</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for webhook in webhooks %}
+                        {% if webhook.pedidos.all %}
+                        {% with pedido=webhook.pedidos.first %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="webhook-select checkbox" value="{{ webhook.id }}">
+                            </td>
+                            <td>ORD-{{ pedido.numero_pedido|stringformat:"03d" }}</td>
+                            <td>{{ webhook.recebido_em|date:"M d, Y" }}</td>
+                            <td>{% if pedido.pdf_path %}
+                                {{ pedido.pdf_path }}
+                                {% else %}
+                                Não gerado
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="status {% if pedido.status == 'Pending' %}status-pending{% elif pedido.status == 'Completed' %}status-completed{% else %}status-processing{% endif %}">
+                                    {{ pedido.status|default:"Processing" }}
+                                </span>
+                            </td>
+                            <td class="actions">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-secondary btn-sm">View PDF</button>
+                                <button class="btn btn-success btn-sm">Status</button>
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% else %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="webhook-select checkbox" value="{{ webhook.id }}">
+                            </td>
+                            <td>N/A</td>
+                            <td>{{ webhook.recebido_em|date:"M d, Y" }}</td>
+                            <td>Não gerado</td>
+                            <td>
+                                <span class="status status-pending">Sem pedido</span>
+                            </td>
+                            <td class="actions">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-secondary btn-sm">View PDF</button>
+                                <button class="btn btn-success btn-sm">Status</button>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="no-data">Nenhum webhook encontrado</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="webhook-stats">
+                <p>Total: <strong>{{ total_webhooks }}</strong> webhooks recebidos, <strong>{{ total_pedidos }}</strong> pedidos processados</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 PDFlow. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/webhooks/webhooks.js' %}"></script>
+</body>
+</html>
