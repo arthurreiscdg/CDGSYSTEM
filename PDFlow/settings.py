@@ -13,18 +13,20 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-d*tjrebg2yar_jz_kjca$dt8f4fucb7!wxz2e-pued87ta!y44'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-d*tjrebg2yar_jz_kjca$dt8f4fucb7!wxz2e-pued87ta!y44')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
+    'cdgsystem.onrender.com',
     'pdflow-system.onrender.com',
     'localhost',
     '127.0.0.1',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://cdgsystem.onrender.com",
     "https://pdflow-system.onrender.com",
     "http://localhost:8090",
     "https://6f64-131-161-249-40.ngrok-free.app",
@@ -52,6 +54,7 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Whitenoise para servir arquivos estáticos
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -128,6 +131,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Configuração do Whitenoise
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
