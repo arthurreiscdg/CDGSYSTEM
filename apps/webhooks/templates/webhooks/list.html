@@ -115,9 +115,7 @@
                                 </span>
                             </td>
                             <td class="actions">
-                                <button class="btn btn-primary btn-sm">Edit</button>
-                                <button class="btn btn-secondary btn-sm">View PDF</button>
-                                <button class="btn btn-success btn-sm">Status</button>
+                                <button class="btn btn-info btn-sm view-details" data-id="{{ webhook.id }}">Ver mais</button>
                             </td>
                         </tr>
                         {% endwith %}
@@ -133,9 +131,7 @@
                                 <span class="status status-pending">Sem pedido</span>
                             </td>
                             <td class="actions">
-                                <button class="btn btn-primary btn-sm">Edit</button>
-                                <button class="btn btn-secondary btn-sm">View PDF</button>
-                                <button class="btn btn-success btn-sm">Status</button>
+                                <button class="btn btn-info btn-sm view-details" data-id="{{ webhook.id }}">Ver mais</button>
                             </td>
                         </tr>
                         {% endif %}
@@ -161,6 +157,85 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modal para detalhes do pedido -->
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalhes do Pedido</h3>
+                <button type="button" class="modal-close" id="closeModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <div class="spinner-container">
+                    <div class="spinner"></div>
+                    <p>Carregando detalhes...</p>
+                </div>
+                <div id="pedidoDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para alterar status -->
+    <div id="statusModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Alterar Status</h3>
+                <button type="button" class="modal-close" id="closeStatusModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="statusSelectionText">Selecione o novo status para os <span id="selectedOrdersCount">0</span> pedidos selecionados:</p>
+                
+                <div class="status-options">
+                    <div class="status-option" data-status="Processing">
+                        <div class="status-indicator processing"></div>
+                        <div class="status-details">
+                            <h4>Processing</h4>
+                            <p>Pedido está sendo processado</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-option" data-status="Pending">
+                        <div class="status-indicator pending"></div>
+                        <div class="status-details">
+                            <h4>Pending</h4>
+                            <p>Aguardando aprovação ou pagamento</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-option" data-status="Completed">
+                        <div class="status-indicator completed"></div>
+                        <div class="status-details">
+                            <h4>Completed</h4>
+                            <p>Pedido finalizado com sucesso</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-option" data-status="Cancelled">
+                        <div class="status-indicator cancelled"></div>
+                        <div class="status-details">
+                            <h4>Cancelled</h4>
+                            <p>Pedido cancelado</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button id="applyStatusBtn" class="btn btn-primary">Aplicar Status</button>
+                    <button id="cancelStatusBtn" class="btn btn-outline">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="{% static 'js/webhooks/webhooks.js' %}"></script>
 </body>

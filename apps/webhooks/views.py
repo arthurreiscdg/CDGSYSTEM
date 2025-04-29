@@ -24,6 +24,7 @@ from .serializers import (
     PedidoSerializer,
     WebhookStatusEnviadoSerializer,
     WebhookStatusEnviadoCreateSerializer,
+    WebhookDetailSerializer,
 )
 from .models import (
     WebhookConfig, Webhook, Pedido, EnderecoEnvio, 
@@ -586,3 +587,73 @@ class WebhookStatusEnviadoViewSet(viewsets.ReadOnlyModelViewSet):
                 {'erro': f'Erro ao reenviar: {str(e)}'}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def webhook_detail_api(request, webhook_id):
+    """
+    API para obter detalhes de um webhook específico.
+    Usado para carregar informações detalhadas no modal.
+    """
+    try:
+        webhook = Webhook.objects.get(pk=webhook_id)
+        serializer = WebhookDetailSerializer(webhook)
+        return Response(serializer.data)
+    except Webhook.DoesNotExist:
+        return Response({'error': 'Webhook não encontrado'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def update_status(request):
+    """
+    API para atualizar o status de múltiplos pedidos de uma vez.
+    Recebe uma lista de IDs de webhooks e um novo status.
+    """
+    try:
+        # Validar dados de entrada
+        webhook_ids = request.data.get('webhook_ids', [])
+        new_status = request.data.get('status')
+        
+        if not webhook_ids or not new_status:
+            return Response(
+                {'error': 'É necessário fornecer IDs de webhooks e um novo status'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        # Validar o status
+        valid_statuses = ['Processing', 'Pending', 'Completed', 'Cancelled']
+        if new_status not in valid_statuses:
+            return Response(
+                {'error': f'Status inválido. Deve ser um dos seguintes: {", ".join(valid_statuses)}'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Buscar webhooks e seus pedidos associados
+        webhooks = Webhook.objects.filter(id__in=webhook_ids)
+        pedidos_atualizados = 0
+        
+        # Atualizar o status de cada pedido associado aos webhooks
+        for webhook in webhooks:
+            pedidos = webhook.pedidos.all()
+            for pedido in pedidos:
+                pedido.status = new_status
+                pedido.save()
+                pedidos_atualizados += 1
+        
+        logger.info(f"Status de {pedidos_atualizados} pedidos atualizado para '{new_status}'")
+        
+        return Response({
+            'message': f'Status atualizado com sucesso para {pedidos_atualizados} pedidos',
+            'pedidos_atualizados': pedidos_atualizados
+        })
+        
+    except Exception as e:
+        logger.error(f"Erro ao atualizar status dos pedidos: {str(e)}")
+        return Response(
+            {'error': f'Erro ao atualizar status: {str(e)}'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

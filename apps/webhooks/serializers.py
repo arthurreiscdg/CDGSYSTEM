@@ -93,3 +93,54 @@ class WebhookStatusEnviadoCreateSerializer(serializers.Serializer):
         if not pedido:
             raise serializers.ValidationError(f"Pedido #{value} não encontrado")
         return value
+
+class WebhookDetailSerializer(serializers.ModelSerializer):
+    """
+    Serializer para detalhes detalhados de um webhook, usado principalmente 
+    para exibir informações no modal de detalhes.
+    """
+    pedido_info = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Webhook
+        fields = ['id', 'evento', 'payload_tipo', 'verificado', 'recebido_em', 'pedido_info']
+    
+    def get_pedido_info(self, obj):
+        pedido = obj.pedidos.first()
+        if not pedido:
+            return None
+            
+        return {
+            'numero_pedido': pedido.numero_pedido,
+            'valor_pedido': pedido.valor_pedido,
+            'nome_cliente': pedido.nome_cliente,
+            'status': pedido.status,
+            'pdf_path': pedido.pdf_path,
+            'cod_op': getattr(pedido, 'cod_op', None),
+            'configuracao': self._get_configuracao_info(pedido),
+            'contato': self._get_contato_info(pedido)
+        }
+        
+    def _get_configuracao_info(self, pedido):
+        if not hasattr(pedido, 'configuracao') or not pedido.configuracao:
+            return None
+            
+        config = pedido.configuracao
+        return {
+            'titulo': config.titulo,
+            'data_entrega': config.data_entrega.strftime('%d/%m/%Y') if config.data_entrega else None,
+            'formato': config.formato,
+            'cor_impressao': config.cor_impressao,
+            'impressao': config.impressao,
+            'gramatura': config.gramatura
+        }
+        
+    def _get_contato_info(self, pedido):
+        if not hasattr(pedido, 'configuracao') or not pedido.configuracao or not pedido.configuracao.contato:
+            return None
+            
+        contato = pedido.configuracao.contato
+        return {
+            'nome': contato.nome,
+            'email': contato.email
+        }
