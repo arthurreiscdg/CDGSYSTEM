@@ -145,10 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="detail-value">${data.evento || 'N/A'}</div>
                 </div>
                 <div class="detail-row">
-                    <div class="detail-label">Tipo de Payload:</div>
-                    <div class="detail-value">${data.payload_tipo || 'N/A'}</div>
-                </div>
-                <div class="detail-row">
                     <div class="detail-label">Recebido em:</div>
                     <div class="detail-value">${data.recebido_em || 'N/A'}</div>
                 </div>
@@ -183,66 +179,84 @@ document.addEventListener('DOMContentLoaded', function() {
                             </span>
                         </div>
                     </div>
-                </div>
-                
-                <div class="detail-section">
-                    <h4>Detalhes do Arquivo</h4>
-                    <div class="detail-row">
-                        <div class="detail-label">Caminho do PDF:</div>
-                        <div class="detail-value">${pedidoInfo.pdf_path || 'Não gerado'}</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Código da Operação:</div>
-                        <div class="detail-value">${pedidoInfo.cod_op || 'N/A'}</div>
-                    </div>
                 </div>`;
                 
-            // Adicionar informações de contato se existirem
-            if (pedidoInfo.contato) {
+            // Adicionar informações de arquivo somente se pdf_path existir
+            if (pedidoInfo.pdf_path || pedidoInfo.cod_op) {
                 detailsHTML += `
                     <div class="detail-section">
-                        <h4>Informações do Cliente</h4>
+                        <h4>Detalhes do Arquivo</h4>`;
+                
+                if (pedidoInfo.pdf_path) {
+                    detailsHTML += `
+                        <div class="detail-row">
+                            <div class="detail-label">Caminho do PDF:</div>
+                            <div class="detail-value">${pedidoInfo.pdf_path}</div>
+                        </div>`;
+                }
+                
+                if (pedidoInfo.cod_op) {
+                    detailsHTML += `
+                        <div class="detail-row">
+                            <div class="detail-label">Código da Operação:</div>
+                            <div class="detail-value">${pedidoInfo.cod_op}</div>
+                        </div>`;
+                }
+                
+                detailsHTML += `</div>`;
+            }
+                
+            // Adicionar informações de contato se existirem
+            if (pedidoInfo.contato && Object.keys(pedidoInfo.contato).length > 0) {
+                detailsHTML += `
+                    <div class="detail-section">
+                        <h4>Informações do Cliente</h4>`;
+                
+                if (pedidoInfo.contato.nome) {
+                    detailsHTML += `
                         <div class="detail-row">
                             <div class="detail-label">Nome:</div>
-                            <div class="detail-value">${pedidoInfo.contato.nome || 'N/A'}</div>
-                        </div>
+                            <div class="detail-value">${pedidoInfo.contato.nome}</div>
+                        </div>`;
+                }
+                
+                if (pedidoInfo.contato.email) {
+                    detailsHTML += `
                         <div class="detail-row">
                             <div class="detail-label">Email:</div>
-                            <div class="detail-value">${pedidoInfo.contato.email || 'N/A'}</div>
-                        </div>
-                    </div>`;
+                            <div class="detail-value">${pedidoInfo.contato.email}</div>
+                        </div>`;
+                }
+                
+                detailsHTML += `</div>`;
             }
                 
             // Adicionar configurações se existirem
-            if (pedidoInfo.configuracao) {
+            if (pedidoInfo.configuracao && Object.keys(pedidoInfo.configuracao).length > 0) {
                 detailsHTML += `
                     <div class="detail-section">
-                        <h4>Especificações do Trabalho</h4>
-                        <div class="detail-row">
-                            <div class="detail-label">Título:</div>
-                            <div class="detail-value">${pedidoInfo.configuracao.titulo || 'N/A'}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Data de Entrega:</div>
-                            <div class="detail-value">${pedidoInfo.configuracao.data_entrega || 'N/A'}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Formato:</div>
-                            <div class="detail-value">${pedidoInfo.configuracao.formato || 'N/A'}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Cor da Impressão:</div>
-                            <div class="detail-value">${pedidoInfo.configuracao.cor_impressao || 'N/A'}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Impressão:</div>
-                            <div class="detail-value">${pedidoInfo.configuracao.impressao || 'N/A'}</div>
-                        </div>
-                        <div class="detail-row">
-                            <div class="detail-label">Gramatura:</div>
-                            <div class="detail-value">${pedidoInfo.configuracao.gramatura || 'N/A'}</div>
-                        </div>
-                    </div>`;
+                        <h4>Especificações do Trabalho</h4>`;
+                
+                const configFields = [
+                    { label: 'Título', field: 'titulo' },
+                    { label: 'Data de Entrega', field: 'data_entrega' },
+                    { label: 'Formato', field: 'formato' },
+                    { label: 'Cor da Impressão', field: 'cor_impressao' },
+                    { label: 'Impressão', field: 'impressao' },
+                    { label: 'Gramatura', field: 'gramatura' }
+                ];
+                
+                configFields.forEach(item => {
+                    if (pedidoInfo.configuracao[item.field]) {
+                        detailsHTML += `
+                            <div class="detail-row">
+                                <div class="detail-label">${item.label}:</div>
+                                <div class="detail-value">${pedidoInfo.configuracao[item.field]}</div>
+                            </div>`;
+                    }
+                });
+                
+                detailsHTML += `</div>`;
             }
         } else {
             // Se não houver pedido associado

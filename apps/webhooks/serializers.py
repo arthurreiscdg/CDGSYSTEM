@@ -103,7 +103,7 @@ class WebhookDetailSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Webhook
-        fields = ['id', 'evento', 'payload_tipo', 'verificado', 'recebido_em', 'pedido_info']
+        fields = ['id', 'evento', 'verificado', 'recebido_em', 'pedido_info']
     
     def get_pedido_info(self, obj):
         pedido = obj.pedidos.first()
@@ -115,7 +115,7 @@ class WebhookDetailSerializer(serializers.ModelSerializer):
             'valor_pedido': pedido.valor_pedido,
             'nome_cliente': pedido.nome_cliente,
             'status': pedido.status,
-            'pdf_path': pedido.pdf_path,
+            'pdf_path': pedido.pdf_path if hasattr(pedido, 'pdf_path') else None,
             'cod_op': getattr(pedido, 'cod_op', None),
             'configuracao': self._get_configuracao_info(pedido),
             'contato': self._get_contato_info(pedido)
@@ -127,20 +127,20 @@ class WebhookDetailSerializer(serializers.ModelSerializer):
             
         config = pedido.configuracao
         return {
-            'titulo': config.titulo,
-            'data_entrega': config.data_entrega.strftime('%d/%m/%Y') if config.data_entrega else None,
-            'formato': config.formato,
-            'cor_impressao': config.cor_impressao,
-            'impressao': config.impressao,
-            'gramatura': config.gramatura
+            'titulo': config.titulo if hasattr(config, 'titulo') else None,
+            'data_entrega': config.data_entrega.strftime('%d/%m/%Y') if hasattr(config, 'data_entrega') and config.data_entrega else None,
+            'formato': config.formato if hasattr(config, 'formato') else None,
+            'cor_impressao': config.cor_impressao if hasattr(config, 'cor_impressao') else None,
+            'impressao': config.impressao if hasattr(config, 'impressao') else None,
+            'gramatura': config.gramatura if hasattr(config, 'gramatura') else None,
         }
         
     def _get_contato_info(self, pedido):
-        if not hasattr(pedido, 'configuracao') or not pedido.configuracao or not pedido.configuracao.contato:
+        if not hasattr(pedido, 'configuracao') or not pedido.configuracao or not hasattr(pedido.configuracao, 'contato') or not pedido.configuracao.contato:
             return None
             
         contato = pedido.configuracao.contato
         return {
-            'nome': contato.nome,
-            'email': contato.email
+            'nome': contato.nome if hasattr(contato, 'nome') else None,
+            'email': contato.email if hasattr(contato, 'email') else None,
         }
