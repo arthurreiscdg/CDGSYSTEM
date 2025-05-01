@@ -5,169 +5,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webhooks Recebidos - PDFlow</title>
+    <title>Notas Fiscais de Saída - PDFlow</title>
     <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/formularios/forms.css' %}">
     <link rel="stylesheet" href="{% static 'css/webhooks/webhooks.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-    <header>
-        <div class="container">
+<body class="dark-theme">
+    <!-- Barra de Navegação Superior -->
+    <header class="main-header">
+        <div class="container-fluid">
             <nav class="navbar">
-                <div class="logo">Django App</div>
-                <ul class="nav-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#nav-buttons">Forms</a></li>
-                    <li><a href="#contact-form-section">Contact</a></li>
-                    <li><a href="#register-form-section">Register</a></li>
-                    <li><a href="#newsletter-form-section">Newsletter</a></li>
-                </ul>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+                <div class="logo-container">
+                    <i class="fa-solid fa-circle-exclamation logo-icon"></i>
+                    <div class="logo">Meu Negócio</div>
+                    <span class="access-badge">Acesse agora</span>
+                </div>
+                
+                <div class="nav-sections">
+                    <a href="#" class="nav-section">Cadastros <i class="fas fa-chevron-down"></i></a>
+                    <a href="#" class="nav-section">Vendas <i class="fas fa-chevron-down"></i></a>
+                    <a href="#" class="nav-section">Estoque <i class="fas fa-chevron-down"></i></a>
+                    <a href="#" class="nav-section">Financeiro <i class="fas fa-chevron-down"></i></a>
+                </div>
+
+                <div class="nav-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Pesquisar">
+                    </div>
+                    <div class="action-icons">
+                        <a href="#" class="action-icon"><i class="fas fa-th"></i></a>
+                        <a href="#" class="action-icon notification-icon"><i class="fas fa-bell"></i><span class="badge">1</span></a>
+                        <a href="#" class="action-icon"><i class="fas fa-cog"></i></a>
+                        <a href="#" class="action-icon profile-icon">
+                            <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Editor">
+                            <span>Editora</span>
+                        </a>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Pedidos Montink</h1>
+    <!-- Breadcrumb e Título da Seção -->
+    <div class="breadcrumb-section">
+        <div class="container-fluid">
+            <div class="breadcrumb">
+                <i class="fas fa-ellipsis-h"></i>
+                <span class="arrow">›</span>
+                <h2>Notas Fiscais de Saída</h2>
+            </div>
+            <div class="location-filter">
+                <span class="filter-label active">Todas as lojas <i class="fas fa-chevron-down"></i></span>
             </div>
         </div>
-    </section>
+    </div>
 
-
-    <section class="webhook-management">
-        <div class="container">
-            <div class="webhook-header">
-                <h2>Gerenciamento de pedidos da Montink</h2>
-                <div class="webhook-actions">
-                    <form id="webhookFilterForm" class="row" method="get">
-                        <div class="form-group">
-                            <select class="form-control" id="statusFilter" name="status">
-                                <option value="">Status</option>
-                                <option value="Processing" {% if status_filter == 'Processing' %}selected{% endif %}>Processing</option>
-                                <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
-                                <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Completed</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="searchQuery" name="q" placeholder="Buscar..." value="{{ search_query|default:'' }}">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Buscar</button>
-                    </form>
+    <!-- Área Principal de Conteúdo -->
+    <section class="main-content">
+        <div class="container-fluid">
+            <!-- Barra de Ações Rápidas -->
+            <div class="action-toolbar">
+                <!-- Campo de busca específico -->
+                <div class="search-bar">
+                    <input type="text" placeholder="Pesquisar por nome, CPF/CNPJ ou n° da nota" class="search-input">
+                    <i class="fas fa-search"></i>
                 </div>
-            </div>
-
-            <div class="selected-actions" id="selected-actions">
-                <div class="selected-count">
-                    <span id="items-selected">0</span> items selected
+                
+                <!-- Seletor de datas -->
+                <div class="date-selector">
+                    <button class="date-btn">
+                        <i class="far fa-calendar"></i> 
+                        <span class="date-range">08/04/2025 até 08/04/2025</span>
+                    </button>
                 </div>
-                <div class="action-buttons">
-                    <button class="btn btn-primary" id="downloadPdfs">
-                        <i class="icon">⬇️</i> Download PDFs
+
+                <!-- Ícones de ação -->
+                <div class="toolbar-actions">
+                    <button class="action-btn">
+                        <i class="fas fa-print"></i>
                     </button>
-                    <button class="btn btn-success" id="changeStatus">
-                        <i class="icon">🔄</i> Change Status
+                    <button class="action-btn">
+                        <i class="fas fa-trash"></i>
                     </button>
-                    <button class="btn btn-outline" id="clearSelection">
-                        <i class="icon">✖️</i> Clear Selection
+                </div>
+                
+                <!-- Botão de adicionar nova nota fiscal -->
+                <div class="add-button-container">
+                    <button class="add-button">
+                        <i class="fas fa-plus"></i> Incluir nota fiscal
                     </button>
                 </div>
             </div>
 
-            <div class="webhooks-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th width="40">
-                                <input type="checkbox" id="select-all" class="checkbox">
-                            </th>
-                            <th>Order ID</th>
-                            <th>Date</th>
-                            <th>PDF Path</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for webhook in webhooks %}
-                        {% if webhook.pedidos.all %}
-                        {% with pedido=webhook.pedidos.first %}
-                        <tr>
-                            <td>
-                                <input type="checkbox" class="webhook-select checkbox" value="{{ webhook.id }}">
-                            </td>
-                            <td>ORD-{{ pedido.numero_pedido|stringformat:"03d" }}</td>
-                            <td>{{ webhook.recebido_em|date:"M d, Y" }}</td>
-                            <td>{% if pedido.pdf_path %}
-                                {{ pedido.pdf_path }}
+            <div class="content-grid">
+                <!-- Painel de Filtros (Lateral Esquerdo) -->
+                <aside class="filter-panel">
+                    <div class="filter-header">
+                        <h4><i class="fas fa-filter"></i> Filtrar</h4>
+                        <button class="clear-filter"><i class="fas fa-times"></i></button>
+                    </div>
+
+                    <div class="filter-content">
+                        <!-- Situação -->
+                        <div class="filter-group">
+                            <label>Situação</label>
+                            <div class="select-container">
+                                <select class="form-select" name="status" data-filter="status">
+                                    <option value="">Selecione uma opção...</option>
+                                    <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Autorizada</option>
+                                    <option value="Processing" {% if status_filter == 'Processing' %}selected{% endif %}>Emitida DANFE</option>
+                                    <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pendente</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+
+                        <!-- Produto -->
+                        <div class="filter-group">
+                            <label>Produto</label>
+                            <div class="select-container">
+                                <select class="form-select" name="produto" data-filter="produto">
+                                    <option value="">Selecione um produto...</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+
+                        <!-- Vendedor -->
+                        <div class="filter-group">
+                            <label>Vendedor</label>
+                            <div class="select-container">
+                                <select class="form-select" name="vendedor" data-filter="vendedor">
+                                    <option value="">Selecione um vendedor...</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+
+                        <!-- Rastreamento -->
+                        <div class="filter-group">
+                            <label>Rastreamento</label>
+                            <div class="select-container">
+                                <select class="form-select" name="rastreamento" data-filter="rastreamento">
+                                    <option value="">Todos</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+
+                        <!-- Código de rastreio -->
+                        <div class="filter-group">
+                            <label>Código de rastreio</label>
+                            <input type="text" class="form-control" name="cod_rastreio" data-filter="cod_rastreio">
+                        </div>
+
+                        <!-- Nº do pedido na loja -->
+                        <div class="filter-group">
+                            <label>Nº do pedido na loja</label>
+                            <input type="text" class="form-control" name="num_pedido" data-filter="num_pedido">
+                        </div>
+
+                        <!-- UF -->
+                        <div class="filter-group">
+                            <label>UF</label>
+                            <div class="select-container">
+                                <select class="form-select" name="uf" data-filter="uf">
+                                    <option value="">Selecione uma UF...</option>
+                                    <option value="SP">SP</option>
+                                    <option value="RJ">RJ</option>
+                                    <option value="MG">MG</option>
+                                </select>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+
+                        <!-- Busca customizada -->
+                        <div class="filter-group custom-search">
+                            <label>Busca customizada</label>
+                            <div class="custom-search-input">
+                                <input type="text" class="form-control" name="busca_customizada" data-filter="busca_customizada" placeholder="Adicionar filtros">
+                                <button class="add-filter-btn"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Botão Filtrar -->
+                        <button class="filter-btn">Filtrar</button>
+                    </div>
+                </aside>
+
+                <!-- Tabela de Dados Principal -->
+                <div class="main-table-container">
+                    <!-- Status da seleção e ações em lote -->
+                    <div class="batch-actions" id="selected-actions">
+                        <div class="selected-info">
+                            <span id="items-selected">0</span> itens selecionados
+                        </div>
+                        <div class="batch-buttons">
+                            <button class="batch-btn"><i class="fas fa-file-download"></i> Download PDFs</button>
+                            <button class="batch-btn"><i class="fas fa-sync-alt"></i> Alterar Status</button>
+                            <button class="batch-btn outline"><i class="fas fa-times"></i> Limpar Seleção</button>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Notas Fiscais -->
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th width="40">
+                                        <div class="checkbox-container">
+                                            <input type="checkbox" id="select-all" class="checkbox">
+                                            <label for="select-all"></label>
+                                        </div>
+                                    </th>
+                                    <th>Número</th>
+                                    <th>Nome</th>
+                                    <th>Data emissão</th>
+                                    <th>Data de saída</th>
+                                    <th>Situação</th>
+                                    <th>Valor (R$)</th>
+                                    <th width="80"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for webhook in webhooks %}
+                                {% if webhook.pedidos.all %}
+                                {% with pedido=webhook.pedidos.first %}
+                                <tr>
+                                    <td>
+                                        <div class="checkbox-container">
+                                            <input type="checkbox" class="webhook-select checkbox" id="item-{{ webhook.id }}" value="{{ webhook.id }}">
+                                            <label for="item-{{ webhook.id }}"></label>
+                                        </div>
+                                    </td>
+                                    <td>{{ pedido.numero_pedido|stringformat:"06d" }}</td>
+                                    <td>{{ pedido.nome_cliente }}</td>
+                                    <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
+                                    <td>{{ pedido.data_saida|default:webhook.recebido_em|date:"d/m/Y" }}</td>
+                                    <td>
+                                        <span class="status-badge 
+                                            {% if pedido.status == 'Pending' %}status-pending
+                                            {% elif pedido.status == 'Completed' %}status-completed
+                                            {% else %}status-processing{% endif %}">
+                                            {% if pedido.status == 'Pending' %}Pendente
+                                            {% elif pedido.status == 'Completed' %}Autorizada
+                                            {% elif pedido.status == 'Processing' %}Processando
+                                            {% else %}Emitida DANFE{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ pedido.valor_pedido|floatformat:2 }}</td>
+                                    <td class="actions-cell">
+                                        <div class="document-icons">
+                                            <span class="doc-icon sent" title="Enviado"><span>S</span></span>
+                                            <span class="doc-icon canceled" title="Cancelado"><span>C</span></span>
+                                            <span class="doc-icon verified" title="Verificado"><span>V</span></span>
+                                            <span class="doc-icon exported" title="Exportado"><span>E</span></span>
+                                        </div>
+                                        <button class="row-actions-btn"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
+                                {% endwith %}
                                 {% else %}
-                                Não gerado
+                                <tr>
+                                    <td>
+                                        <div class="checkbox-container">
+                                            <input type="checkbox" class="webhook-select checkbox" id="item-{{ webhook.id }}" value="{{ webhook.id }}">
+                                            <label for="item-{{ webhook.id }}"></label>
+                                        </div>
+                                    </td>
+                                    <td>{{ webhook.id|stringformat:"06d" }}</td>
+                                    <td>Sem cliente</td>
+                                    <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
+                                    <td>--/--/----</td>
+                                    <td>
+                                        <span class="status-badge status-pending">Pendente</span>
+                                    </td>
+                                    <td>0,00</td>
+                                    <td class="actions-cell">
+                                        <div class="document-icons">
+                                            <span class="doc-icon" title="Sem documentos"></span>
+                                        </div>
+                                        <button class="row-actions-btn"><i class="fas fa-ellipsis-v"></i></button>
+                                    </td>
+                                </tr>
                                 {% endif %}
-                            </td>
-                            <td>
-                                <span class="status {% if pedido.status == 'Pending' %}status-pending{% elif pedido.status == 'Completed' %}status-completed{% else %}status-processing{% endif %}">
-                                    {{ pedido.status|default:"Processing" }}
-                                </span>
-                            </td>
-                            <td class="actions">
-                                <button class="btn btn-info btn-sm view-details" data-id="{{ webhook.id }}">Ver mais</button>
-                            </td>
-                        </tr>
-                        {% endwith %}
-                        {% else %}
-                        <tr>
-                            <td>
-                                <input type="checkbox" class="webhook-select checkbox" value="{{ webhook.id }}">
-                            </td>
-                            <td>N/A</td>
-                            <td>{{ webhook.recebido_em|date:"M d, Y" }}</td>
-                            <td>Não gerado</td>
-                            <td>
-                                <span class="status status-pending">Sem pedido</span>
-                            </td>
-                            <td class="actions">
-                                <button class="btn btn-info btn-sm view-details" data-id="{{ webhook.id }}">Ver mais</button>
-                            </td>
-                        </tr>
-                        {% endif %}
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" class="no-data">Nenhum webhook encontrado</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="no-data">Nenhuma nota fiscal encontrada</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
-            <div class="webhook-stats">
-                <p>Total: <strong>{{ total_webhooks }}</strong> webhooks recebidos, <strong>{{ total_pedidos }}</strong> pedidos processados</p>
+                    <div class="table-footer">
+                        <div class="showing-entries">
+                            Exibindo 1-{{ webhooks|length }} de {{ total_webhooks }} registros
+                        </div>
+                        <div class="pagination">
+                            <button class="pagination-btn disabled"><i class="fas fa-chevron-left"></i></button>
+                            <button class="pagination-btn active">1</button>
+                            <button class="pagination-btn">2</button>
+                            <button class="pagination-btn">3</button>
+                            <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel de Ações (Lateral Direito) -->
+                <aside class="actions-panel">
+                    <div class="action-card">
+                        <div class="action-card-header">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Enviar</span>
+                        </div>
+                        <div class="action-card-content">
+                            <button class="action-card-btn">
+                                <i class="fas fa-file-invoice"></i>
+                                <span>Enviar NF-es selecionadas</span>
+                            </button>
+                            <button class="action-card-btn">
+                                <i class="fas fa-print"></i>
+                                <span>Imprimir NF-es selecionadas</span>
+                            </button>
+                            <button class="action-card-btn">
+                                <i class="fas fa-envelope"></i>
+                                <span>Enviar notas pendentes</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-card-header">
+                            <i class="fas fa-file-export"></i>
+                            <span>Gerar / Exportar</span>
+                        </div>
+                        <div class="action-card-content">
+                            <button class="action-card-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>Gerar PDF DANFE</span>
+                            </button>
+                            <button class="action-card-btn">
+                                <i class="fas fa-file-code"></i>
+                                <span>Exportar XML</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-card-header">
+                            <i class="fas fa-cog"></i>
+                            <span>Mais opções</span>
+                        </div>
+                        <div class="action-card-content">
+                            <button class="action-card-btn">
+                                <i class="fas fa-file-import"></i>
+                                <span>Importar</span>
+                            </button>
+                            <button class="action-card-btn">
+                                <i class="fas fa-file-upload"></i>
+                                <span>XML NF-e</span>
+                            </button>
+                            <button class="action-card-btn">
+                                <i class="fas fa-tag"></i>
+                                <span>Etiquetas de transporte</span>
+                            </button>
+                        </div>
+                    </div>
+                </aside>
             </div>
         </div>
     </section>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <p>&copy; 2025 PDFlow. Todos os direitos reservados.</p>
-            </div>
-        </div>
-    </footer>
 
     <!-- Modal para detalhes do pedido -->
     <div id="detailsModal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Detalhes do Pedido</h3>
+                <h3 class="modal-title">Detalhes da Nota Fiscal</h3>
                 <button type="button" class="modal-close" id="closeModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body" id="modalContent">
@@ -186,45 +404,42 @@
             <div class="modal-header">
                 <h3 class="modal-title">Alterar Status</h3>
                 <button type="button" class="modal-close" id="closeStatusModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <p id="statusSelectionText">Selecione o novo status para os <span id="selectedOrdersCount">0</span> pedidos selecionados:</p>
+                <p id="statusSelectionText">Selecione o novo status para os <span id="selectedOrdersCount">0</span> itens selecionados:</p>
                 
                 <div class="status-options">
                     <div class="status-option" data-status="Processing">
                         <div class="status-indicator processing"></div>
                         <div class="status-details">
-                            <h4>Processing</h4>
-                            <p>Pedido está sendo processado</p>
+                            <h4>Emitida DANFE</h4>
+                            <p>Documento emitido e pronto para envio</p>
                         </div>
                     </div>
                     
                     <div class="status-option" data-status="Pending">
                         <div class="status-indicator pending"></div>
                         <div class="status-details">
-                            <h4>Pending</h4>
-                            <p>Aguardando aprovação ou pagamento</p>
+                            <h4>Pendente</h4>
+                            <p>Aguardando emissão ou processamento</p>
                         </div>
                     </div>
                     
                     <div class="status-option" data-status="Completed">
                         <div class="status-indicator completed"></div>
                         <div class="status-details">
-                            <h4>Completed</h4>
-                            <p>Pedido finalizado com sucesso</p>
+                            <h4>Autorizada</h4>
+                            <p>Documento fiscal autorizado pela SEFAZ</p>
                         </div>
                     </div>
                     
                     <div class="status-option" data-status="Cancelled">
                         <div class="status-indicator cancelled"></div>
                         <div class="status-details">
-                            <h4>Cancelled</h4>
-                            <p>Pedido cancelado</p>
+                            <h4>Cancelada</h4>
+                            <p>Documento fiscal cancelado</p>
                         </div>
                     </div>
                 </div>

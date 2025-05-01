@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Pedido de Produção ZeroHum</title>
+    <title>Formulário de Pedido de Produção com Excel</title>
     <link rel="stylesheet" href="{% static 'css/formZeroHum/style.css' %}">
 </head>
 
@@ -19,8 +19,8 @@
             <form id="formZeroHum" class="form-container" enctype="multipart/form-data" method="post">
                 {% csrf_token %}
                 <div class="form-header">
-                    <h1>Formulário de Pedido de Produção ZeroHum Excel</h1>
-                    <p>Preencha os detalhes abaixo para solicitar a produção do seu material</p>
+                    <h1>Formulário ZeroHum com Importação de Excel</h1>
+                    <p>Preencha os detalhes abaixo e envie seu arquivo Excel para solicitar a produção do seu material</p>
                 </div>
 
                 <div class="form-grid">
@@ -29,9 +29,16 @@
                         <h3>Upload de PDFs</h3>
                         <div class="form-group">
                             <label for="pdfInput" class="file-upload">
-                                <input type="file" name="file" id="pdfInput" accept=".pdf" multiple required>
+                                <svg class="file-upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
                                 <span class="file-upload-text">Clique para enviar PDF</span>
                                 <span class="file-upload-subtext">Arraste arquivos ou clique para selecionar</span>
+                                <input type="file" name="file" id="pdfInput" accept=".pdf" multiple required>
                             </label>
                             <span class="error-message">Pelo menos um arquivo PDF é obrigatório</span>
                         </div>
@@ -56,21 +63,41 @@
                         </div>
                     </div>
 
-                    <!-- Coluna 3: Upload de Excel -->
+                    <!-- Coluna 2: Upload de Excel -->
                     <div id="section-excel" class="form-section">
                         <h3>Upload de Excel</h3>
                         <div class="form-group">
                             <label for="excelInput" class="file-upload">
-                                <input type="file" name="excel_file" id="excelInput" accept=".xls,.xlsx" required>
+                                <svg class="file-upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <path d="M8 13H16"></path>
+                                    <path d="M8 17H16"></path>
+                                    <path d="M10 9H8"></path>
+                                </svg>
                                 <span class="file-upload-text">Clique para enviar Excel</span>
-                                <span class="file-upload-subtext">Arraste arquivos ou clique para selecionar</span>
+                                <span class="file-upload-subtext">O arquivo deve conter a planilha PEDIDO com as colunas UNIDADES e QTDE</span>
+                                <input type="file" name="excel_file" id="excelInput" accept=".xls,.xlsx" required>
                             </label>
-                            <span class="error-message">Pelo menos um arquivo Excel é obrigatório</span>
+                            <span class="error-message">Arquivo Excel é obrigatório</span>
                         </div>
                         <ul class="file-list" id="excelList"></ul>
+                        
+                        <div class="excel-download">
+                            <a href="{% static 'Ex/ZeroHumExPadrao.xlsx' %}" class="btn btn-outline btn-sm" download>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Baixar modelo de planilha
+                            </a>
+                        </div>
                     </div>
 
-                    <!-- Coluna 2: Informações do Trabalho -->
+                    <!-- Coluna 3: Informações do Trabalho -->
                     <div id="section-info" class="form-section">
                         <h3>Informações do Trabalho</h3>
                         <div class="form-group">
@@ -89,7 +116,7 @@
                         </div>
                     </div>
 
-                    <!-- Coluna 3: Especificações para Produção -->
+                    <!-- Coluna 4: Especificações para Produção -->
                     <div id="section-specs" class="form-section">
                         <h3>Especificações para Produção</h3>
 
@@ -137,24 +164,31 @@
                             <span class="error-message">Selecione uma opção</span>
                         </div>
                     </div>
+                </div>
 
-
-                    <!-- Dados de Contato -->
-                    <div id="section-contact" class="form-footer">
-                        <h3 class="text-center">Dados de Contato</h3>
-                        <div class="form-group">
-                            <label for="nome">Nome</label>
-                            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
-                            <span class="error-message">Este campo é obrigatório</span>
+                <!-- Dados de Contato -->
+                <div id="section-contact" class="form-footer">
+                    <div class="contact-container">
+                        <h3 class="text-center" style="margin-bottom: 1rem;">Dados de Contato</h3>
+                    
+                        <div class="contact-grid">
+                            <div class="form-group">
+                                <label for="nome">Nome</label>
+                                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                                <span class="error-message">Este campo é obrigatório</span>
+                            </div>
+                    
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" required>
+                                <span class="error-message">Digite um email válido</span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" required>
-                            <span class="error-message">Digite um email válido</span>
-                        </div>
+                    
                         <div class="alert">
                             Ao enviar este formulário, você concorda em ser contatado sobre seu pedido de produção de documentos.
                         </div>
+                    
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary btn-lg">Enviar Pedido</button>
                         </div>
@@ -165,10 +199,8 @@
     </main>
 
     {% include "components/modal.html" %}
+    
+    <script src="{% static 'js/formZeroHum/sidebar.js' %}"></script>
+    <script src="{% static 'js/formZeroHum/formulario.js' %}"></script>
 </body>
-<script src="{% static 'js/formZeroHum/sidebar.js' %}"></script>
-<script src="{% static 'js/formZeroHum/modal.js' %}"></script>
-<script src="{% static 'js/formZeroHum/script.js' %}"></script>
-<script src="{% static 'js/formZeroHum/script_excel.js' %}"></script>
-
 </html>

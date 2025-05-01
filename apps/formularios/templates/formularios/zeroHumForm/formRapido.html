@@ -23,255 +23,372 @@
                     <p>Preencha os detalhes abaixo para solicitar a produção do seu material</p>
                 </div>
 
-                <div class="form-grid">
-                    <!-- Coluna 1: Upload de PDFs -->
-                    <div id="section-upload" class="form-section">
-                        <h3>Upload de PDFs</h3>
+                <!-- Navegação entre etapas -->
+                <ul class="form-steps">
+                    <li class="step-item active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Método de Pedido</div>
+                    </li>
+                    <li class="step-item" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Upload de PDF</div>
+                    </li>
+                    <li class="step-item" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Informações do Trabalho</div>
+                    </li>
+                    <li class="step-item" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Especificações</div>
+                    </li>
+                    <li class="step-item step-escolas" data-step="5">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Escolas</div>
+                    </li>
+                    <li class="step-item step-excel" data-step="5" style="display:none;">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Excel</div>
+                    </li>
+                    <li class="step-item" data-step="6">
+                        <div class="step-number">6</div>
+                        <div class="step-title">Dados de Contato</div>
+                    </li>
+                </ul>
 
-                        <div class="form-group">
-                            <label for="fileInput" class="file-upload">
-                                <svg class="file-upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                    <polyline points="17 8 12 3 7 8"></polyline>
-                                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                                </svg>
-                                <span class="file-upload-text">Clique para enviar PDF</span>
-                                <span class="file-upload-subtext">Arraste arquivos ou clique para selecionar</span>
-                                <input type="file" name="file" id="fileInput" accept=".pdf" multiple required>
-                                <span class="error-message">Pelo menos um arquivo PDF é obrigatório</span>
+                <!-- Conteúdo das etapas -->
+                <div class="form-grid" style="display: block;">
+                    
+                    <!-- Etapa 1: Escolha do método de pedido -->
+                    <div id="step-1" class="step-content active">
+                        <div id="section-method" class="form-section">
+                            <h3>Escolha o método de pedido</h3>
+                            <p class="method-description">Selecione como deseja informar as quantidades por escola:</p>
+                            
+                            <div class="method-options">
+                                <div class="method-option">
+                                    <input type="radio" id="metodoManual" name="metodoPedido" value="manual" checked>
+                                    <label for="metodoManual" class="method-card">
+                                        <div class="method-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 20h9"></path>
+                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                            </svg>
+                                        </div>
+                                        <h4>Preenchimento Manual</h4>
+                                        <p>Preencha manualmente as quantidades para cada escola</p>
+                                    </label>
+                                </div>
+                                
+                                <div class="method-option">
+                                    <input type="radio" id="metodoExcel" name="metodoPedido" value="excel">
+                                    <label for="metodoExcel" class="method-card">
+                                        <div class="method-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                <polyline points="14 2 14 8 20 8"></polyline>
+                                                <path d="M8 13H16"></path>
+                                                <path d="M8 17H16"></path>
+                                                <path d="M10 9H8"></path>
+                                            </svg>
+                                        </div>
+                                        <h4>Importar Excel</h4>
+                                        <p>Carregue uma planilha Excel com as informações das escolas</p>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-
-                        <ul class="file-list" id="fileList">
-                            <!-- Os arquivos selecionados aparecerão aqui -->
-                        </ul>
                     </div>
+                    
+                    <!-- Etapa 2: Upload de PDFs -->
+                    <div id="step-2" class="step-content">
+                        <div id="section-upload" class="form-section">
+                            <h3>Upload de PDFs</h3>
 
-                    <!-- Modal para visualização do PDF -->
-                    <div id="pdfModal" class="modal-overlay">
-                        <div class="modal pdf-modal">
-                            <div class="modal-header">
-                                <h2 class="modal-title">Visualizando PDF</h2>
-                                <button type="button" class="modal-close" id="closePdfModal">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                            <div class="form-group">
+                                <label for="fileInput" class="file-upload">
+                                    <svg class="file-upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
                                     </svg>
-                                </button>
+                                    <span class="file-upload-text">Clique para enviar PDF</span>
+                                    <span class="file-upload-subtext">Arraste arquivos ou clique para selecionar</span>
+                                    <input type="file" name="file" id="fileInput" accept=".pdf" multiple required>
+                                </label>
+                                <span class="error-message">Pelo menos um arquivo PDF é obrigatório</span>
                             </div>
-                            <div class="modal-body pdf-preview-wrapper">
-                                <iframe id="pdfPreview" class="pdf-preview"></iframe>
+
+                            <ul class="file-list" id="fileList">
+                                <!-- Os arquivos selecionados aparecerão aqui -->
+                            </ul>
+                        </div>
+
+                        <!-- Modal para visualização do PDF -->
+                        <div id="pdfModal" class="modal-overlay">
+                            <div class="modal pdf-modal">
+                                <div class="modal-header">
+                                    <h2 class="modal-title">Visualizando PDF</h2>
+                                    <button type="button" class="modal-close" id="closePdfModal">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="modal-body pdf-preview-wrapper">
+                                    <iframe id="pdfPreview" class="pdf-preview"></iframe>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Coluna 2: Informações do Trabalho -->
-                    <div id="section-info" class="form-section">
-                        <h3>Informações do Trabalho</h3>
+                    <!-- Etapa 3: Informações do Trabalho -->
+                    <div id="step-3" class="step-content">
+                        <div id="section-info" class="form-section">
+                            <h3>Informações do Trabalho</h3>
 
-                        <div class="form-group">
-                            <label for="titulo">Título do material</label>
-                            <input type="text" id="titulo" name="titulo" placeholder="Ex: Apostila de Matemática"
-                                required>
-                            <span class="error-message">Este campo é obrigatório</span>
-                        </div>
+                            <div class="form-group">
+                                <label for="titulo">Título do material</label>
+                                <input type="text" id="titulo" name="titulo" placeholder="Ex: Apostila de Matemática"
+                                    required>
+                                <span class="error-message">Este campo é obrigatório</span>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="dataEntrega">Data de entrega na escola</label>
-                            <input type="date" id="dataEntrega" name="dataEntrega" required>
-                            <span class="error-message">Selecione uma data válida</span>
-                        </div>
+                            <div class="form-group">
+                                <label for="dataEntrega">Data de entrega na escola</label>
+                                <input type="date" id="dataEntrega" name="dataEntrega" required>
+                                <span class="error-message">Selecione uma data válida</span>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="observacoes">Observações</label>
-                            <textarea id="observacoes" name="observacoes"
-                                placeholder="Informações adicionais sobre o trabalho"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Coluna 3: Especificações para Produção -->
-                    <div id="section-specs" class="form-section">
-                        <h3>Especificações para Produção</h3>
-
-                        <div class="form-group">
-                            <label for="formato">Formato Final</label>
-                            <select id="formato" name="formato" required>
-                                <option value="a4">A4</option>
-                            </select>
-                            <span class="error-message">Selecione uma opção</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="corImpressao">Cor da Impressão</label>
-                            <select id="corImpressao" name="corImpressao" required>
-                                <option value="pb">Preto e Branco</option>
-                            </select>
-                            <span class="error-message">Selecione uma opção</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="impressao">Impressão</label>
-                            <select id="impressao" name="impressao" required>
-                                <option value="" disabled selected>Selecione o tipo</option>
-                                <option value="frente">Só frente</option>
-                                <option value="frenteVerso">Frente e Verso</option>
-                            </select>
-                            <span class="error-message">Selecione uma opção</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="gramatura">Gramatura</label>
-                            <select id="gramatura" name="gramatura" required>
-                                <option value="75g">75g (Padrão)</option>
-                            </select>
-                            <span class="error-message">Selecione uma opção</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="grampos">Grampos</label>
-                            <select id="grampos" name="grampos" required>
-                                <option value="" disabled selected>Selecione a quantidade</option>
-                                <option value="nenhum">Nenhum</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                            </select>
-                            <span class="error-message">Selecione uma opção</span>
+                            <div class="form-group">
+                                <label for="observacoes">Observações</label>
+                                <textarea id="observacoes" name="observacoes"
+                                    placeholder="Informações adicionais sobre o trabalho"></textarea>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Etapa 4: Especificações para Produção -->
+                    <div id="step-4" class="step-content">
+                        <div id="section-specs" class="form-section">
+                            <h3>Especificações para Produção</h3>
 
-                    <!-- Coluna 4: Escolas cadastradas -->
-                    <div id="section-options" class="form-section">
-                        <h3>Escolas cadastradas</h3>
-                        <div id="scroll-icon" class="scroll-icon">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Escola</th>
-                                        <th>Resposta</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>ARARUAMA </td>
-                                        <td><input type="number" name="ARARUAMA"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>CABO_FRIO</td>
-                                        <td><input type="number" name="CABO_FRIO"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ITABORAI </td>
-                                        <td><input type="number" name="ITABORAI"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ITAIPUACU</td>
-                                        <td><input type="number" name="ITAIPUACU"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>MARICA_I </td>
-                                        <td><input type="number" name="MARICA_I"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NOVA_FRIBURGO</td>
-                                        <td><input type="number" name="NOVA_FRIBURGO"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>QUEIMADOS</td>
-                                        <td><input type="number" name="QUEIMADOS"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>SEROPEDICA</td>
-                                        <td><input type="number" name="SEROPEDICA"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ALCANTARA</td>
-                                        <td><input type="number" name="ALCANTARA"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>BANGU</td>
-                                        <td><input type="number" name="BANGU"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>BARRA_DA_TIJU</td>
-                                        <td><input type="number" name="BARRA_DA_TIJUCA"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>BELFORD_ROXO </td>
-                                        <td><input type="number" name="BELFORD_ROXO"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>DUQUE_DE_CAXI</td>
-                                        <td><input type="number" name="DUQUE_DE_CAXIAS"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ICARA</td>
-                                        <td><input type="number" name="ICARAI"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ILHA_DO_GOVERNADO</td>
-                                        <td><input type="number" name="ILHA_DO_GOVERNADOR"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ITAIP</td>
-                                        <td><input type="number" name="ITAIPU"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>MADUREIRA</td>
-                                        <td><input type="number" name="MADUREIRA"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>MEIER</td>
-                                        <td><input type="number" name="MEIER"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NILOPOLIS</td>
-                                        <td><input type="number" name="NILOPOLIS"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NITER</td>
-                                        <td><input type="number" name="NITEROI"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>NOVA_IGUA</td>
-                                        <td><input type="number" name="NOVA_IGUACU"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>OLARI</td>
-                                        <td><input type="number" name="OLARIA"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>PRATA</td>
-                                        <td><input type="number" name="PRATA"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>SAO_GONCA</td>
-                                        <td><input type="number" name="SAO_GONCALO"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>SAO_JOAO_DE_MERIT</td>
-                                        <td><input type="number" name="SAO_JOAO_DE_MERITI"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>VILA_ISAB</td>
-                                        <td><input type="number" name="VILA_ISABEL"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>VILAR_DOS_TEL</td>
-                                        <td><input type="number" name="VILAR_DOS_TELES"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="form-group">
+                                <label for="formato">Formato Final</label>
+                                <select id="formato" name="formato" required>
+                                    <option value="a4">A4</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="corImpressao">Cor da Impressão</label>
+                                <select id="corImpressao" name="corImpressao" required>
+                                    <option value="pb">Preto e Branco</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="impressao">Impressão</label>
+                                <select id="impressao" name="impressao" required>
+                                    <option value="" disabled selected>Selecione o tipo</option>
+                                    <option value="frente">Só frente</option>
+                                    <option value="frenteVerso">Frente e Verso</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gramatura">Gramatura</label>
+                                <select id="gramatura" name="gramatura" required>
+                                    <option value="75g">75g (Padrão)</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="grampos">Grampos</label>
+                                <select id="grampos" name="grampos" required>
+                                    <option value="" disabled selected>Selecione a quantidade</option>
+                                    <option value="nenhum">Nenhum</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Dados de Contato e Envio -->
-                <div id="section-contact" class="form-footer">
-                    <div class="contact-container">
-                        <h3 class="text-center" style="margin-bottom: 1rem;">Dados de Contato</h3>
+                    <!-- Etapa 5 (Opção 1): Escolas cadastradas - Preenchimento manual -->
+                    <div id="step-5-manual" class="step-content step-escolas">
+                        <div id="section-options" class="form-section">
+                            <h3>Escolas cadastradas</h3>
+                            <div id="scroll-icon" class="scroll-icon">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Escola</th>
+                                            <th>Resposta</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>ARARUAMA </td>
+                                            <td><input type="number" name="ARARUAMA" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CABO_FRIO</td>
+                                            <td><input type="number" name="CABO_FRIO" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ITABORAI </td>
+                                            <td><input type="number" name="ITABORAI" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ITAIPUACU</td>
+                                            <td><input type="number" name="ITAIPUACU" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>MARICA_I </td>
+                                            <td><input type="number" name="MARICA_I" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>NOVA_FRIBURGO</td>
+                                            <td><input type="number" name="NOVA_FRIBURGO" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>QUEIMADOS</td>
+                                            <td><input type="number" name="QUEIMADOS" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>SEROPEDICA</td>
+                                            <td><input type="number" name="SEROPEDICA" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ALCANTARA</td>
+                                            <td><input type="number" name="ALCANTARA" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>BANGU</td>
+                                            <td><input type="number" name="BANGU" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>BARRA_DA_TIJU</td>
+                                            <td><input type="number" name="BARRA_DA_TIJUCA" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>BELFORD_ROXO </td>
+                                            <td><input type="number" name="BELFORD_ROXO" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>DUQUE_DE_CAXI</td>
+                                            <td><input type="number" name="DUQUE_DE_CAXIAS" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ICARA</td>
+                                            <td><input type="number" name="ICARAI" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ILHA_DO_GOVERNADO</td>
+                                            <td><input type="number" name="ILHA_DO_GOVERNADOR" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ITAIP</td>
+                                            <td><input type="number" name="ITAIPU" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>MADUREIRA</td>
+                                            <td><input type="number" name="MADUREIRA" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>MEIER</td>
+                                            <td><input type="number" name="MEIER" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>NILOPOLIS</td>
+                                            <td><input type="number" name="NILOPOLIS" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>NITER</td>
+                                            <td><input type="number" name="NITEROI" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>NOVA_IGUA</td>
+                                            <td><input type="number" name="NOVA_IGUACU" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>OLARI</td>
+                                            <td><input type="number" name="OLARIA" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>PRATA</td>
+                                            <td><input type="number" name="PRATA" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>SAO_GONCA</td>
+                                            <td><input type="number" name="SAO_GONCALO" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>SAO_JOAO_DE_MERIT</td>
+                                            <td><input type="number" name="SAO_JOAO_DE_MERITI" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>VILA_ISAB</td>
+                                            <td><input type="number" name="VILA_ISABEL" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>VILAR_DOS_TEL</td>
+                                            <td><input type="number" name="VILAR_DOS_TELES" min="0"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
-                        <div class="contact-grid">
+                    <!-- Etapa 5 (Opção 2): Upload de Excel -->
+                    <div id="step-5-excel" class="step-content step-excel" style="display:none;">
+                        <div id="section-excel" class="form-section">
+                            <h3>Upload de Excel</h3>
+                            <div class="form-group">
+                                <label for="excelInput" class="file-upload">
+                                    <svg class="file-upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <path d="M8 13H16"></path>
+                                        <path d="M8 17H16"></path>
+                                        <path d="M10 9H8"></path>
+                                    </svg>
+                                    <span class="file-upload-text">Clique para enviar Excel</span>
+                                    <span class="file-upload-subtext">O arquivo deve conter a planilha PEDIDO com as colunas UNIDADES e QTDE</span>
+                                    <input type="file" name="excel_file" id="excelInput" accept=".xls,.xlsx">
+                                </label>
+                                <span class="error-message">Arquivo Excel é obrigatório</span>
+                            </div>
+                            <ul class="file-list" id="excelList"></ul>
+                            
+                            <div class="excel-download">
+                                <a href="{% static 'Ex/ZeroHumExPadrao.xlsx' %}" class="btn btn-outline btn-sm" download>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    Baixar modelo de planilha
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 6: Dados de Contato -->
+                    <div id="step-6" class="step-content">
+                        <div id="section-contact" class="form-section">
+                            <h3>Dados de Contato</h3>
+
                             <div class="form-group">
                                 <label for="nome">Nome</label>
                                 <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
@@ -284,27 +401,28 @@
                                     required>
                                 <span class="error-message">Digite um email válido</span>
                             </div>
-                        </div>
 
-                        <div class="alert">
-                            Ao enviar este formulário, você concorda em ser contatado sobre seu pedido de produção de
-                            documentos.
+                            <div class="alert">
+                                Ao enviar este formulário, você concorda em ser contatado sobre seu pedido de produção de
+                                documentos.
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-lg">Enviar Pedido</button>
-                        </div>
+                    <!-- Navegação entre etapas -->
+                    <div class="step-navigation">
+                        <button type="button" class="btn prev-step" style="display: none;">Voltar</button>
+                        <button type="button" class="btn btn-primary next-step">Próximo</button>
+                        <button type="submit" class="btn btn-primary submit-form" style="display: none;">Enviar Pedido</button>
                     </div>
                 </div>
             </form>
         </div>
     </main>
 
-    <!-- Modal de Status -->
     {% include "components/modal.html" %}
-</body>
-<script src="{% static 'js/formZeroHum/sidebar.js' %}"></script>
-<script src="{% static 'js/formZeroHum/modal.js' %}"></script>
-<script src="{% static 'js/formZeroHum/script.js' %}"></script>
 
+    <script src="{% static 'js/formZeroHum/sidebar.js' %}"></script>
+    <script src="{% static 'js/formZeroHum/formulario.js' %}"></script>
+</body>
 </html>

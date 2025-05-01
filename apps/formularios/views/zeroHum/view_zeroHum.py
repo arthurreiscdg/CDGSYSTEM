@@ -112,10 +112,12 @@ def processar_uploads(files, folder_id, configuracao, timestamp, unidades_associ
                 logger.error(f"Erro no upload do arquivo {f.name}")
                 continue
 
+            # Criar o objeto ArquivoPDF com o link de download
             arquivo_pdf = ArquivoPDF.objects.create(
                 arquivo=f,
                 configuracao=configuracao,
-                cod_op=cod_op
+                cod_op=cod_op,
+                link_download=link_download  # Salvar o link de download
             )
             arquivo_pdf.unidades.set(unidades_associadas)
 
@@ -127,13 +129,19 @@ def processar_uploads(files, folder_id, configuracao, timestamp, unidades_associ
 
             with open(json_path, 'rb') as json_file:
                 json_upload_info = upload_arquivo_drive(json_filename, json_file, 'application/json', folder_id)
+                
+            # Salvar o link do arquivo JSON
+            json_link = json_upload_info.get('link_download')
+            if json_link:
+                arquivo_pdf.json_link = json_link
+                arquivo_pdf.save()
 
             arquivos_info.append({
                 'nome': f.name,
                 'link': link_download,
                 'json': {
                     'nome': json_filename,
-                    'link': json_upload_info.get('link_download')
+                    'link': json_link
                 }
             })
 

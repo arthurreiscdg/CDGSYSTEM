@@ -82,6 +82,8 @@ class ArquivoPDF(models.Model):
     cod_op = models.CharField(max_length=10)
     produto = models.ForeignKey(Produto, on_delete=models.SET_NULL, null=True, blank=True)
     unidades = models.ManyToManyField(Unidade, related_name='arquivos_pdf')
+    link_download = models.URLField(max_length=500, null=True, blank=True)  # Novo campo para armazenar o link
+    json_link = models.URLField(max_length=500, null=True, blank=True)  # Novo campo para armazenar o link do JSON
     criado_em = models.DateTimeField(default=timezone.now)
     atualizado_em = models.DateTimeField(auto_now=True)
     criado_por = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='arquivos_criados')

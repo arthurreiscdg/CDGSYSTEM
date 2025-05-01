@@ -45,13 +45,16 @@ class ConfiguracaoImpressaoAdmin(admin.ModelAdmin):
 
 @admin.register(ArquivoPDF)
 class ArquivoPDFAdmin(admin.ModelAdmin):
-    list_display = ('cod_op', 'configuracao', 'produto', 'criado_em')
+    list_display = ('cod_op', 'configuracao', 'produto', 'link_download', 'criado_em')
     search_fields = ('cod_op', 'configuracao__titulo')
     list_filter = ('criado_em', 'configuracao')
     readonly_fields = ('criado_em', 'atualizado_em', 'criado_por')
     fieldsets = (
         ('Informações do Arquivo', {
             'fields': ('arquivo', 'cod_op', 'configuracao', 'produto')
+        }),
+        ('Links de Download', {
+            'fields': ('link_download', 'json_link')
         }),
         ('Informações do Sistema', {
             'fields': ('criado_em', 'atualizado_em', 'criado_por'),
