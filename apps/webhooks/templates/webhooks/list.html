@@ -443,6 +443,13 @@
         </div>
     </div>
 
-    <script src="{% static 'js/webhooks/webhooks.js' %}"></script>
+    <!-- Importar os módulos JavaScript em ordem -->
+    <script src="{% static 'js/webhooks/core.js' %}"></script>
+    <script src="{% static 'js/webhooks/notifications.js' %}"></script>
+    <script src="{% static 'js/webhooks/selection.js' %}"></script>
+    <script src="{% static 'js/webhooks/modals.js' %}"></script>
+    <script src="{% static 'js/webhooks/status.js' %}"></script>
+    <script src="{% static 'js/webhooks/filters.js' %}"></script>
+    <script src="{% static 'js/webhooks/main.js' %}"></script>
 </body>
 </html>
