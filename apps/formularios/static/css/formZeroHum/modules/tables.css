@@ -1,0 +1,79 @@
+/* Table Styles */
+
+/* Estilo melhorado para tabelas */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    background-color: white;
+    border: 1px solid var(--gray-200);
+}
+  
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: white;
+}
+  
+table th,
+table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+}
+  
+table th {
+    background-color: var(--gray-50);
+    font-weight: 600;
+    color: var(--gray-700);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 1px 0 var(--gray-200);
+}
+  
+table tr:hover {
+    background-color: var(--gray-50);
+}
+  
+table tr:last-child td {
+    border-bottom: none;
+}
+  
+table input[type="number"] {
+    width: 100%;
+    min-width: 80px;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+  
+/* Estilo melhorado para área de rolagem */
+#scroll-icon {
+    overflow: auto;
+    max-height: 550px;
+    border-radius: var(--border-radius);
+    scrollbar-width: thin;
+    scrollbar-color: var(--gray-400) var(--gray-100);
+}
+  
+#scroll-icon::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+  
+#scroll-icon::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: var(--border-radius);
+}
+  
+#scroll-icon::-webkit-scrollbar-thumb {
+    background-color: var(--gray-400);
+    border-radius: 20px;
+    border: 2px solid var(--gray-100);
+}

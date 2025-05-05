@@ -1,0 +1,60 @@
+/* Utilities Styles - Classes utilitárias e animações */
+
+/* Utilitários */
+.hidden {
+    display: none;
+}
+  
+.error-message {
+    color: var(--error-color);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    display: none;
+}
+  
+input:invalid + .error-message,
+select:invalid + .error-message {
+    display: block;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+}
+  
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+  
+@keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+}
+  
+.slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}

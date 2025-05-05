@@ -1,0 +1,28 @@
+/* 
+   FormZeroHum - Estilos principais
+   Arquivo principal que importa todos os módulos CSS
+*/
+
+/* Importando estilos base (variáveis e reset) */
+@import url('./modules/base.css');
+
+/* Importando estilos de layout */
+@import url('./modules/layout.css');
+
+/* Importando componentes */
+@import url('./modules/components.css');
+
+/* Importando formulários */
+@import url('./modules/forms.css');
+
+/* Importando tabelas */
+@import url('./modules/tables.css');
+
+/* Importando modais */
+@import url('./modules/modal.css');
+
+/* Importando utilitários e animações */
+@import url('./modules/utilities.css');
+
+/* Importando media queries e responsividade */
+@import url('./modules/responsive.css');

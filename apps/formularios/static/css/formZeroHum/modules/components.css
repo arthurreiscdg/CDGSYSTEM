@@ -1,0 +1,225 @@
+/* Components Styles - Botões, Alertas, etc */
+
+/* Componentes do formulário */
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--gray-200);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+  
+.form-section:hover {
+    box-shadow: var(--box-shadow-md);
+    transform: translateY(-2px);
+}
+  
+.form-section h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--gray-200);
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+    position: relative;
+}
+  
+.form-section h3::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 2.5rem;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 3px;
+}
+
+/* Estilo melhorado para botões */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+  
+.btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+  
+.btn:hover::after {
+    opacity: 1;
+}
+  
+.btn:active {
+    transform: translateY(1px);
+}
+  
+.btn-primary {
+    background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+    color: white;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+  
+.btn-primary:hover {
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+    transform: translateY(-1px);
+}
+  
+.btn-primary:active {
+    box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+    transform: translateY(0);
+}
+  
+.btn-lg {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-light);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+}
+
+/* Estilo melhorado para alertas */
+.alert {
+    background-color: var(--primary-light);
+    border-left: 4px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--gray-700);
+    font-size: 0.875rem;
+}
+
+/* Estilos de status */
+.status-icon {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+  
+.status-success {
+    background-color: var(--success-light);
+    color: var(--success-color);
+}
+  
+.status-processing {
+    background-color: var(--warning-light);
+    color: var(--warning-color);
+}
+  
+.status-error {
+    background-color: var(--error-light);
+    color: var(--error-color);
+}
+  
+.status-message {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+  
+.status-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+}
+  
+.status-description {
+    color: var(--gray-600);
+    margin-bottom: 1.5rem;
+}
+
+/* Spinner de carregamento */
+.spinner {
+    border: 3px solid var(--gray-200);
+    border-radius: 50%;
+    border-top: 3px solid var(--primary-color);
+    width: 2rem;
+    height: 2rem;
+    animation: spin 1s linear infinite;
+}
+
+/* Ícones SVG inline */
+.icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.status-files {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 16px;
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.status-files p {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.status-files ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.status-files li {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e096;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.status-files li:hover {
+    background-color: #f0f0f0;
+    cursor: default;
+}

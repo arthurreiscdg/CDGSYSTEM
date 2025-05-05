@@ -1,0 +1,338 @@
+/* Forms Styles - Campos e Elementos de Formulário */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+  
+label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    display: flex;
+    align-items: center;
+}
+  
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--border-radius);
+    background-color: white;
+    color: var(--gray-800);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+  
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="date"]:hover,
+input[type="number"]:hover,
+textarea:hover,
+select:hover {
+    border-color: var(--gray-400);
+}
+  
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+  
+input:invalid,
+select:invalid {
+    border-color: var(--error-color);
+}
+  
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+  
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+}
+
+/* Estilos para formulário em etapas (wizard) */
+.form-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+    padding: 0;
+    list-style: none;
+}
+
+.form-steps::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background-color: var(--gray-300);
+    z-index: 1;
+}
+
+.step-item {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 8px;
+    border-radius: 50%;
+    background-color: var(--gray-200);
+    color: var(--gray-600);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.step-title {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.step-item.active .step-number {
+    background-color: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.step-item.active .step-title {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.step-item.completed .step-number {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.step-content {
+    display: none;
+}
+
+.step-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.step-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+.prev-step {
+    background-color: var(--gray-200);
+    color: var(--gray-700);
+}
+
+.prev-step:hover {
+    background-color: var(--gray-300);
+}
+
+/* Estilo melhorado para o upload de arquivos */
+.file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--primary-light);
+    border-radius: var(--border-radius);
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: rgba(219, 234, 254, 0.2);
+}
+  
+.file-upload:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary-color);
+}
+  
+.file-upload input[type="file"] {
+    display: none;
+}
+  
+.file-upload-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+}
+  
+.file-upload-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    margin-bottom: 0.25rem;
+}
+  
+.file-upload-subtext {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+}
+  
+.file-list {
+    list-style: none;
+    margin-top: 0.75rem;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--gray-200);
+}
+  
+.file-list:empty {
+    display: none;
+}
+  
+.file-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--gray-50);
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--gray-200);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+  
+.file-list li:last-child {
+    border-bottom: none;
+}
+  
+.file-list li button {
+    background: none;
+    border: none;
+    color: var(--error-color);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+  
+.file-list li button:hover {
+    background-color: var(--error-light);
+}
+  
+.file-list li:hover {
+    background-color: var(--primary-light);
+}
+  
+.file-list li.active {
+    background-color: var(--primary-light);
+    border-left: 3px solid var(--primary-color);
+}
+
+/* Estilos para a etapa de escolha de método */
+.method-description {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--gray-600);
+}
+
+.method-options {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.method-option {
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+}
+
+.method-option input[type="radio"] {
+    display: none;
+}
+
+.method-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--border-radius);
+    background-color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    height: 100%;
+}
+
+.method-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--box-shadow-md);
+    transform: translateY(-3px);
+}
+
+.method-option input[type="radio"]:checked + .method-card {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+    box-shadow: 0 6px 16px rgba(38, 132, 255, 0.2);
+}
+
+.method-icon {
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.method-card h4 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+    text-align: center;
+    color: var(--gray-800);
+}
+
+.method-card p {
+    margin: 0;
+    text-align: center;
+    color: var(--gray-600);
+}
+
+/* Estilos para a seção de Excel */
+.excel-download {
+    margin-top: 1.5rem;
+    text-align: center;
+}

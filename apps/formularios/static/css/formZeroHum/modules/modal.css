@@ -1,0 +1,144 @@
+/* Modal Styles */
+
+/* Estilos do Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(3px);
+}
+  
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+  
+.modal {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-lg);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+  
+.modal-overlay.active .modal {
+    transform: scale(1);
+    opacity: 1;
+}
+  
+.modal-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+  
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+  
+.modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-500);
+    transition: color 0.2s ease;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+  
+.modal-close:hover {
+    color: var(--gray-800);
+    background-color: var(--gray-100);
+}
+  
+.modal-body {
+    padding: 1.5rem;
+}
+  
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    background-color: var(--gray-50);
+}
+
+/* Estilos para pré-visualização de PDF */
+.pdf-preview-container {
+    margin-top: 1.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    background-color: var(--gray-50);
+}
+
+.pdf-preview-container h4 {
+    margin-bottom: 1rem;
+    color: var(--gray-700);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.pdf-preview-wrapper {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.pdf-preview {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Estilos para o modal do PDF */
+.pdf-modal {
+    width: 95%;
+    max-width: 1200px;
+    height: 90vh;
+}
+
+.pdf-modal .modal-body {
+    padding: 0;
+    height: calc(100% - 70px); /* Altura total menos o header */
+}
+
+.pdf-modal .pdf-preview-wrapper {
+    height: 100%;
+    border: none;
+    margin: 0;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.pdf-modal .pdf-preview {
+    height: 100%;
+    width: 100%;
+    border: none;
+}
