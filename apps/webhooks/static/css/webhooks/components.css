@@ -1,0 +1,589 @@
+/* components.css - Componentes reutilizáveis */
+
+/* Botões */
+.btn {
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+.btn-primary {
+    background-color: #4361ee;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3a56d4;
+}
+
+.btn-secondary {
+    background-color: #6366f1;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a5fcb;
+}
+
+.btn-success {
+    background-color: #10b981;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #0da571;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--gray-300);
+    color: var(--gray-700);
+}
+
+.btn-outline:hover {
+    background-color: var(--gray-100);
+    color: var(--gray-800);
+}
+
+.btn-info {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #2563eb;
+}
+
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-disabled:hover {
+    background-color: inherit;
+}
+
+/* Tema escuro para botões */
+.dark-theme .btn-primary {
+    background-color: var(--dark-accent-blue);
+    color: white;
+    border: none;
+}
+
+.dark-theme .btn-primary:hover {
+    background-color: #1976D2;
+}
+
+.dark-theme .btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text-secondary);
+}
+
+.dark-theme .btn-outline:hover {
+    background-color: var(--dark-bg-elevated);
+    color: var(--dark-text-primary);
+}
+
+/* Badges de status */
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.status {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-processing, .status-processing {
+    background-color: rgba(76, 201, 240, 0.15);
+    color: #3391b0;
+}
+
+.status-pending, .status-pending {
+    background-color: rgba(255, 159, 28, 0.15);
+    color: #b87305;
+}
+
+.status-completed, .status-completed {
+    background-color: rgba(46, 196, 182, 0.15);
+    color: #1a8a7e;
+}
+
+.status-cancelled {
+    background-color: rgba(229, 62, 62, 0.15);
+    color: #c53030;
+}
+
+/* Tema escuro para badges de status */
+.dark-theme .status-completed {
+    background-color: var(--dark-status-authorized-bg);
+    color: var(--dark-status-authorized);
+}
+
+.dark-theme .status-pending {
+    background-color: var(--dark-status-pending-bg);
+    color: var(--dark-status-pending);
+}
+
+.dark-theme .status-processing {
+    background-color: var(--dark-status-processing-bg);
+    color: var(--dark-status-processing);
+}
+
+.dark-theme .status-cancelled {
+    background-color: var(--dark-status-cancelled-bg);
+    color: var(--dark-status-cancelled);
+}
+
+/* Ícones e elementos decorativos */
+.icon {
+    margin-right: 0.5rem;
+    font-style: normal;
+}
+
+.logo-icon {
+    color: var(--dark-accent-green);
+    font-size: 1.5rem;
+}
+
+.logo {
+    color: var(--dark-text-primary);
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+.access-badge {
+    background-color: var(--dark-accent-purple);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+
+/* Links e navegação */
+.nav-section {
+    color: var(--dark-text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.nav-section i {
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+}
+
+.nav-section:hover {
+    color: var(--dark-text-primary);
+}
+
+.nav-section:hover i {
+    transform: rotate(180deg);
+}
+
+/* Ferramentas de ação */
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--dark-bg-tertiary);
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.search-box i {
+    color: var(--dark-text-tertiary);
+}
+
+.search-box input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--dark-text-secondary);
+    width: 100%;
+}
+
+.search-box input::placeholder {
+    color: var(--dark-text-tertiary);
+}
+
+.action-icon {
+    color: var(--dark-text-secondary);
+    text-decoration: none;
+    position: relative;
+}
+
+.action-icon i {
+    font-size: 1.1rem;
+}
+
+.action-icon:hover {
+    color: var(--dark-text-primary);
+}
+
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--dark-accent-red);
+    color: white;
+    font-size: 0.7rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-icon img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Barra de pesquisa e data */
+.search-bar {
+    flex: 1;
+    position: relative;
+    min-width: 200px;
+}
+
+.search-input {
+    width: 100%;
+    background-color: var(--dark-bg-tertiary);
+    border: 1px solid var(--dark-border);
+    border-radius: 4px;
+    color: var(--dark-text-secondary);
+    padding: 0.6rem 1rem 0.6rem 2.5rem;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--dark-text-tertiary);
+}
+
+.search-bar i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dark-text-tertiary);
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+}
+
+.date-btn {
+    background-color: var(--dark-bg-tertiary);
+    border: 1px solid var(--dark-border);
+    border-radius: 4px;
+    color: var(--dark-text-secondary);
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.date-btn:hover {
+    background-color: var(--dark-bg-elevated);
+}
+
+.toolbar-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background-color: var(--dark-bg-tertiary);
+    border: 1px solid var(--dark-border);
+    border-radius: 4px;
+    color: var(--dark-text-secondary);
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background-color: var(--dark-bg-elevated);
+    color: var(--dark-text-primary);
+}
+
+.add-button-container {
+    margin-left: auto;
+}
+
+.add-button {
+    background-color: var(--dark-accent-green);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.add-button:hover {
+    background-color: #00A040;
+}
+
+/* Cards de ação */
+.action-card {
+    background-color: var(--dark-bg-secondary);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.action-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background-color: var(--dark-bg-tertiary);
+    border-bottom: 1px solid var(--dark-border);
+    color: var(--dark-text-primary);
+    font-weight: 500;
+}
+
+.action-card-header i {
+    color: var(--dark-accent-blue);
+}
+
+.action-card-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.action-card-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: var(--dark-bg-tertiary);
+    border: none;
+    border-radius: 4px;
+    color: var(--dark-text-secondary);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    cursor: pointer;
+}
+
+.action-card-btn i {
+    color: var(--dark-accent-blue);
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.action-card-btn:hover {
+    background-color: var(--dark-bg-elevated);
+    color: var(--dark-text-primary);
+}
+
+.batch-btn {
+    background-color: var(--dark-bg-elevated);
+    border: none;
+    border-radius: 4px;
+    color: var(--dark-text-secondary);
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.batch-btn:hover {
+    background-color: var(--dark-bg-tertiary);
+    color: var(--dark-text-primary);
+}
+
+.batch-btn.outline {
+    border: 1px solid var(--dark-border);
+    background-color: transparent;
+}
+
+/* Indicadores de status para modal */
+.status-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-top: 3px;
+}
+
+.status-indicator.processing {
+    background-color: var(--dark-status-processing);
+}
+
+.status-indicator.pending {
+    background-color: var(--dark-status-pending);
+}
+
+.status-indicator.completed {
+    background-color: var(--dark-status-authorized);
+}
+
+.status-indicator.cancelled {
+    background-color: var(--dark-status-cancelled);
+}
+
+/* Ícones de documento */
+.document-icons {
+    display: flex;
+}
+
+.doc-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2px;
+    position: relative;
+}
+
+.doc-icon span {
+    font-weight: 600;
+}
+
+.doc-icon.sent {
+    background-color: var(--dark-accent-blue);
+    color: white;
+}
+
+.doc-icon.canceled {
+    background-color: var(--dark-accent-red);
+    color: white;
+}
+
+.doc-icon.verified {
+    background-color: var(--dark-accent-green);
+    color: white;
+}
+
+.doc-icon.exported {
+    background-color: var(--dark-accent-orange);
+    color: white;
+}
+
+/* Paginação */
+.pagination {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.pagination-btn {
+    min-width: 32px;
+    height: 32px;
+    background-color: var(--dark-bg-elevated);
+    border: 1px solid var(--dark-border);
+    border-radius: 4px;
+    color: var(--dark-text-secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.pagination-btn.active {
+    background-color: var(--dark-accent-blue);
+    color: white;
+    border-color: var(--dark-accent-blue);
+}
+
+.pagination-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-btn:not(.active):not(.disabled):hover {
+    background-color: var(--dark-bg-tertiary);
+    color: var(--dark-text-primary);
+}
+
+/* Spinners */
+.spinner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.spinner {
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 3px solid #3b82f6;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+.dark-theme .spinner-container {
+    color: var(--dark-text-secondary);
+}
+
+.dark-theme .spinner {
+    border: 3px solid var(--dark-bg-elevated);
+    border-top: 3px solid var(--dark-accent-blue);
+}
+
+.spinner-small {
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 2px solid #3b82f6;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+}

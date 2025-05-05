@@ -8,7 +8,7 @@
     <title>Notas Fiscais de Saída - PDFlow</title>
     <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/formularios/forms.css' %}">
-    <link rel="stylesheet" href="{% static 'css/webhooks/webhooks.css' %}">
+    <link rel="stylesheet" href="{% static 'css/webhooks/main.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="dark-theme">
@@ -18,8 +18,8 @@
             <nav class="navbar">
                 <div class="logo-container">
                     <i class="fa-solid fa-circle-exclamation logo-icon"></i>
-                    <div class="logo">Meu Negócio</div>
-                    <span class="access-badge">Acesse agora</span>
+                    <div class="logo">Montink</div>
+                    {% comment %} <span class="access-badge">Acesse agora</span> {% endcomment %}
                 </div>
                 
                 <div class="nav-sections">
@@ -30,19 +30,15 @@
                 </div>
 
                 <div class="nav-actions">
-                    <div class="search-box">
+                    {% comment %} <div class="search-box">
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Pesquisar">
-                    </div>
-                    <div class="action-icons">
+                    </div> {% endcomment %}
+                    {% comment %} <div class="action-icons">
                         <a href="#" class="action-icon"><i class="fas fa-th"></i></a>
                         <a href="#" class="action-icon notification-icon"><i class="fas fa-bell"></i><span class="badge">1</span></a>
                         <a href="#" class="action-icon"><i class="fas fa-cog"></i></a>
-                        <a href="#" class="action-icon profile-icon">
-                            <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Editor">
-                            <span>Editora</span>
-                        </a>
-                    </div>
+                    </div> {% endcomment %}
                 </div>
             </nav>
         </div>
@@ -52,12 +48,7 @@
     <div class="breadcrumb-section">
         <div class="container-fluid">
             <div class="breadcrumb">
-                <i class="fas fa-ellipsis-h"></i>
-                <span class="arrow">›</span>
-                <h2>Notas Fiscais de Saída</h2>
-            </div>
-            <div class="location-filter">
-                <span class="filter-label active">Todas as lojas <i class="fas fa-chevron-down"></i></span>
+                <h2>Pedidos Montink</h2>
             </div>
         </div>
     </div>

@@ -1,0 +1,179 @@
+/* table.css - Estilos específicos para tabelas */
+
+/* Estilização geral da tabela */
+.webhooks-table {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.webhooks-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.webhooks-table th {
+    background-color: var(--gray-200);
+    color: var(--gray-800);
+    font-weight: 600;
+    text-align: left;
+    padding: 1rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.webhooks-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+    color: var(--gray-700);
+    vertical-align: middle;
+}
+
+.webhooks-table tr:last-child td {
+    border-bottom: none;
+}
+
+.webhooks-table tr:hover {
+    background-color: var(--gray-100);
+}
+
+.webhooks-table tr.selected {
+    background-color: rgba(67, 97, 238, 0.05);
+}
+
+.webhooks-table .actions {
+    white-space: nowrap;
+    text-align: right;
+}
+
+.webhooks-table .actions .btn {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+}
+
+/* Tabela de dados principal */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.data-table thead th {
+    background-color: var(--dark-bg-tertiary);
+    color: var(--dark-text-tertiary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--dark-border);
+    white-space: nowrap;
+}
+
+.data-table tbody td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--dark-border);
+    color: var(--dark-text-secondary);
+    font-size: 0.875rem;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+    background-color: var(--dark-bg-tertiary);
+}
+
+.data-table tbody tr.selected {
+    background-color: rgba(30, 136, 229, 0.1);
+}
+
+/* Checkbox estilizado na tabela */
+.checkbox-container {
+    position: relative;
+    height: 18px;
+    width: 18px;
+}
+
+.checkbox {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    cursor: pointer;
+}
+
+.checkbox-container label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: var(--dark-bg-tertiary);
+    border: 1px solid var(--dark-border);
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.checkbox:checked + label {
+    background-color: var(--dark-accent-blue);
+    border-color: var(--dark-accent-blue);
+}
+
+.checkbox:checked + label:after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 3px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Ações em células da tabela */
+.actions-cell {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.row-actions-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--dark-text-tertiary);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row-actions-btn:hover {
+    background-color: var(--dark-bg-elevated);
+    color: var(--dark-text-primary);
+}
+
+/* Mensagem de nenhum dado */
+.no-data {
+    text-align: center;
+    padding: 2rem !important;
+    color: var(--gray-500);
+    font-style: italic;
+}
+
+.dark-theme .no-data {
+    color: var(--dark-text-tertiary);
+}

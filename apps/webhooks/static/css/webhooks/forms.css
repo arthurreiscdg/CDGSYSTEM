@@ -1,0 +1,275 @@
+/* forms.css - Estilos para formulários e inputs */
+
+/* Inputs e controles de formulário */
+.form-control {
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #e2e8f0;
+    padding: 0 1rem;
+    font-size: 0.9rem;
+    width: 100%;
+    background-color: white;
+    color: var(--gray-800);
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+}
+
+.form-select {
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #e2e8f0;
+    padding: 0 1rem;
+    font-size: 0.9rem;
+    appearance: none;
+    background-color: white;
+    color: var(--gray-800);
+    width: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a0aec0'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px;
+    padding-right: 2.5rem;
+    transition: border-color 0.2s;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+}
+
+/* Tema escuro para formulários */
+.dark-theme .form-select,
+.dark-theme .form-control {
+    width: 100%;
+    background-color: var(--dark-bg-tertiary);
+    border: 1px solid var(--dark-border);
+    border-radius: 4px;
+    color: var(--dark-text-secondary);
+    padding: 0.6rem 1rem;
+    outline: none;
+}
+
+.dark-theme .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239E9E9E'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px;
+    padding-right: 2.5rem;
+}
+
+.dark-theme .form-select:focus,
+.dark-theme .form-control:focus {
+    border-color: var(--dark-accent-blue);
+    outline: none;
+}
+
+/* Grupos de formulários */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--gray-700);
+    margin-bottom: 0.5rem;
+}
+
+.dark-theme .form-group label {
+    color: var(--dark-text-tertiary);
+}
+
+/* Container de select com ícone */
+.select-container {
+    position: relative;
+}
+
+.select-container i {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-500);
+    pointer-events: none;
+}
+
+.dark-theme .select-container i {
+    color: var(--dark-text-tertiary);
+}
+
+/* Busca customizada */
+.custom-search {
+    margin-bottom: 1.5rem;
+}
+
+.custom-search-input {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Filtros */
+.filter-panel {
+    background-color: white;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.dark-theme .filter-panel {
+    background-color: var(--dark-bg-secondary);
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.dark-theme .filter-header {
+    border-bottom: 1px solid var(--dark-border);
+}
+
+.filter-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray-800);
+}
+
+.dark-theme .filter-header h4 {
+    color: var(--dark-text-primary);
+}
+
+.filter-header h4 i {
+    color: var(--primary-color);
+}
+
+.dark-theme .filter-header h4 i {
+    color: var(--dark-accent-blue);
+}
+
+.clear-filter {
+    background-color: transparent;
+    border: none;
+    color: var(--gray-500);
+    cursor: pointer;
+}
+
+.clear-filter:hover {
+    color: var(--gray-700);
+}
+
+.dark-theme .clear-filter {
+    color: var(--dark-text-tertiary);
+}
+
+.dark-theme .clear-filter:hover {
+    color: var(--dark-text-primary);
+}
+
+.filter-content {
+    padding: 1rem;
+}
+
+.filter-group {
+    margin-bottom: 1.25rem;
+}
+
+.filter-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    cursor: pointer;
+}
+
+.filter-label.active {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.dark-theme .filter-label.active {
+    color: var(--dark-accent-green);
+}
+
+.filter-btn {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+.filter-btn:hover {
+    background-color: #3a56d4;
+}
+
+.dark-theme .filter-btn {
+    background-color: var(--dark-accent-green);
+}
+
+.dark-theme .filter-btn:hover {
+    background-color: #00A040;
+}
+
+/* Formulário de filtro de webhooks */
+#webhookFilterForm {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.webhook-actions .form-group {
+    margin-bottom: 0;
+}
+
+.webhook-actions .btn {
+    height: 41px; /* Match the height of inputs */
+}
+
+/* Botão para adicionar filtros */
+.add-filter-btn {
+    background-color: #f5f6f8;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    color: var(--gray-600);
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.add-filter-btn:hover {
+    background-color: #edf2f7;
+    color: var(--gray-700);
+}
+
+.dark-theme .add-filter-btn {
+    background-color: var(--dark-bg-tertiary);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text-secondary);
+}
+
+.dark-theme .add-filter-btn:hover {
+    background-color: var(--dark-bg-elevated);
+    color: var(--dark-text-primary);
+}

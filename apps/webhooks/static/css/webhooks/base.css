@@ -1,0 +1,101 @@
+/* base.css - Variáveis e estilos base */
+
+:root {
+    /* Cores principais do tema claro */
+    --gray-100: #f6f8fb;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e0;
+    --gray-500: #a0aec0;
+    --gray-600: #718096;
+    --gray-700: #4a5568;
+    --gray-800: #2d3748;
+    
+    /* Cores de ação */
+    --primary-color: #4361ee;
+    
+    /* Utilitários */
+    --border-radius: 6px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    
+    /* Cores do tema escuro */
+    --dark-bg-primary: #121212;
+    --dark-bg-secondary: #1C1C1E;
+    --dark-bg-tertiary: #2A2A2D;
+    --dark-bg-elevated: #323236;
+    
+    /* Cores de texto - tema escuro */
+    --dark-text-primary: #FFFFFF;
+    --dark-text-secondary: #DADADA;
+    --dark-text-tertiary: #9E9E9E;
+    
+    /* Cores de ação - tema escuro */
+    --dark-accent-green: #00C851;
+    --dark-accent-blue: #1E88E5;
+    --dark-accent-purple: #9C27B0;
+    --dark-accent-red: #F44336;
+    --dark-accent-orange: #FF9800;
+    
+    /* Cores de status - tema escuro */
+    --dark-status-authorized: #A4E786;
+    --dark-status-authorized-bg: rgba(164, 231, 134, 0.15);
+    --dark-status-pending: #FF9800;
+    --dark-status-pending-bg: rgba(255, 152, 0, 0.15);
+    --dark-status-processing: #1E88E5;
+    --dark-status-processing-bg: rgba(30, 136, 229, 0.15);
+    --dark-status-cancelled: #F44336;
+    --dark-status-cancelled-bg: rgba(244, 67, 54, 0.15);
+    
+    /* Utilitários - tema escuro */
+    --dark-border: #323236;
+    --dark-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos básicos */
+body {
+    background-color: #f6f8fb;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
+
+body.dark-theme {
+    background-color: var(--dark-bg-primary);
+    color: var(--dark-text-primary);
+}
+
+.container-fluid {
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Animações */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
