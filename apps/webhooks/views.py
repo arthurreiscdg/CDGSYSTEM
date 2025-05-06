@@ -9,8 +9,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.db import transaction
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes, action
@@ -35,7 +37,7 @@ from .models import (
 # Configuração de logging
 logger = logging.getLogger('apps.webhooks')
 
-
+@login_required
 def webhook_list(request):
     """
     View para renderizar a página de listagem de webhooks.
@@ -44,12 +46,20 @@ def webhook_list(request):
     na página list.html, permitindo ao usuário visualizar e gerenciar
     os webhooks recebidos. Implementa filtros por status e busca por texto.
     
+    Requer que o usuário seja membro da equipe para acessar.
+    
     Args:
         request (HttpRequest): O objeto de requisição HTTP
         
     Returns:
         HttpResponse: Resposta HTML renderizada com o template list.html
+                     ou redirecionamento caso o usuário não tenha permissão
     """
+    # Verificar se o usuário é membro da equipe
+    if not request.user.is_staff:
+        messages.error(request, "Você não tem permissão para acessar esta página. Apenas membros da equipe podem acessar.")
+        return redirect('/home')  # Redirecionamento para a URL direta ao invés de usar namespace
+    
     # Iniciar queryset de webhooks - sem usar select_related para pedido
     queryset = Webhook.objects.all().prefetch_related('pedidos').order_by('-recebido_em')
     
