@@ -1,0 +1,32 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/formularios/header.css' %}">
+ <!-- Header -->
+ <header class="header">
+    <div class="header-left">
+        <h1>CDG System</h1>
+    </div>
+    <div class="header-right">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Pesquisar...">
+        </div>
+        <div class="notifications">
+            <button class="icon-button">
+                <i class="fas fa-bell"></i>
+                <span class="badge">3</span>
+            </button>
+        </div>
+        <div class="theme-toggle">
+            <button id="theme-toggle-btn" class="icon-button">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        <div class="user-profile">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuário">
+            <div class="user-info">
+                <span class="user-name">João Silva</span>
+                <span class="user-role">Administrador</span>
+            </div>
+        </div>
+    </div>
+</header>

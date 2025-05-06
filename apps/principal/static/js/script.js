@@ -1,164 +1,183 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Mobile menu toggle
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
+// Elementos DOM
+const themeToggleBtn = document.getElementById("theme-toggle-btn")
+const sidebarToggle = document.getElementById("toggle-sidebar")
+const sidebar = document.getElementById("sidebar")
+const moduleCards = document.querySelectorAll(".module-card")
+const quickActionBtns = document.querySelectorAll(".quick-action-btn")
 
-    hamburger.addEventListener('click', function () {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
-    });
+// Toggle do tema (claro/escuro)
+themeToggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark-theme")
 
-    // Close mobile menu when clicking a link
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-        });
-    });
+  // Atualiza o ícone do botão
+  const icon = themeToggleBtn.querySelector("i")
+  if (document.body.classList.contains("dark-theme")) {
+    icon.classList.remove("fa-moon")
+    icon.classList.add("fa-sun")
+    localStorage.setItem("theme", "dark")
+  } else {
+    icon.classList.remove("fa-sun")
+    icon.classList.add("fa-moon")
+    localStorage.setItem("theme", "light")
+  }
+})
 
-    // Smooth scrolling for all anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
+// Verifica se há um tema salvo no localStorage
+document.addEventListener("DOMContentLoaded", () => {
+  const savedTheme = localStorage.getItem("theme")
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark-theme")
+    const icon = themeToggleBtn.querySelector("i")
+    icon.classList.remove("fa-moon")
+    icon.classList.add("fa-sun")
+  }
+})
 
-            // Remove active class from all form cards
-            document.querySelectorAll('.form-card').forEach(card => {
-                card.classList.remove('active-form');
-            });
+// Toggle do sidebar em dispositivos móveis
+sidebarToggle.addEventListener("click", () => {
+  sidebar.classList.toggle("open")
+})
 
-            const targetId = this.getAttribute('href');
+// Fecha o sidebar ao clicar fora dele em dispositivos móveis
+document.addEventListener("click", (e) => {
+  if (
+    window.innerWidth <= 768 &&
+    !sidebar.contains(e.target) &&
+    !sidebarToggle.contains(e.target) &&
+    sidebar.classList.contains("open")
+  ) {
+    sidebar.classList.remove("open")
+  }
+})
 
-            // If it's a form section, highlight it
-            if (targetId.includes('form-section')) {
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    targetElement.classList.add('active-form');
-                }
-            }
+// Adiciona evento de clique aos cards de módulos
+moduleCards.forEach((card) => {
+  card.addEventListener("click", () => {
+    const module = card.getAttribute("data-module")
+    // Aqui você pode adicionar a lógica para navegar para o módulo específico
+    console.log(`Navegando para o módulo: ${module}`)
 
-            // Scroll to the target element
-            const target = document.querySelector(targetId);
-            if (target) {
-                // Calculate header height for offset
-                const headerHeight = document.querySelector('header').offsetHeight;
+    // Exemplo de animação ao clicar
+    card.style.transform = "scale(0.95)"
+    setTimeout(() => {
+      card.style.transform = ""
+    }, 200)
+  })
+})
 
-                // Calculate position to scroll to (element position - header height - additional padding)
-                const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
-                const offsetPosition = elementPosition - headerHeight - 20;
+// Adiciona evento de clique aos botões de ação rápida
+quickActionBtns.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation() // Evita propagação do evento
 
-                // Smooth scroll to the element
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
+    // Exemplo de animação ao clicar
+    btn.style.transform = "scale(0.95)"
+    setTimeout(() => {
+      btn.style.transform = ""
+    }, 200)
 
-    // Form submission handlers
-    const contactForm = document.getElementById('contact-form');
-    const registerForm = document.getElementById('register-form');
-    const newsletterForm = document.getElementById('newsletter-form');
+    // Aqui você pode adicionar a lógica para cada ação rápida
+    const action = btn.querySelector("span").textContent
+    console.log(`Executando ação: ${action}`)
+  })
+})
 
-    // Contact form submission
-    contactForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+// Função para atualizar a data e hora
+function updateDateTime() {
+  const now = new Date()
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }
 
-        // In a real Django app, you would use AJAX to submit the form
-        // or let Django handle the form submission
+  // Aqui você pode atualizar um elemento com a data/hora atual se necessário
+  // Por exemplo: document.getElementById('current-time').textContent = now.toLocaleDateString('pt-BR', options);
+}
 
-        // Simulate form submission
-        const formData = new FormData(contactForm);
+// Atualiza a data/hora a cada minuto
+updateDateTime()
+setInterval(updateDateTime, 60000)
 
-        // Validate form (simple validation for demo)
-        const email = formData.get('email');
-        const message = formData.get('message');
+// Simulação de notificações em tempo real (apenas para demonstração)
+function simulateNewNotification() {
+  const notificationsList = document.querySelector(".notifications-list")
+  const notificationTypes = ["warning", "info", "success", "error"]
+  const notificationMessages = [
+    "Nova venda registrada",
+    "Atualização do sistema disponível",
+    "Backup automático concluído",
+    "Erro na sincronização de dados",
+  ]
 
-        if (!email || !message) {
-            document.getElementById('contact-error').style.display = 'block';
-            document.getElementById('contact-success').style.display = 'none';
-            return;
-        }
+  // Gera uma notificação aleatória
+  const randomType = notificationTypes[Math.floor(Math.random() * notificationTypes.length)]
+  const randomMessage = notificationMessages[Math.floor(Math.random() * notificationMessages.length)]
 
-        // Simulate successful submission
-        document.getElementById('contact-success').style.display = 'block';
-        document.getElementById('contact-error').style.display = 'none';
-        contactForm.reset();
+  // Cria o elemento de notificação
+  const notificationItem = document.createElement("div")
+  notificationItem.className = "notification-item unread"
+  notificationItem.style.animation = "slideIn 0.3s ease-out forwards"
 
-        // In a real Django app, this would be handled by Django views
-        console.log('Contact form submitted:', Object.fromEntries(formData));
-    });
+  // Define o ícone com base no tipo
+  let icon = ""
+  switch (randomType) {
+    case "warning":
+      icon = "exclamation-triangle"
+      break
+    case "info":
+      icon = "info-circle"
+      break
+    case "success":
+      icon = "check-circle"
+      break
+    case "error":
+      icon = "times-circle"
+      break
+  }
 
-    // Registration form submission
-    registerForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+  // Conteúdo da notificação
+  notificationItem.innerHTML = `
+        <div class="notification-icon ${randomType}">
+            <i class="fas fa-${icon}"></i>
+        </div>
+        <div class="notification-content">
+            <p>${randomMessage}</p>
+            <span class="notification-time">Agora mesmo</span>
+        </div>
+    `
 
-        const formData = new FormData(registerForm);
+  // Adiciona a notificação ao início da lista
+  if (notificationsList.firstChild) {
+    notificationsList.insertBefore(notificationItem, notificationsList.firstChild)
+  } else {
+    notificationsList.appendChild(notificationItem)
+  }
 
-        // Validate password match
-        const password = formData.get('password');
-        const confirmPassword = formData.get('confirm_password');
+  // Remove a última notificação se houver mais de 4
+  if (notificationsList.children.length > 4) {
+    const lastNotification = notificationsList.lastChild
+    lastNotification.style.animation = "slideOut 0.3s ease-out forwards"
+    setTimeout(() => {
+      notificationsList.removeChild(lastNotification)
+    }, 300)
+  }
 
-        if (password !== confirmPassword) {
-            document.getElementById('register-error').textContent = 'Passwords do not match.';
-            document.getElementById('register-error').style.display = 'block';
-            document.getElementById('register-success').style.display = 'none';
-            return;
-        }
+  // Atualiza o contador de notificações
+  const badge = document.querySelector(".notifications .badge")
+  badge.textContent = Number.parseInt(badge.textContent) + 1
+}
 
-        if (password.length < 8) {
-            document.getElementById('register-error').textContent = 'Password must be at least 8 characters long.';
-            document.getElementById('register-error').style.display = 'block';
-            document.getElementById('register-success').style.display = 'none';
-            return;
-        }
-
-        // Simulate successful registration
-        document.getElementById('register-success').style.display = 'block';
-        document.getElementById('register-error').style.display = 'none';
-        registerForm.reset();
-
-        console.log('Registration form submitted:', Object.fromEntries(formData));
-    });
-
-    // Newsletter form submission
-    newsletterForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const formData = new FormData(newsletterForm);
-
-        // Get selected interests
-        const interests = [];
-        document.querySelectorAll('input[name="interests"]:checked').forEach(checkbox => {
-            interests.push(checkbox.value);
-        });
-
-        // Simulate successful subscription
-        document.getElementById('newsletter-success').style.display = 'block';
-        document.getElementById('newsletter-error').style.display = 'none';
-        newsletterForm.reset();
-
-        console.log('Newsletter form submitted:', {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            interests: interests,
-            frequency: formData.get('frequency')
-        });
-    });
-
-    // Highlight the active form when page loads if URL has a hash
-    if (window.location.hash) {
-        const targetElement = document.querySelector(window.location.hash);
-        if (targetElement && targetElement.classList.contains('form-card')) {
-            targetElement.classList.add('active-form');
-        }
+// Simula novas notificações a cada 30-60 segundos (apenas para demonstração)
+setInterval(
+  () => {
+    // 50% de chance de gerar uma nova notificação
+    if (Math.random() > 0.5) {
+      simulateNewNotification()
     }
-
-    // Redirect to another page on button click
-    document.getElementById('form-rapido').forEach(button => {
-        button.addEventListener('click', function () {
-            alert('Formulário enviado com sucesso!');
-        });
-    });
-});
-
+  },
+  Math.random() * 30000 + 30000,
+)

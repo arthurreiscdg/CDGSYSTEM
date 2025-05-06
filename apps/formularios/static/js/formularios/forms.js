@@ -1,157 +1,89 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Get all form navigation buttons
-    const formNavButtons = document.querySelectorAll('.form-nav-button');
-    const formContainer = document.getElementById('form-container');
-    
-    // Add click event to each form button
-    formNavButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remove active class from all buttons
-            formNavButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            this.classList.add('active');
-            
-            // Get the form type from data attribute
-            const formType = this.getAttribute('data-form');
-            
-            // Load the appropriate form
-            loadForm(formType);
-        });
-    });
-    
-    // Function to load form based on type
-    function loadForm(formType) {
-        // Show loading state
-        formContainer.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Carregando formulário...</p></div>';
-        
-        // Simulate loading delay (in a real app, this would be an AJAX request)
-        setTimeout(() => {
-            // Load the form content based on type
-            switch(formType) {
-                case 'coleguium':
-                    formContainer.innerHTML = createColeguiumForm();
-                    break;
-                case 'elite':
-                    formContainer.innerHTML = createEliteForm();
-                    break;
-                case 'zerohum':
-                    formContainer.innerHTML = createZeroHumForm();
-                    break;
-                case 'pensi':
-                    formContainer.innerHTML = createPensiForm();
-                    break;
-                default:
-                    formContainer.innerHTML = '<div class="form-error">Formulário não encontrado</div>';
-            }
-            
-            // Add event listeners to the form
-            setupFormListeners();
-            
-            // Scroll to form
-            formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 800);
+// Script específico para a página de formulários
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Referências aos elementos
+    const hamburger = document.querySelector(".hamburger")
+    const navLinks = document.querySelector(".nav-links")
+    const formNavButtons = document.querySelectorAll(".form-nav-button")
+  
+    // Adicionar o botão de toggle de tema se não existir
+    if (!document.querySelector(".theme-toggle")) {
+      const themeToggle = document.createElement("div")
+      themeToggle.className = "theme-toggle"
+      themeToggle.innerHTML = "<i>🌙</i>" // Usando emoji como ícone
+      document.body.appendChild(themeToggle)
+  
+      // Verificar se há um tema salvo
+      const savedTheme = localStorage.getItem("theme")
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark-theme")
+        themeToggle.innerHTML = "<i>☀️</i>" // Usando emoji como ícone
+      }
+  
+      // Adicionar evento de clique para alternar o tema
+      themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-theme")
+  
+        if (document.body.classList.contains("dark-theme")) {
+          localStorage.setItem("theme", "dark")
+          themeToggle.innerHTML = "<i>☀️</i>" // Usando emoji como ícone
+        } else {
+          localStorage.setItem("theme", "light")
+          themeToggle.innerHTML = "<i>🌙</i>" // Usando emoji como ícone
+        }
+      })
     }
-    
-    // Function to set up form event listeners
-    function setupFormListeners() {
-        const form = document.querySelector('.dynamic-form');
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Show success message
-                const successMessage = document.createElement('div');
-                successMessage.className = 'success-message';
-                successMessage.style.display = 'block';
-                successMessage.innerHTML = '<strong>Sucesso!</strong> Seu formulário foi enviado com sucesso.';
-                
-                // Replace form with success message
-                form.innerHTML = '';
-                form.appendChild(successMessage);
-                
-                // Add return button
-                const returnButton = document.createElement('button');
-                returnButton.className = 'btn btn-primary';
-                returnButton.textContent = 'Voltar para Formulários';
-                returnButton.style.marginTop = '2rem';
-                returnButton.addEventListener('click', function() {
-                    // Reset active state
-                    formNavButtons.forEach(btn => btn.classList.remove('active'));
-                    
-                    // Show form selection placeholder
-                    formContainer.innerHTML = `
-                        <div class="form-placeholder">
-                            <div class="form-placeholder-icon">👆</div>
-                            <h3>Selecione um formulário acima</h3>
-                            <p>O formulário selecionado será exibido aqui para preenchimento.</p>
-                        </div>
-                    `;
-                    
-                    // Scroll to form navigation
-                    document.getElementById('forms-nav').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                });
-                
-                form.appendChild(returnButton);
-            });
-        }
-    }
-    
-    
-    // Add loading spinner styles
-    const style = document.createElement('style');
-    style.textContent = `
-        .loading-spinner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem;
-            text-align: center;
-        }
-        
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--gray-200);
-            border-top: 5px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1.5rem;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .form-error {
-            padding: 2rem;
-            text-align: center;
-            color: var(--danger-color);
-            font-weight: 600;
-        }
-        
-        .success-message {
-            padding: 1.5rem;
-            background-color: rgba(46, 196, 182, 0.15);
-            color: #1a8a7e;
-            border: 1px solid rgba(46, 196, 182, 0.3);
-            border-radius: var(--border-radius);
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-    `;
-    document.head.appendChild(style);
-    
-    // Initialize hamburger menu functionality
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    
+  
+    // Toggle do menu mobile
     if (hamburger) {
-        hamburger.addEventListener('click', function() {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
+      hamburger.addEventListener("click", () => {
+        hamburger.classList.toggle("active")
+        navLinks.classList.toggle("active")
+      })
     }
-});
+  
+    // Fechar o menu ao clicar em um link
+    document.querySelectorAll(".nav-links li a").forEach((link) => {
+      link.addEventListener("click", () => {
+        hamburger.classList.remove("active")
+        navLinks.classList.remove("active")
+      })
+    })
+  
+    // Efeito de clique nos botões de formulário
+    formNavButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        // Adicionar efeito visual ao clicar
+        this.style.transform = "scale(0.95)"
+        setTimeout(() => {
+          this.style.transform = ""
+        }, 200)
+  
+        // Se o botão não tiver um link, podemos adicionar uma lógica aqui
+        const formType = this.getAttribute("data-form")
+        console.log(`Formulário selecionado: ${formType}`)
+  
+        // Aqui você pode adicionar lógica para redirecionar ou mostrar o formulário
+        // Por exemplo, se o botão não tiver um link <a>:
+        const btnLink = this.querySelector("a")
+        if (!btnLink && formType) {
+          // Redirecionar para a URL do formulário
+          // window.location.href = `/form/${formType}/`;
+        }
+      })
+    })
+  
+    // Animação de entrada para os cards de formulários
+    function animateFormCards() {
+      formNavButtons.forEach((card, index) => {
+        setTimeout(() => {
+          card.style.opacity = "1"
+          card.style.transform = "translateY(0)"
+        }, 100 * index)
+      })
+    }
+  
+    // Iniciar animação quando a página carrega
+    animateFormCards()
+  })
+  

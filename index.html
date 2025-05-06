@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Pedido de Produção - Preview</title>
+    <style>
+    /* Variáveis de cores e estilos - Paleta moderna */
+:root {
+  --primary-color: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  --secondary-color: #64748b;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --warning-color: #f59e0b;
+  --info-color: #0ea5e9;
+  --light-bg: #f8fafc;
+  --dark-bg: #0f172a;
+  --dark-surface: #1e293b;
+  --light-surface: #ffffff;
+  --dark-text: #0f172a;
+  --light-text: #f8fafc;
+  --border-radius: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-sm: 8px;
+  --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --box-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --box-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Importação de fontes */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Estilos gerais */
+body {
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+  background-color: var(--light-bg);
+  color: var(--dark-text);
+  line-height: 1.6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.dark-theme {
+  background-color: var(--dark-bg);
+  color: var(--light-text);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.1'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.form-container {
+  background-color: var(--light-surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-lg);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  transition: var(--transition);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  position: relative;
+}
+
+.form-container:hover {
+  box-shadow: var(--box-shadow-hover);
+  transform: translateY(-5px);
+}
+
+.dark-theme .form-container {
+  background-color: var(--dark-surface);
+  color: var(--light-text);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+/* Cabeçalho do formulário */
+.form-header {
+  padding: 3rem 2rem 2rem;
+  text-align: center;
+  position: relative;
+  background-image: var(--primary-gradient);
+  color: white;
+  overflow: hidden;
+}
+
+.form-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.7;
+}
+
+.form-header h1 {
+  font-size: 2.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  position: relative;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-header p {
+  font-size: 1.125rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Navegação entre etapas */
+.form-steps {
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow-x: auto;
+  background-color: #f1f5f9;
+  position: relative;
+  z-index: 10;
+}
+
+.dark-theme .form-steps {
+  background-color: #1e293b;
+}
+
+.step-item {
+  flex: 1;
+  min-width: 120px;
+  padding: 1.25rem 0.5rem;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
+  opacity: 0.7;
+}
+
+.step-item::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #e2e8f0;
+  transform: translateY(-50%);
+  z-index: -1;
+}
+
+.dark-theme .step-item::after {
+  background-color: #334155;
+}
+
+.step-item:last-child::after {
+  display: none;
+}
+
+.step-item.active {
+  opacity: 1;
+}
+
+.step-item.active::after {
+  background-color: var(--primary-color);
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.75rem;
+  font-weight: 600;
+  transition: var(--transition);
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .step-number {
+  background-color: #334155;
+  color: #94a3b8;
+}
+
+.step-item.active .step-number {
+  background-image: var(--primary-gradient);
+  color: white;
+  transform: scale(1.2);
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+
+.step-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.step-item.active .step-title {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.dark-theme .step-title {
+  color: #94a3b8;
+}
+
+.dark-theme .step-item.active .step-title {
+  color: var(--primary-color);
+}
+
+/* Conteúdo das etapas */
+.form-grid {
+  padding: 2.5rem;
+}
+
+.step-content {
+  display: none;
+}
+
+.step-content.active {
+  display: block;
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-section {
+  margin-bottom: 2.5rem;
+}
+
+.form-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.75rem;
+  color: var(--primary-color);
+  position: relative;
+  padding-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.form-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background-image: var(--primary-gradient);
+  border-radius: 2px;
+}
+
+/* Grupos de formulário */
+.form-group {
+  margin-bottom: 1.75rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--dark-text);
+  transition: var(--transition);
+}
+
+.dark-theme .form-group label {
+  color: #e2e8f0;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  background-color: white;
+  color: var(--dark-text);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.dark-theme .form-group input[type="text"],
+.dark-theme .form-group input[type="email"],
+.dark-theme .form-group input[type="date"],
+.dark-theme .form-group input[type="number"],
+.dark-theme .form-group select,
+.dark-theme .form-group textarea {
+  background-color: #334155;
+  border-color: #475569;
+  color: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+.form-group textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.error-message {
+  display: none;
+  color: var(--danger-color);
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+  font-weight: 500;
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* Opções de método */
+.method-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.method-option {
+  flex: 1;
+  min-width: 250px;
+}
+
+.method-option input[type="radio"] {
+  display: none;
+}
+
+.method-card {
+  display: block;
+  padding: 2rem;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--border-radius);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.dark-theme .method-card {
+  border-color: #475569;
+  background-color: #334155;
+}
+
+.method-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.method-option input[type="radio"]:checked + .method-card {
+  border-color: var(--primary-color);
+  background-color: rgba(99, 102, 241, 0.05);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.2);
+}
+
+.dark-theme .method-option input[type="radio"]:checked + .method-card {
+  background-color: rgba(99, 102, 241, 0.15);
+}
+
+.method-icon {
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  background-color: rgba(99, 102, 241, 0.1);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  transition: var(--transition);
+}
+
+.method-option input[type="radio"]:checked + .method-card .method-icon {
+  background-image: var(--primary-gradient);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+}
+
+.method-card h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  color: var(--dark-text);
+  transition: var(--transition);
+}
+
+.dark-theme .method-card h4 {
+  color: white;
+}
+
+.method-card p {
+  color: var(--secondary-color);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.dark-theme .method-card p {
+  color: #94a3b8;
+}
+
+/* Upload de arquivos */
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  background-color: #f8fafc;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark-theme .file-upload {
+  background-color: #1e293b;
+  border-color: #475569;
+}
+
+.file-upload::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z' fill='%236366f1' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.file-upload:hover {
+  border-color: var(--primary-color);
+  background-color: rgba(99, 102, 241, 0.05);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .file-upload:hover {
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+.file-upload-icon {
+  width: 70px;
+  height: 70px;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  background-color: rgba(99, 102, 241, 0.1);
+  padding: 1rem;
+  border-radius: 50%;
+  transition: var(--transition);
+  position: relative;
+  z-index: 1;
+}
+
+.file-upload:hover .file-upload-icon {
+  transform: scale(1.1);
+  background-image: var(--primary-gradient);
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+}
+
+.file-upload-text {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  color: var(--dark-text);
+  position: relative;
+  z-index: 1;
+}
+
+.dark-theme .file-upload-text {
+  color: white;
+}
+
+.file-upload-subtext {
+  color: var(--secondary-color);
+  font-size: 0.9375rem;
+  position: relative;
+  z-index: 1;
+}
+
+.dark-theme .file-upload-subtext {
+  color: #94a3b8;
+}
+
+.file-upload input[type="file"] {
+  display: none;
+}
+
+/* Lista de arquivos */
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+}
+
+.file-list li {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background-color: #f1f5f9;
+  border-radius: var(--border-radius);
+  margin-bottom: 0.75rem;
+  transition: var(--transition);
+  border-left: 4px solid var(--primary-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.file-list li:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .file-list li {
+  background-color: #334155;
+  border-left: 4px solid var(--primary-color);
+}
+
+.file-list .file-name {
+  flex: 1;
+  margin-right: 1rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.file-list .file-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.file-list button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--secondary-color);
+  transition: var(--transition);
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-list button:hover {
+  color: white;
+  background-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.file-list .view-btn:hover {
+  background-color: var(--info-color);
+}
+
+.file-list .delete-btn:hover {
+  background-color: var(--danger-color);
+}
+
+/* Tabela de escolas */
+#scroll-icon {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--border-radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) #f1f5f9;
+}
+
+#scroll-icon::-webkit-scrollbar {
+  width: 8px;
+}
+
+#scroll-icon::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+#scroll-icon::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 20px;
+}
+
+.dark-theme #scroll-icon {
+  border-color: #475569;
+  scrollbar-color: var(--primary-color) #1e293b;
+}
+
+.dark-theme #scroll-icon::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th {
+  background-image: var(--primary-gradient);
+  color: white;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+table th:first-child {
+  border-top-left-radius: var(--border-radius-sm);
+}
+
+table th:last-child {
+  border-top-right-radius: var(--border-radius-sm);
+}
+
+table td {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  transition: var(--transition);
+}
+
+.dark-theme table td {
+  border-top: 1px solid #475569;
+}
+
+table tr {
+  transition: var(--transition);
+}
+
+table tr:hover {
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+.dark-theme table tr:hover {
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+table input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #cbd5e1;
+  border-radius: var(--border-radius-sm);
+  text-align: center;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+table input[type="number"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+  outline: none;
+}
+
+.dark-theme table input[type="number"] {
+  background-color: #475569;
+  border-color: #64748b;
+  color: white;
+}
+
+/* Navegação entre etapas */
+.step-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.dark-theme .step-navigation {
+  border-top: 1px solid #475569;
+}
+
+/* Botões */
+.btn {
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.btn:hover::before {
+  transform: translateX(0);
+}
+
+.btn-primary {
+  background-image: var(--primary-gradient);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.btn-outline:hover {
+  background-color: var(--secondary-color);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-sm {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+/* Alerta */
+.alert {
+  padding: 1.25rem;
+  border-radius: var(--border-radius);
+  background-color: #f8fafc;
+  border-left: 4px solid var(--info-color);
+  margin-top: 1.5rem;
+  font-size: 0.9375rem;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.alert::before {
+  content: '\f05a';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  color: var(--info-color);
+  margin-right: 0.75rem;
+}
+
+.dark-theme .alert {
+  background-color: #334155;
+  color: #e2e8f0;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+}
+
+.modal-overlay.active {
+  display: flex;
+  opacity: 1;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--box-shadow-lg);
+  transform: scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: scaleIn 0.3s ease forwards;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+
+.dark-theme .modal {
+  background-color: var(--dark-surface);
+  color: var(--light-text);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  background-image: var(--primary-gradient);
+  color: white;
+}
+
+.dark-theme .modal-header {
+  border-bottom: 1px solid #475569;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: var(--transition);
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 1.75rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dark-theme .modal-footer {
+  border-top: 1px solid #475569;
+}
+
+/* PDF Modal */
+.pdf-modal {
+  max-width: 90%;
+  width: 900px;
+  height: 80vh;
+}
+
+.pdf-preview-wrapper {
+  height: 100%;
+  padding: 0;
+}
+
+.pdf-preview {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Excel download */
+.excel-download {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.excel-download .btn {
+  background-color: #1D6F42;
+  color: white;
+  transition: var(--transition);
+}
+
+.excel-download .btn:hover {
+  background-color: #15562f;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(29, 111, 66, 0.4);
+}
+
+/* Tema escuro */
+.theme-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-image: var(--primary-gradient);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--box-shadow-lg);
+  z-index: 100;
+  transition: var(--transition);
+  font-size: 1.25rem;
+}
+
+.theme-toggle:hover {
+  transform: rotate(360deg) scale(1.1);
+  box-shadow: 0 15px 20px -5px rgba(99, 102, 241, 0.5);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .form-steps {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  
+  .step-item {
+    min-width: 120px;
+    padding: 1rem 0.25rem;
+  }
+  
+  .step-number {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
+  }
+  
+  .step-title {
+    font-size: 0.75rem;
+  }
+  
+  .form-grid {
+    padding: 1.5rem 1rem;
+  }
+  
+  .method-options {
+    flex-direction: column;
+  }
+  
+  .method-option {
+    width: 100%;
+  }
+  
+  .file-upload {
+    padding: 2rem 1rem;
+  }
+  
+  .file-upload-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .file-upload-text {
+    font-size: 1.125rem;
+  }
+  
+  .modal {
+    width: 95%;
+  }
+  
+  .form-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .form-header p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem 0.5rem;
+  }
+  
+  .form-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .form-section h3 {
+    font-size: 1.25rem;
+  }
+  
+  .step-navigation {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+  
+  .theme-toggle {
+    bottom: 1rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .method-icon {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* Animações adicionais */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+    </style>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="dark-theme">
+    <!-- Botão de alternância de tema -->
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <div class="preview-controls">
+        <button id="toggleTheme" class="preview-btn">Alternar Tema</button>
+        <button id="nextStep" class="preview-btn">Próximo Passo</button>
+        <button id="prevStep" class="preview-btn">Passo Anterior</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <div class="container">
+
+            <form id="formZeroHum" class="form-container" enctype="multipart/form-data" method="post">
+                <div class="form-header">
+                    <h1>Formulário ZeroHum de Pedido de Produção</h1>
+                    <p>Preencha os detalhes abaixo para solicitar a produção do seu material</p>
+                </div>
+
+                <!-- Navegação entre etapas -->
+                <ul class="form-steps">
+                    <li class="step-item active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Método de Pedido</div>
+                    </li>
+                    <li class="step-item" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Upload de PDF</div>
+                    </li>
+                    <li class="step-item" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Informações do Trabalho</div>
+                    </li>
+                    <li class="step-item" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Especificações</div>
+                    </li>
+                    <li class="step-item step-escolas" data-step="5">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Escolas</div>
+                    </li>
+                    <li class="step-item step-excel" data-step="5" style="display:none;">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Excel</div>
+                    </li>
+                    <li class="step-item" data-step="6">
+                        <div class="step-number">6</div>
+                        <div class="step-title">Dados de Contato</div>
+                    </li>
+                </ul>
+
+                <!-- Conteúdo das etapas -->
+                <div class="form-grid" style="display: block;">
+                    
+                    <!-- Etapa 1: Escolha do método de pedido -->
+                    <div id="step-1" class="step-content active">
+                        <div id="section-method" class="form-section">
+                            <h3>Escolha o método de pedido</h3>
+                            <p class="method-description">Selecione como deseja informar as quantidades por escola:</p>
+                            
+                            <div class="method-options">
+                                <div class="method-option">
+                                    <input type="radio" id="metodoManual" name="metodoPedido" value="manual" checked>
+                                    <label for="metodoManual" class="method-card">
+                                        <div class="method-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 20h9"></path>
+                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                            </svg>
+                                        </div>
+                                        <h4>Preenchimento Manual</h4>
+                                        <p>Preencha manualmente as quantidades para cada escola</p>
+                                    </label>
+                                </div>
+                                
+                                <div class="method-option">
+                                    <input type="radio" id="metodoExcel" name="metodoPedido" value="excel">
+                                    <label for="metodoExcel" class="method-card">
+                                        <div class="method-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                <polyline points="14 2 14 8 20 8"></polyline>
+                                                <path d="M8 13H16"></path>
+                                                <path d="M8 17H16"></path>
+                                                <path d="M10 9H8"></path>
+                                            </svg>
+                                        </div>
+                                        <h4>Importar Excel</h4>
+                                        <p>Carregue uma planilha Excel com as informações das escolas</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Etapa 2: Upload de PDFs -->
+                    <div id="step-2" class="step-content">
+                        <div id="section-upload" class="form-section">
+                            <h3>Upload de PDFs</h3>
+
+                            <div class="form-group">
+                                <label for="fileInput" class="file-upload">
+                                    <svg class="file-upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                    <span class="file-upload-text">Clique para enviar PDF</span>
+                                    <span class="file-upload-subtext">Arraste arquivos ou clique para selecionar</span>
+                                    <input type="file" name="file" id="fileInput" accept=".pdf" multiple required>
+                                </label>
+                                <span class="error-message">Pelo menos um arquivo PDF é obrigatório</span>
+                            </div>
+
+                            <ul class="file-list" id="fileList">
+                                <!-- Os arquivos selecionados aparecerão aqui -->
+                                <li>
+                                    <span class="file-name">documento-exemplo.pdf</span>
+                                    <div class="file-actions">
+                                        <button type="button" class="view-btn">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button type="button" class="delete-btn">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 3: Informações do Trabalho -->
+                    <div id="step-3" class="step-content">
+                        <div id="section-info" class="form-section">
+                            <h3>Informações do Trabalho</h3>
+
+                            <div class="form-group">
+                                <label for="titulo">Título do material</label>
+                                <input type="text" id="titulo" name="titulo" placeholder="Ex: Apostila de Matemática"
+                                    required>
+                                <span class="error-message">Este campo é obrigatório</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dataEntrega">Data de entrega na escola</label>
+                                <input type="date" id="dataEntrega" name="dataEntrega" required>
+                                <span class="error-message">Selecione uma data válida</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="observacoes">Observações</label>
+                                <textarea id="observacoes" name="observacoes"
+                                    placeholder="Informações adicionais sobre o trabalho"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 4: Especificações para Produção -->
+                    <div id="step-4" class="step-content">
+                        <div id="section-specs" class="form-section">
+                            <h3>Especificações para Produção</h3>
+
+                            <div class="form-group">
+                                <label for="formato">Formato Final</label>
+                                <select id="formato" name="formato" required>
+                                    <option value="a4">A4</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="corImpressao">Cor da Impressão</label>
+                                <select id="corImpressao" name="corImpressao" required>
+                                    <option value="pb">Preto e Branco</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="impressao">Impressão</label>
+                                <select id="impressao" name="impressao" required>
+                                    <option value="" disabled selected>Selecione o tipo</option>
+                                    <option value="frente">Só frente</option>
+                                    <option value="frenteVerso">Frente e Verso</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gramatura">Gramatura</label>
+                                <select id="gramatura" name="gramatura" required>
+                                    <option value="75g">75g (Padrão)</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="grampos">Grampos</label>
+                                <select id="grampos" name="grampos" required>
+                                    <option value="" disabled selected>Selecione a quantidade</option>
+                                    <option value="nenhum">Nenhum</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                                <span class="error-message">Selecione uma opção</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 5 (Opção 1): Escolas cadastradas - Preenchimento manual -->
+                    <div id="step-5-manual" class="step-content step-escolas">
+                        <div id="section-options" class="form-section">
+                            <h3>Escolas cadastradas</h3>
+                            <div id="scroll-icon" class="scroll-icon">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Escola</th>
+                                            <th>Resposta</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>ARARUAMA</td>
+                                            <td><input type="number" name="ARARUAMA" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CABO_FRIO</td>
+                                            <td><input type="number" name="CABO_FRIO" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ITABORAI</td>
+                                            <td><input type="number" name="ITABORAI" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ITAIPUACU</td>
+                                            <td><input type="number" name="ITAIPUACU" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>MARICA_I</td>
+                                            <td><input type="number" name="MARICA_I" min="0"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>NOVA_FRIBURGO</td>
+                                            <td><input type="number" name="NOVA_FRIBURGO" min="0"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 5 (Opção 2): Upload de Excel -->
+                    <div id="step-5-excel" class="step-content step-excel" style="display:none;">
+                        <div id="section-excel" class="form-section">
+                            <h3>Upload de Excel</h3>
+                            <div class="form-group">
+                                <label for="excelInput" class="file-upload">
+                                    <svg class="file-upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <path d="M8 13H16"></path>
+                                        <path d="M8 17H16"></path>
+                                        <path d="M10 9H8"></path>
+                                    </svg>
+                                    <span class="file-upload-text">Clique para enviar Excel</span>
+                                    <span class="file-upload-subtext">O arquivo deve conter a planilha PEDIDO com as colunas UNIDADES e QTDE</span>
+                                    <input type="file" name="excel_file" id="excelInput" accept=".xls,.xlsx">
+                                </label>
+                                <span class="error-message">Arquivo Excel é obrigatório</span>
+                            </div>
+                            <ul class="file-list" id="excelList"></ul>
+                            
+                            <div class="excel-download">
+                                <a href="#" class="btn btn-outline btn-sm" download>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    Baixar modelo de planilha
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Etapa 6: Dados de Contato -->
+                    <div id="step-6" class="step-content">
+                        <div id="section-contact" class="form-section">
+                            <h3>Dados de Contato</h3>
+
+                            <div class="form-group">
+                                <label for="nome">Nome</label>
+                                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                                <span class="error-message">Este campo é obrigatório</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com"
+                                    required>
+                                <span class="error-message">Digite um email válido</span>
+                            </div>
+
+                            <div class="alert">
+                                Ao enviar este formulário, você concorda em ser contatado sobre seu pedido de produção de
+                                documentos.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navegação entre etapas -->
+                    <div class="step-navigation">
+                        <button type="button" class="btn prev-step" style="display: none;">Voltar</button>
+                        <button type="button" class="btn btn-primary next-step">Próximo</button>
+                        <button type="submit" class="btn btn-primary submit-form" style="display: none;">Enviar Pedido</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+    
+    <!-- Modal de status de envio -->
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Status do Pedido</h3>
+                <button type="button" class="modal-close" id="closeModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <p>Seu pedido foi enviado com sucesso!</p>
+                <p>Um email de confirmação será enviado para o endereço fornecido.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="modalActionButton">Fechar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Estilo para os controles de visualização -->
+    <style>
+        .preview-controls {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+        
+        .preview-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+        
+        .preview-btn:hover {
+            background-color: var(--primary-hover);
+        }
+    </style>
+    
+    <!-- Scripts para navegação na visualização -->
+    <script>
+        // Variáveis para controle de navegação
+        const steps = document.querySelectorAll('.step-content');
+        const stepItems = document.querySelectorAll('.step-item');
+        const nextBtn = document.querySelector('.next-step');
+        const prevBtn = document.querySelector('.prev-step');
+        const submitBtn = document.querySelector('.submit-form');
+        let currentStep = 0;
+        
+        // Função para mostrar uma etapa específica
+        function showStep(stepIndex) {
+            // Esconde todas as etapas
+            steps.forEach((step, index) => {
+                step.classList.remove('active');
+                stepItems[index].classList.remove('active');
+            });
+            
+            // Mostra a etapa atual
+            steps[stepIndex].classList.add('active');
+            stepItems[stepIndex].classList.add('active');
+            
+            // Controla a visibilidade dos botões de navegação
+            if (stepIndex === 0) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'block';
+            }
+            
+            if (stepIndex === steps.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+        
+        // Botão de próxima etapa
+        document.getElementById('nextStep').addEventListener('click', () => {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        });
+        
+        // Botão de etapa anterior
+        document.getElementById('prevStep').addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+        
+        // Alternar entre tema claro e escuro
+        document.getElementById('toggleTheme').addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            const icon = document.querySelector('.theme-toggle i');
+            if (document.body.classList.contains('dark-theme')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+        
+        // Alternar entre método manual e Excel
+        document.getElementById('metodoManual').addEventListener('change', () => {
+            if (document.getElementById('metodoManual').checked) {
+                document.querySelector('.step-escolas').style.display = 'block';
+                document.querySelector('.step-excel').style.display = 'none';
+            }
+        });
+        
+        document.getElementById('metodoExcel').addEventListener('change', () => {
+            if (document.getElementById('metodoExcel').checked) {
+                document.querySelector('.step-escolas').style.display = 'none';
+                document.querySelector('.step-excel').style.display = 'block';
+            }
+        });
+        
+        // Exibir o modal com exemplo
+        document.getElementById('modalActionButton').addEventListener('click', () => {
+            document.getElementById('statusModal').classList.remove('active');
+        });
+        
+        // Mostrar modal ao clicar no botão Enviar
+        document.querySelector('.submit-form').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('statusModal').classList.add('active');
+        });
+    </script>
+</body>
+</html>

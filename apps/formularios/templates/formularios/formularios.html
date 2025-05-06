@@ -1,146 +1,112 @@
+
+
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDFlow - Forms</title>
+    <title>ERP Dashboard - ROM</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/formularios/forms.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">Django App</div>
-                <ul class="nav-links">
-                    <li><a href="">Home</a></li>
-                    <li><a href="" class="active">Forms</a></li>
-                    <li><a href="#contact-form-section">Contact</a></li>
-                    <li><a href="#register-form-section">Register</a></li>
-                    <li><a href="#newsletter-form-section">Newsletter</a></li>
-                </ul>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <div class="app-container">
+        <!-- Sidebar -->
+        {% include "components/sidebar.html" %}
 
-    <section class="hero forms-hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Escolha seu Formulário</h1>
-                <p>Selecione o tipo de formulário que você precisa preencher. Cada opção oferece funcionalidades específicas para atender às suas necessidades.</p>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            {% include "components/header.html" %}
+            <div class="container">
+                <h2 class="section-title">Nossos Formulários</h2>
+                {% if user.is_authenticated and user.is_admin_form %}
+                    <!-- Exibe todos os formulários para administradores -->
+                    <div class="forms-nav-container">
+                        <div class="form-nav-button" data-form="coleguium">
+                            <div class="form-nav-icon">📝</div>
+                            <h3>Coleguium</h3>
+                            <p>Formulário específico para o sistema Coleguium, com campos personalizados para esta instituição.</p>
+                            <a class="btn btn-primary">Selecionar</a>
+                        </div>
+                        <div class="form-nav-button" data-form="elite">
+                            <div class="form-nav-icon">🏆</div>
+                            <h3>Elite</h3>
+                            <p>Formulário Elite com campos avançados e opções adicionais para processamento prioritário.</p>
+                            <button class="btn btn-success">Selecionar</button>
+                        </div>
+                        <div class="form-nav-button" data-form="zerohum">
+                            <div class="form-nav-icon">🚀</div>
+                            <h3>ZeroHum</h3>
+                            <p>Formulário ZeroHum otimizado para velocidade e eficiência no processamento de dados.</p>
+                            <a href="{% url 'formZeroHum' %}" class="btn btn-secondary">Selecionar</a>
+                        </div>
+                        <div class="form-nav-button" data-form="pensi">
+                            <div class="form-nav-icon">📊</div>
+                            <h3>Pensi</h3>
+                            <p>Formulário Pensi com recursos especiais para análise e visualização de dados.</p>
+                            <button class="btn btn-accent">Selecionar</button>
+                        </div>
+
+                    </div>
+                {% elif user.is_authenticated %}
+                    <!-- Exibe o formulário correspondente ao tipo do usuário -->
+                    <div class="forms-nav-container">
+                        {% if user.tipo_formulario == 'zerohum' %}
+                        <div class="form-nav-button" data-form="zerohum">
+                            <div class="form-nav-icon">🚀</div>
+                            <h3>ZeroHum</h3>
+                            <p>Formulário ZeroHum otimizado para velocidade e eficiência no processamento de dados.</p>
+                            <a href="{% url 'formZeroHum' %}" class="btn btn-secondary">Selecionar</a>
+                        </div>
+                        {% elif user.tipo_formulario == 'pensi' %}
+                        <div class="form-nav-button" data-form="pensi">
+                            <div class="form-nav-icon">📊</div>
+                            <h3>Pensi</h3>
+                            <p>Formulário Pensi com recursos especiais para análise e visualização de dados.</p>
+                            <button class="btn btn-accent">Selecionar</button>
+                        </div>
+                        {% elif user.tipo_formulario == 'elite' %}
+                        <div class="form-nav-button" data-form="elite">
+                            <div class="form-nav-icon">🏆</div>
+                            <h3>Elite</h3>
+                            <p>Formulário Elite com campos avançados e opções adicionais para processamento prioritário.</p>
+                            <button class="btn btn-success">Selecionar</button>
+                        </div>
+                        {% elif user.tipo_formulario == 'coleguium' %}
+                        <div class="form-nav-button" data-form="coleguium">
+                            <div class="form-nav-icon">📝</div>
+                            <h3>Coleguium</h3>
+                            <p>Formulário específico para o sistema Coleguium, com campos personalizados para esta instituição.</p>
+                            <a class="btn btn-primary">Selecionar</a>
+                        </div>
+                        {% endif %}
+                        
+                    </div>
+                {% else %}
+                    <p>Você precisa estar logado para acessar os formulários.</p>
+                {% endif %}
             </div>
-        </div>
-    </section>
+            
 
-    <!-- Forms Navigation Section -->
-    <section id="forms-nav" class="forms-nav-section">
-        <div class="container">
-            <h2 class="section-title">Nossos Formulários</h2>
-            {% if user.is_authenticated and user.is_admin_form %}
-                <!-- Exibe todos os formulários para administradores -->
-                <div class="forms-nav-container">
-                    <div class="form-nav-button" data-form="coleguium">
-                        <div class="form-nav-icon">📝</div>
-                        <h3>Coleguium</h3>
-                        <p>Formulário específico para o sistema Coleguium, com campos personalizados para esta instituição.</p>
-                        <a class="btn btn-primary">Selecionar</a>
-                    </div>
-                    <div class="form-nav-button" data-form="elite">
-                        <div class="form-nav-icon">🏆</div>
-                        <h3>Elite</h3>
-                        <p>Formulário Elite com campos avançados e opções adicionais para processamento prioritário.</p>
-                        <button class="btn btn-success">Selecionar</button>
-                    </div>
-                    <div class="form-nav-button" data-form="zerohum">
-                        <div class="form-nav-icon">🚀</div>
-                        <h3>ZeroHum</h3>
-                        <p>Formulário ZeroHum otimizado para velocidade e eficiência no processamento de dados.</p>
-                        <a href="{% url 'formZeroHum' %}" class="btn btn-secondary">Selecionar</a>
-                    </div>
-                    <div class="form-nav-button" data-form="pensi">
-                        <div class="form-nav-icon">📊</div>
-                        <h3>Pensi</h3>
-                        <p>Formulário Pensi com recursos especiais para análise e visualização de dados.</p>
-                        <button class="btn btn-accent">Selecionar</button>
-                    </div>
-                    <div class="form-nav-button" data-form="webhooks">
-                        <div class="form-nav-icon">🔄</div>
-                        <h3>Webhooks</h3>
-                        <p>Gerencie e monitore todos os webhooks recebidos pelo sistema em um único lugar.</p>
-                        <a href="{% url 'webhooks:webhook_list' %}" class="btn btn-primary">Acessar</a>
-                    </div>
+            <!-- Footer -->
+            <footer class="footer">
+                <p>&copy; 2023 ERP System. Todos os direitos reservados.</p>
+                <div class="footer-links">
+                    <a href="#">Suporte</a>
+                    <a href="#">Documentação</a>
+                    <a href="#">Versão 1.0.5</a>
                 </div>
-            {% elif user.is_authenticated %}
-                <!-- Exibe o formulário correspondente ao tipo do usuário -->
-                <div class="forms-nav-container">
-                    {% if user.tipo_formulario == 'zerohum' %}
-                    <div class="form-nav-button" data-form="zerohum">
-                        <div class="form-nav-icon">🚀</div>
-                        <h3>ZeroHum</h3>
-                        <p>Formulário ZeroHum otimizado para velocidade e eficiência no processamento de dados.</p>
-                        <a href="{% url 'formZeroHum' %}" class="btn btn-secondary">Selecionar</a>
-                    </div>
-                    {% elif user.tipo_formulario == 'pensi' %}
-                    <div class="form-nav-button" data-form="pensi">
-                        <div class="form-nav-icon">📊</div>
-                        <h3>Pensi</h3>
-                        <p>Formulário Pensi com recursos especiais para análise e visualização de dados.</p>
-                        <button class="btn btn-accent">Selecionar</button>
-                    </div>
-                    {% elif user.tipo_formulario == 'elite' %}
-                    <div class="form-nav-button" data-form="elite">
-                        <div class="form-nav-icon">🏆</div>
-                        <h3>Elite</h3>
-                        <p>Formulário Elite com campos avançados e opções adicionais para processamento prioritário.</p>
-                        <button class="btn btn-success">Selecionar</button>
-                    </div>
-                    {% elif user.tipo_formulario == 'coleguium' %}
-                    <div class="form-nav-button" data-form="coleguium">
-                        <div class="form-nav-icon">📝</div>
-                        <h3>Coleguium</h3>
-                        <p>Formulário específico para o sistema Coleguium, com campos personalizados para esta instituição.</p>
-                        <a class="btn btn-primary">Selecionar</a>
-                    </div>
-                    {% endif %}
-                    
-                    {% if user.is_staff %}
-                    <div class="form-nav-button" data-form="webhooks">
-                        <div class="form-nav-icon">🔄</div>
-                        <h3>Webhooks</h3>
-                        <p>Gerencie e monitore todos os webhooks recebidos pelo sistema em um único lugar.</p>
-                        <a href="{% url 'webhooks:webhook_list' %}" class="btn btn-primary">Acessar</a>
-                    </div>
-                    {% endif %}
-                </div>
-            {% else %}
-                <p>Você precisa estar logado para acessar os formulários.</p>
-            {% endif %}
-        </div>
-    </section>
+            </footer>
+        </main>
+    </div>
 
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <p>&copy; 2025 Django Application. All rights reserved.</p>
-                <ul class="social-links">
-                    <li><a href="#"><i>Facebook</i></a></li>
-                    <li><a href="#"><i>Twitter</i></a></li>
-                    <li><a href="#"><i>Instagram</i></a></li>
-                    <li><a href="#"><i>LinkedIn</i></a></li>
-                </ul>
-                <p>Designed with ❤️ by Your Company</p>
-            </div>
-        </div>
-    </footer>
-    
-    <script src="{% static 'js/home/script.js' %}"></script>
-    <script src="{% static 'js/formularios/forms.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
+                
+                
+                

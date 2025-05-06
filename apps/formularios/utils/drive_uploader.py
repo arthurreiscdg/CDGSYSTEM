@@ -2,14 +2,40 @@ import os
 import json
 import pytz
 import logging
+import time
+import random
 from datetime import datetime
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
+from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
 from io import BytesIO
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
+
+# Configuração para retry
+MAX_RETRIES = 5  # Número máximo de tentativas
+RETRY_STATUSES = [429, 500, 502, 503, 504]  # Status codes que devem ser tentados novamente
+
+# Função para executar uma operação com retry
+def execute_with_retry(operation, *args, **kwargs):
+    for attempt in range(MAX_RETRIES):
+        try:
+            return operation(*args, **kwargs)
+        except HttpError as e:
+            status = e.resp.status
+            if status in RETRY_STATUSES and attempt < MAX_RETRIES - 1:
+                # Backoff exponencial com jitter para evitar sincronização de múltiplas requisições
+                sleep_time = (2 ** attempt) + random.random()
+                logger.warning(f"Tentativa {attempt+1} falhou com status {status}. Tentando novamente em {sleep_time:.1f} segundos...")
+                time.sleep(sleep_time)
+            else:
+                logger.error(f"Erro persistente após {attempt+1} tentativas: {str(e)}")
+                raise
+        except Exception as e:
+            logger.error(f"Erro não relacionado ao HTTP: {str(e)}")
+            raise
 
 # Carregar a chave JSON da variável de ambiente
 try:
@@ -51,12 +77,25 @@ def criar_pasta_drive(nome, parent_id=PASTA_PAI_ID):
             'mimeType': 'application/vnd.google-apps.folder',
             'parents': [parent_id]
         }
-        pasta = service.files().create(body=metadata, fields='id').execute()
-        service.permissions().create(fileId=pasta['id'], body={
-            'type': 'user',
-            'role': 'writer',
-            'emailAddress': EMAIL_PESSOAL
-        }, sendNotificationEmail=False).execute()
+        
+        # Usando retry para a criação da pasta
+        pasta = execute_with_retry(
+            service.files().create(body=metadata, fields='id').execute
+        )
+        
+        # Usando retry para configurar permissões
+        execute_with_retry(
+            service.permissions().create(
+                fileId=pasta['id'], 
+                body={
+                    'type': 'user',
+                    'role': 'writer',
+                    'emailAddress': EMAIL_PESSOAL
+                }, 
+                sendNotificationEmail=False
+            ).execute
+        )
+        
         logger.info(f"Pasta criada com sucesso no Drive: {nome}")
         return pasta['id']
     except Exception as e:
@@ -66,10 +105,16 @@ def criar_pasta_drive(nome, parent_id=PASTA_PAI_ID):
 
 def tornar_publico(file_id):
     try:
-        service.permissions().create(fileId=file_id, body={
-            'type': 'anyone',
-            'role': 'reader'
-        }).execute()
+        # Usando retry para configurar permissões públicas
+        execute_with_retry(
+            service.permissions().create(
+                fileId=file_id, 
+                body={
+                    'type': 'anyone',
+                    'role': 'reader'
+                }
+            ).execute
+        )
         logger.info(f"Arquivo {file_id} tornado público com sucesso")
     except Exception as e:
         logger.error(f"Erro ao tornar arquivo público: {str(e)}")
@@ -83,7 +128,12 @@ def upload_arquivo_drive(file_name, file_bytes, mime_type, folder_id):
             'name': file_name,
             'parents': [folder_id]
         }
-        file = service.files().create(body=metadata, media_body=media, fields='id').execute()
+        
+        # Usando retry para upload de arquivo
+        file = execute_with_retry(
+            service.files().create(body=metadata, media_body=media, fields='id').execute
+        )
+        
         tornar_publico(file['id'])
         link_download = f"https://drive.google.com/uc?id={file['id']}&export=download"
         logger.info(f"Arquivo {file_name} carregado com sucesso")

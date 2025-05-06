@@ -1,87 +1,184 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDFlow</title>
+    <title>ERP Dashboard - ROM</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">Django App</div>
-                <ul class="nav-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#nav-buttons">Forms</a></li>
-                    <li><a href="#contact-form-section">Contact</a></li>
-                    <li><a href="#register-form-section">Register</a></li>
-                    <li><a href="#newsletter-form-section">Newsletter</a></li>
-                </ul>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+    <div class="app-container">
+        <!-- Sidebar -->
+        {% include "components/sidebar.html" %}
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            {% include "components/header.html" %}
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Quick Stats -->
+                <section class="stats-section">
+                    <div class="stats-card">
+                        <div class="stats-icon" style="background-color: rgba(30, 136, 229, 0.15);">
+                            <i class="fas fa-shopping-cart" style="color: #1E88E5;"></i>
+                        </div>
+                        <div class="stats-info">
+                            <h3>Vendas</h3>
+                            <p class="stats-value">R$ 24.500,00</p>
+                            <p class="stats-change positive">+12% <span>este mês</span></p>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon" style="background-color: rgba(164, 231, 134, 0.15);">
+                            <i class="fas fa-users" style="color: #A4E786;"></i>
+                        </div>
+                        <div class="stats-info">
+                            <h3>Clientes</h3>
+                            <p class="stats-value">1.245</p>
+                            <p class="stats-change positive">+5% <span>este mês</span></p>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon" style="background-color: rgba(255, 152, 0, 0.15);">
+                            <i class="fas fa-boxes" style="color: #FF9800;"></i>
+                        </div>
+                        <div class="stats-info">
+                            <h3>Produtos</h3>
+                            <p class="stats-value">856</p>
+                            <p class="stats-change negative">-2% <span>em estoque</span></p>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon" style="background-color: rgba(244, 67, 54, 0.15);">
+                            <i class="fas fa-money-bill-wave" style="color: #F44336;"></i>
+                        </div>
+                        <div class="stats-info">
+                            <h3>Despesas</h3>
+                            <p class="stats-value">R$ 12.350,00</p>
+                            <p class="stats-change negative">+8% <span>este mês</span></p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Main Modules -->
+                <section class="modules-section">
+                    <h2>Módulos Principais</h2>
+                    <div class="modules-grid">
+                        <div class="module-card" data-module="relatorios">
+                            <div class="module-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h3>Formulários</h3>
+                            <p>Análises e relatórios gerenciais</p>
+                            <div class="module-actions">
+                                <a href="/formularios" class="btn-primary">Acessar</a>
+                            </div>
+                        </div>
+                        <div class="module-card" data-module="estoque">
+                            <div class="module-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <h3>Montink</h3>
+                            <p>Controle de produtos, entradas e saídas</p>
+                            <div class="module-actions">
+                                <a href="/webhooks/list" class="btn-primary">Acessar</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Actions and Notifications -->
+                <div class="flex-row">
+                    <!-- Quick Actions -->
+                    <section class="quick-actions-section">
+                        <h2>Ações Rápidas</h2>
+                        <div class="quick-actions-grid">
+                            <a href="/admin" class="quick-action-btn">
+                                <i class="fas fa-truck-loading"></i>
+                                <span>Administração</span>
+                            </a>
+                            <a href="/admin/usuarios/usuario/add/" class="quick-action-btn">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Novo Usuário</span>
+                            </a>
+                            <a href="/admin/webhooks/" class="quick-action-btn">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Configuracões Montink</span>
+                            </a>
+                            <a href="/admin/formularios" class="quick-action-btn">
+                                <i class="fas fa-file-invoice"></i>
+                                <span>Configuracões Form</span>
+                            </a>
+                        </div>
+                    </section>
+
+                    <!-- Notifications -->
+                    <section class="notifications-section">
+                        <div class="section-header">
+                            <h2>Notificações</h2>
+                            <button class="btn-text">Limpar todas</button>
+                        </div>
+                        <div class="notifications-list">
+                            <div class="notification-item unread">
+                                <div class="notification-icon warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p>Estoque baixo para 5 produtos</p>
+                                    <span class="notification-time">Há 30 minutos</span>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon info">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p>3 pagamentos vencem hoje</p>
+                                    <span class="notification-time">Há 1 hora</span>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon success">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p>Backup do sistema realizado com sucesso</p>
+                                    <span class="notification-time">Há 3 horas</span>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon error">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p>Falha na sincronização fiscal</p>
+                                    <span class="notification-time">Ontem</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </nav>
-        </div>
-    </header>
-
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Bem-vindo ao PDFlow</h1>
-                <p>A powerful platform designed to streamline your workflow and enhance productivity. Explore our features and get started today with our intuitive forms and services.</p>
-                <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Começar</a>
             </div>
-        </div>
-    </section>
 
-    <!-- Navigation Buttons Section -->
-    <section id="nav-buttons" class="nav-buttons-section">
-        <div class="container">
-            <h2 class="section-title">Formulários</h2>
-            <div class="nav-buttons-container">
-                <a  class="nav-button" id="contact-nav-btn">
-                    <div class="nav-button-icon">✉️</div>
-                    <h3>Formulário Rápido</h3>
-                    <p>Have questions or need assistance? Our team is ready to help you with any inquiries you might have.</p>
-                    <button class="btn btn-primary" >Começar</button>
-                </a>
-                <a  class="nav-button" id="register-nav-btn">
-                    <div class="nav-button-icon">👤</div>
-                    <h3>Register Account</h3>
-                    <p>Join our community today and get access to exclusive features, personalized content, and more.</p>
-                    <button class="btn btn-success">Go to Registration</button>
-                </a>
-                <a href="#newsletter-form-section" class="nav-button" id="newsletter-nav-btn">
-                    <div class="nav-button-icon">📰</div>
-                    <h3>Subscribe</h3>
-                    <p>Stay updated with our latest news, offers, and updates delivered directly to your inbox.</p>
-                    <button class="btn btn-secondary">Go to Newsletter</button>
-                </a>
-            </div>
-        </div>
-    </section>
+            <!-- Footer -->
+            <footer class="footer">
+                <p>&copy; 2023 ERP System. Todos os direitos reservados.</p>
+                <div class="footer-links">
+                    <a href="#">Suporte</a>
+                    <a href="#">Documentação</a>
+                    <a href="#">Versão 1.0.5</a>
+                </div>
+            </footer>
+        </main>
+    </div>
 
-    
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <p>&copy; 2025 Django Application. All rights reserved.</p>
-                <ul class="social-links">
-                    <li><a href="#"><i>Facebook</i></a></li>
-                    <li><a href="#"><i>Twitter</i></a></li>
-                    <li><a href="#"><i>Instagram</i></a></li>
-                    <li><a href="#"><i>LinkedIn</i></a></li>
-                </ul>
-                <p>Designed with ❤️ by Your Company</p>
-            </div>
-        </div>
-    </footer>
-    <script src="{% static 'js/home/script.js' %}"></script>
-
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
+
+
