@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevButton = document.querySelector('.prev-step');
     const submitButton = document.querySelector('.submit-form');
     
+    // Constantes para validação
+    const MAX_FILE_SIZE_MB = 200; // Tamanho máximo total de arquivos (em MB)
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024; // Convertendo para bytes
+    
     let currentStep = 1;
     const totalSteps = 6; // Agora temos 6 etapas no total
     
@@ -165,8 +169,86 @@ document.addEventListener('DOMContentLoaded', function() {
                     isValid = false;
                     fileInput.setCustomValidity('Selecione pelo menos um arquivo PDF');
                     fileInput.reportValidity();
-                } else if (fileInput) {
-                    fileInput.setCustomValidity('');
+                } else if (fileInput && fileInput.files.length > 0) {
+                    // Verificar o tipo de arquivo (apenas PDF)
+                    let validFiles = true;
+                    let totalSize = 0;
+                    
+                    for (let i = 0; i < fileInput.files.length; i++) {
+                        const file = fileInput.files[i];
+                        
+                        // Verificar tipo do arquivo
+                        if (!file.type || file.type !== 'application/pdf') {
+                            validFiles = false;
+                            fileInput.setCustomValidity(`O arquivo "${file.name}" não é um PDF válido`);
+                            fileInput.reportValidity();
+                            isValid = false;
+                            break;
+                        }
+                        
+                        // Acumular tamanho total
+                        totalSize += file.size;
+                    }
+                    
+                    // Verificar tamanho total dos arquivos
+                    if (validFiles && totalSize > MAX_FILE_SIZE_BYTES) {
+                        isValid = false;
+                        const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
+                        fileInput.setCustomValidity(`O tamanho total dos arquivos (${sizeMB}MB) excede o limite de ${MAX_FILE_SIZE_MB}MB`);
+                        fileInput.reportValidity();
+                    } else if (validFiles) {
+                        fileInput.setCustomValidity('');
+                    }
+                }
+                break;
+                
+            case 3:
+                // Validar o título do material (pelo menos 5 caracteres)
+                const titulo = document.getElementById('titulo');
+                if (titulo && titulo.value.trim().length < 5) {
+                    isValid = false;
+                    titulo.setCustomValidity('O título precisa ter pelo menos 5 caracteres');
+                    titulo.reportValidity();
+                } else if (titulo) {
+                    titulo.setCustomValidity('');
+                }
+                
+                // Validar a data de entrega (não pode ser no passado)
+                const dataEntrega = document.getElementById('dataEntrega');
+                if (dataEntrega) {
+                    const hoje = new Date();
+                    hoje.setHours(0, 0, 0, 0);
+                    const dataSelecionada = new Date(dataEntrega.value);
+                    
+                    if (dataSelecionada < hoje) {
+                        isValid = false;
+                        dataEntrega.setCustomValidity('A data de entrega não pode ser no passado');
+                        dataEntrega.reportValidity();
+                    } else {
+                        dataEntrega.setCustomValidity('');
+                    }
+                }
+                break;
+                
+            case 4:
+                // Validar seleção de impressão
+                const impressao = document.getElementById('impressao');
+                if (impressao && impressao.value === "") {
+                    isValid = false;
+                    impressao.setCustomValidity('Selecione um tipo de impressão');
+                    impressao.reportValidity();
+                } else if (impressao) {
+                    impressao.setCustomValidity('');
+                }
+                
+                // Validar seleção de grampos
+                const grampos = document.getElementById('grampos');
+                if (grampos && grampos.value === "") {
+                    isValid = false;
+                    grampos.setCustomValidity('Selecione uma opção de grampos');
+                    grampos.reportValidity();
+                } else if (grampos) {
+                    grampos.setCustomValidity('');
                 }
                 break;
                 
@@ -192,8 +274,44 @@ document.addEventListener('DOMContentLoaded', function() {
                         isValid = false;
                         excelInput.setCustomValidity('Selecione um arquivo Excel');
                         excelInput.reportValidity();
-                    } else if (excelInput) {
-                        excelInput.setCustomValidity('');
+                    } else if (excelInput && excelInput.files.length > 0) {
+                        // Verificar se é um arquivo Excel válido
+                        const file = excelInput.files[0];
+                        const validExtensions = ['.xls', '.xlsx'];
+                        const extension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+                        
+                        if (!validExtensions.includes(extension)) {
+                            isValid = false;
+                            excelInput.setCustomValidity('O arquivo não é um Excel válido');
+                            excelInput.reportValidity();
+                        } else {
+                            excelInput.setCustomValidity('');
+                        }
+                    }
+                }
+                break;
+                
+            case 6:
+                // Validar nome (pelo menos 5 caracteres)
+                const nome = document.getElementById('nome');
+                if (nome && nome.value.trim().length < 5) {
+                    isValid = false;
+                    nome.setCustomValidity('O nome precisa ter pelo menos 5 caracteres');
+                    nome.reportValidity();
+                } else if (nome) {
+                    nome.setCustomValidity('');
+                }
+                
+                // Validar o email
+                const email = document.getElementById('email');
+                if (email && email.value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email.value)) {
+                        isValid = false;
+                        email.setCustomValidity('Digite um endereço de email válido');
+                        email.reportValidity();
+                    } else {
+                        email.setCustomValidity('');
                     }
                 }
                 break;
@@ -309,17 +427,69 @@ document.addEventListener('DOMContentLoaded', function() {
         fileInput.addEventListener('change', function() {
             fileList.innerHTML = '';
             
+            // Verificar se há arquivos selecionados
             if (this.files.length > 0) {
+                let totalSize = 0;
+                let invalidFiles = [];
+                
+                // Verificar tipos e tamanhos dos arquivos
                 for (let i = 0; i < this.files.length; i++) {
                     const file = this.files[i];
+                    totalSize += file.size;
+                    
+                    // Verificar se é um PDF
+                    if (!file.type || file.type !== 'application/pdf') {
+                        invalidFiles.push({
+                            name: file.name,
+                            reason: 'Tipo de arquivo inválido. Apenas PDFs são permitidos.'
+                        });
+                        continue;
+                    }
+                    
+                    // Criar item na lista
                     const li = document.createElement('li');
                     li.textContent = file.name;
+                    
+                    // Adicionar informação do tamanho do arquivo
+                    const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+                    const sizeSpan = document.createElement('span');
+                    sizeSpan.classList.add('file-size');
+                    sizeSpan.textContent = `${fileSize} MB`;
+                    li.appendChild(sizeSpan);
+                    
+                    // Adicionar evento de pré-visualização
                     li.addEventListener('click', () => previewPDF(file));
                     fileList.appendChild(li);
+                }
+                
+                // Verificar tamanho total
+                if (totalSize > MAX_FILE_SIZE_BYTES) {
+                    const totalSizeMB = (totalSize / (1024 * 1024)).toFixed(2);
+                    this.setCustomValidity(`O tamanho total dos arquivos (${totalSizeMB}MB) excede o limite de ${MAX_FILE_SIZE_MB}MB`);
+                    this.reportValidity();
                     
-                    // Limpar mensagem de validação
+                    // Adicionar aviso visual
+                    const errorDiv = document.createElement('div');
+                    errorDiv.classList.add('file-error');
+                    errorDiv.textContent = `Tamanho total excede ${MAX_FILE_SIZE_MB}MB (atual: ${totalSizeMB}MB)`;
+                    fileList.appendChild(errorDiv);
+                } else if (invalidFiles.length > 0) {
+                    // Mostrar arquivos inválidos
+                    this.setCustomValidity(`Há ${invalidFiles.length} arquivo(s) com formato inválido`);
+                    this.reportValidity();
+                    
+                    // Adicionar aviso para cada arquivo inválido
+                    invalidFiles.forEach(invalid => {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.classList.add('file-error');
+                        errorDiv.textContent = `${invalid.name}: ${invalid.reason}`;
+                        fileList.appendChild(errorDiv);
+                    });
+                } else {
                     this.setCustomValidity('');
                 }
+            } else {
+                this.setCustomValidity('Selecione pelo menos um arquivo PDF');
             }
         });
     }
@@ -329,15 +499,35 @@ document.addEventListener('DOMContentLoaded', function() {
             excelList.innerHTML = '';
             
             if (this.files.length > 0) {
-                for (let i = 0; i < this.files.length; i++) {
-                    const file = this.files[i];
+                // Verificar se é um arquivo Excel válido
+                const file = this.files[0];
+                const validExtensions = ['.xls', '.xlsx'];
+                const extension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+                
+                if (!validExtensions.includes(extension)) {
+                    this.setCustomValidity('O arquivo não é um Excel válido. Use .xls ou .xlsx');
+                    this.reportValidity();
+                    
+                    const errorDiv = document.createElement('div');
+                    errorDiv.classList.add('file-error');
+                    errorDiv.textContent = `${file.name}: Formato inválido. Apenas .xls ou .xlsx são aceitos.`;
+                    excelList.appendChild(errorDiv);
+                } else {
                     const li = document.createElement('li');
                     li.textContent = file.name;
-                    excelList.appendChild(li);
                     
-                    // Limpar mensagem de validação
+                    // Adicionar informação do tamanho do arquivo
+                    const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+                    const sizeSpan = document.createElement('span');
+                    sizeSpan.classList.add('file-size');
+                    sizeSpan.textContent = `${fileSize} MB`;
+                    li.appendChild(sizeSpan);
+                    
+                    excelList.appendChild(li);
                     this.setCustomValidity('');
                 }
+            } else {
+                this.setCustomValidity('Selecione um arquivo Excel');
             }
         });
     }
@@ -346,12 +536,18 @@ document.addEventListener('DOMContentLoaded', function() {
     function previewPDF(file) {
         if (!pdfModal || !pdfPreview) return;
         
+        // Verificar se é um PDF
+        if (!file.type || file.type !== 'application/pdf') {
+            alert('O arquivo selecionado não é um PDF válido.');
+            return;
+        }
+        
         // Remover classe active de todos os itens
         const fileItems = document.querySelectorAll('.file-list li');
         fileItems.forEach(item => item.classList.remove('active'));
         
         // Adicionar classe active ao item selecionado
-        const selectedItem = Array.from(fileItems).find(li => li.textContent === file.name);
+        const selectedItem = Array.from(fileItems).find(li => li.textContent.includes(file.name));
         if (selectedItem) {
             selectedItem.classList.add('active');
         }
@@ -449,4 +645,56 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Adicionar validação em tempo real para o campo de título
+    const tituloInput = document.getElementById('titulo');
+    if (tituloInput) {
+        tituloInput.addEventListener('input', function() {
+            if (this.value.trim().length < 5) {
+                this.setCustomValidity('O título precisa ter pelo menos 5 caracteres');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    }
+    
+    // Adicionar validação em tempo real para o campo de nome
+    const nomeInput = document.getElementById('nome');
+    if (nomeInput) {
+        nomeInput.addEventListener('input', function() {
+            if (this.value.trim().length < 5) {
+                this.setCustomValidity('O nome precisa ter pelo menos 5 caracteres');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    }
+    
+    // Adicionar validação em tempo real para o campo de email
+    const emailInput = document.getElementById('email');
+    if (emailInput) {
+        emailInput.addEventListener('input', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(this.value)) {
+                this.setCustomValidity('Digite um endereço de email válido');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    }
+    
+    // Função para formatar números de entrada
+    function setupNumberInputs() {
+        const numberInputs = document.querySelectorAll('input[type="number"]');
+        numberInputs.forEach(input => {
+            // Garantir que seja apenas número positivo
+            input.addEventListener('input', function() {
+                if (parseInt(this.value) < 0) {
+                    this.value = 0;
+                }
+            });
+        });
+    }
+    
+    setupNumberInputs();
 });

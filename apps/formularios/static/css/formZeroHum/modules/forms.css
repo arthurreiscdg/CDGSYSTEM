@@ -263,6 +263,72 @@ select {
     border-left: 3px solid var(--primary-color);
 }
 
+/* Novos estilos para exibição do tamanho do arquivo */
+.file-size {
+    margin-left: 0.5rem;
+    color: var(--gray-500);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background-color: var(--gray-100);
+    border-radius: 1rem;
+}
+
+.file-error {
+    padding: 0.5rem 0.75rem;
+    margin: 0.5rem 0;
+    background-color: var(--error-light);
+    color: var(--error-color);
+    border-left: 3px solid var(--error-color);
+    border-radius: 3px;
+    font-size: 0.85rem;
+}
+
+.validation-info {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+}
+
+/* Estilos para mensagens de validação */
+.validation-error {
+    color: var(--error-color);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.validation-success {
+    color: var(--success-color);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Barra de progresso de validação */
+.file-progress {
+    width: 100%;
+    height: 0.25rem;
+    margin: 0.5rem 0;
+    background-color: var(--gray-200);
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.file-progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 1rem;
+    transition: width 0.3s ease;
+}
+
+.file-progress-bar.warning {
+    background-color: var(--warning-color);
+}
+
+.file-progress-bar.error {
+    background-color: var(--error-color);
+}
+
 /* Estilos para a etapa de escolha de método */
 .method-description {
     text-align: center;
@@ -335,4 +401,21 @@ select {
 .excel-download {
     margin-top: 1.5rem;
     text-align: center;
+}
+
+/* Estilo para botão de remover arquivo */
+.file-remove {
+    padding: 0.15rem 0.5rem;
+    background-color: var(--error-light);
+    color: var(--error-color);
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.file-remove:hover {
+    background-color: var(--error-color);
+    color: white;
 }
