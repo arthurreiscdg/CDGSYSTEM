@@ -321,7 +321,16 @@ def formZeroHumEx(request):
             if not unidades_processadas:
                 logger.warning("Nenhuma unidade foi processada do Excel!")
                 
-            cod_op = abs(hash(configuracao.titulo + str(timestamp))) % 100000  # Limita o hash a 5 dígitos
+            cod_op_str = (
+                'ZER' + str(configuracao.data_entrega) +
+                (configuracao.formato or '') + (configuracao.cor_impressao or '') +
+                (configuracao.impressao or '') + (configuracao.gramatura or '') +
+                (str(configuracao.papel_adesivo) if configuracao.papel_adesivo is not None else '') +
+                (configuracao.tipo_adesivo or '') + (configuracao.grampos or '') +
+                (str(configuracao.espiral) if configuracao.espiral is not None else '') +
+                (str(configuracao.capa_pvc) if configuracao.capa_pvc is not None else '')
+            )
+            cod_op = abs(hash(cod_op_str)) % 100000  # Limita o hash a 5 dígitos
             arquivos_info = processar_uploads(files, folder_id, configuracao, timestamp, unidades_associadas, cod_op)
 
             return JsonResponse({
