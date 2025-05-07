@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const excelInput = document.getElementById('excelInput');
     const fileList = document.getElementById('fileList');
     const excelList = document.getElementById('excelList');
+    const formTypeInput = document.getElementById('formType');
     
     // Elementos para escolha do método de pedido
     const metodoManual = document.getElementById('metodoManual');
@@ -14,6 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const stepExcel = document.querySelectorAll('.step-excel');
     const stepManualContent = document.getElementById('step-5-manual');
     const stepExcelContent = document.getElementById('step-5-excel');
+    
+    // URLs para os diferentes tipos de formulário (usando caminhos completos)
+    const urlFormManual = '/formularios/formZeroHum/';
+    const urlFormExcel = '/formularios/formZeroHumEx/';
     
     // Elementos do modal
     const statusModal = document.getElementById('statusModal');
@@ -50,11 +55,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 stepManualContent.style.display = '';
                 stepExcelContent.style.display = 'none';
                 
+                // Atualizar tipo de formulário e URL de destino
+                if (formTypeInput) formTypeInput.value = 'manual';
+                if (form) form.action = urlFormManual;
+                
                 // Tornar obrigatório inputs de escolas e opcional o Excel
                 if (excelInput) excelInput.removeAttribute('required');
                 document.querySelectorAll('#step-5-manual input[type="number"]').forEach(input => {
                     input.setAttribute('data-validation', 'escola');
                 });
+                
+                console.log('Modo manual selecionado. Formulário configurado para:', urlFormManual);
+                
             } else if (metodoExcel.checked) {
                 // Mostrar etapa de Excel e esconder etapa de escolas
                 stepEscolas.forEach(item => item.style.display = 'none');
@@ -62,11 +74,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 stepManualContent.style.display = 'none';
                 stepExcelContent.style.display = '';
                 
+                // Atualizar tipo de formulário e URL de destino
+                if (formTypeInput) formTypeInput.value = 'excel';
+                if (form) form.action = urlFormExcel;
+                
                 // Tornar obrigatório o Excel e opcional inputs de escolas
                 if (excelInput) excelInput.setAttribute('required', 'required');
                 document.querySelectorAll('#step-5-manual input[type="number"]').forEach(input => {
                     input.removeAttribute('data-validation');
                 });
+                
+                console.log('Modo Excel selecionado. Formulário configurado para:', urlFormExcel);
             }
         }
     }

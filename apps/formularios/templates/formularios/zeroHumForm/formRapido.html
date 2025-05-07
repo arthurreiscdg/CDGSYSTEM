@@ -14,8 +14,9 @@
     <main class="main-content" id="mainContent">
         <div class="container">
 
-            <form id="formZeroHum" class="form-container" enctype="multipart/form-data" method="post">
+            <form id="formZeroHum" class="form-container" enctype="multipart/form-data" method="post" action="{% url 'formZeroHum' %}">
                 {% csrf_token %}
+                <input type="hidden" id="formType" name="formType" value="manual">
                 <div class="form-header">
                     <h1>Formulário ZeroHum de Pedido de Produção</h1>
                     <p>Preencha os detalhes abaixo para solicitar a produção do seu material</p>

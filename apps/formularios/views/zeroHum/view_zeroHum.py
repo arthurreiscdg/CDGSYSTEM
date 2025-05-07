@@ -62,13 +62,25 @@ def salvar_configuracao(request, contato, titulo, data_entrega):
 
 # Gera o JSON com os dados enviados e processados
 def gerar_json_info(nome_pdf, link_download, numero_arquivos, unidades_dict, configuracao, contato, timestamp, cod_op):
+    # Log para debug - verificar se o dicionário de unidades está correto
+    logger.info(f"unidades_dict recebido: {unidades_dict}")
+    
+    # Criar dicionário de nomes de unidades, verificando valores adequadamente
+    nomes_unidade = {}
+    for nome in UNIDADES_LISTA:
+        quantidade = unidades_dict.get(nome, 0)
+        nomes_unidade[nome] = quantidade
+        
+    # Log para debug - verificar se o dicionário final está correto
+    logger.info(f"nomeUnidade final: {nomes_unidade}")
+    
     dados = {
         "nomeArquivo": nome_pdf,
         "caminhoDownload": link_download,
         "caminhoSwitch": "C:/Users/CDG/OneDrive/Desktop/uploads",
         "cod_op": cod_op,
         "numeroArquivos": numero_arquivos,
-        "nomeUnidade": {nome: unidades_dict.get(nome, 0) for nome in UNIDADES_LISTA},
+        "nomeUnidade": nomes_unidade,
         "dadosFormulario": {
             "titulo": configuracao.titulo,
             "dataEntrega": str(configuracao.data_entrega),
@@ -250,14 +262,26 @@ def formZeroHumEx(request):
             if not excel_file:
                 return JsonResponse({'success': False, 'error': 'Arquivo Excel ausente'}, status=400)
 
-            erro = validar_data(data_entrega)
+            erro = validar_data(data_str=data_entrega)
             if erro: return erro
 
+            # Leitura do arquivo Excel com melhor tratamento de erros
             try:
-                df = pd.read_excel(io.BytesIO(excel_file.read()), sheet_name='PEDIDO')
+                df = pd.read_excel(excel_file, sheet_name='PEDIDO')
+                if 'UNIDADES' not in df.columns or 'QTDE' not in df.columns:
+                    return JsonResponse({
+                        'success': False, 
+                        'error': 'O arquivo Excel deve conter as colunas UNIDADES e QTDE na planilha PEDIDO'
+                    }, status=400)
+                    
+                # Limpeza e normalização dos dados
                 df = df.dropna(subset=["UNIDADES"])
                 df['UNIDADES'] = df['UNIDADES'].str.strip().str.upper()
+                
+                # Adicionar log para depuração
+                logger.info(f"Dados Excel lidos: {df.to_dict()}")
             except Exception as e:
+                logger.error(f"Erro ao processar Excel: {str(e)}")
                 return JsonResponse({'success': False, 'error': f'Erro ao processar Excel: {str(e)}'}, status=400)
 
             timestamp = f"ZEROHUM{get_timestamp()}"
@@ -266,21 +290,37 @@ def formZeroHumEx(request):
             configuracao = salvar_configuracao(request, contato, titulo, data_entrega)
 
             unidades_associadas = []
-            for unidade_nome in UNIDADES_LISTA:
-                linha = df[df['UNIDADES'] == unidade_nome]
-                if not linha.empty:
-                    try:
-                        qtde = linha['QTDE'].values[0]
-                        if pd.notna(qtde):
-                            quantidade_int = int(qtde)
-                            if quantidade_int > 0:
-                                unidade_obj, _ = Unidade.objects.get_or_create(nome=unidade_nome)
-                                unidade_obj.quantidade = quantidade_int
-                                unidade_obj.save()
-                                unidades_associadas.append(unidade_obj)
-                    except Exception as e:
-                        return JsonResponse({'success': False, 'error': f'Erro ao processar unidade {unidade_nome}: {str(e)}'}, status=500)
+            unidades_processadas = set()  # Para rastrear as unidades processadas
+            
+            # Debug - imprimir dataframe antes do processamento
+            logger.info(f"Processando dataframe com {len(df)} linhas")
+            
+            # Processar cada linha do Excel
+            for index, row in df.iterrows():
+                unidade_nome = row['UNIDADES']
+                if pd.isna(unidade_nome) or unidade_nome not in UNIDADES_LISTA:
+                    continue
+                
+                try:
+                    qtde = row['QTDE']
+                    quantidade_int = int(qtde) if pd.notna(qtde) else 0
+                    
+                    if quantidade_int > 0:
+                        unidade_obj, _ = Unidade.objects.get_or_create(nome=unidade_nome)
+                        unidade_obj.quantidade = quantidade_int
+                        unidade_obj.save()
+                        unidades_associadas.append(unidade_obj)
+                        unidades_processadas.add(unidade_nome)
+                        # Debug
+                        logger.info(f"Unidade processada: {unidade_nome} = {quantidade_int}")
+                except Exception as e:
+                    logger.error(f"Erro ao processar unidade {unidade_nome}: {str(e)}")
+                    continue
 
+            # Verificar unidades processadas
+            if not unidades_processadas:
+                logger.warning("Nenhuma unidade foi processada do Excel!")
+                
             cod_op = abs(hash(configuracao.titulo + str(timestamp))) % 100000  # Limita o hash a 5 dígitos
             arquivos_info = processar_uploads(files, folder_id, configuracao, timestamp, unidades_associadas, cod_op)
 
@@ -288,7 +328,8 @@ def formZeroHumEx(request):
                 'success': True,
                 'message': 'Upload concluído com sucesso!',
                 'arquivos': arquivos_info,
-                'numeroArquivos': len(arquivos_info)
+                'numeroArquivos': len(arquivos_info),
+                'unidades': list(unidades_processadas)  # Retornar as unidades processadas para diagnóstico
             })
 
         except Exception as e:
