@@ -182,6 +182,67 @@
     color: #c53030;
 }
 
+/* Classes CSS para status em português */
+.status-badge[data-status="Novo Pedido"],
+.status-badge.status-novo-pedido {
+    background-color: rgba(136, 132, 255, 0.15);
+    color: #8884FF;
+}
+
+.status-badge[data-status="Enviado para Produção"],
+.status-badge.status-enviado-producao {
+    background-color: rgba(171, 71, 188, 0.15);
+    color: #AB47BC;
+}
+
+.status-badge[data-status="Preparando Envio"],
+.status-badge.status-preparando-envio {
+    background-color: rgba(38, 198, 218, 0.15);
+    color: #26C6DA;
+}
+
+.status-badge[data-status="Pronto para Retirada"],
+.status-badge.status-pronto-retirada {
+    background-color: rgba(102, 187, 106, 0.15);
+    color: #66BB6A;
+}
+
+.status-badge[data-status="Aguardando Retirada da Transportadora"],
+.status-badge.status-aguardando-retirada {
+    background-color: rgba(255, 167, 38, 0.15);
+    color: #FFA726;
+}
+
+.status-badge[data-status="Enviado"],
+.status-badge.status-enviado {
+    background-color: rgba(66, 165, 245, 0.15);
+    color: #42A5F5;
+}
+
+.status-badge[data-status="Em Trânsito"],
+.status-badge.status-em-transito {
+    background-color: rgba(41, 182, 246, 0.15);
+    color: #29B6F6;
+}
+
+.status-badge[data-status="Entregue"],
+.status-badge.status-entregue {
+    background-color: rgba(102, 187, 106, 0.15);
+    color: #66BB6A;
+}
+
+.status-badge[data-status="Retornando - Erro na Entrega"],
+.status-badge.status-retornando-erro {
+    background-color: rgba(229, 57, 53, 0.15);
+    color: #E53935;
+}
+
+.status-badge[data-status="Cancelado"],
+.status-badge.status-cancelado {
+    background-color: rgba(229, 62, 62, 0.15);
+    color: #c53030;
+}
+
 /* Tema escuro para badges de status */
 .dark-theme .status-neworder {
     background-color: var(--dark-status-neworder-bg);
@@ -244,6 +305,67 @@
 }
 
 .dark-theme .status-cancelled {
+    background-color: var(--dark-status-cancelled-bg);
+    color: var(--dark-status-cancelled);
+}
+
+/* Tema escuro para badges de status em português */
+.dark-theme .status-badge[data-status="Novo Pedido"],
+.dark-theme .status-badge.status-novo-pedido {
+    background-color: var(--dark-status-neworder-bg);
+    color: var(--dark-status-neworder);
+}
+
+.dark-theme .status-badge[data-status="Enviado para Produção"],
+.dark-theme .status-badge.status-enviado-producao {
+    background-color: var(--dark-status-production-bg);
+    color: var(--dark-status-production);
+}
+
+.dark-theme .status-badge[data-status="Preparando Envio"],
+.dark-theme .status-badge.status-preparando-envio {
+    background-color: var(--dark-status-preparing-bg);
+    color: var(--dark-status-preparing);
+}
+
+.dark-theme .status-badge[data-status="Pronto para Retirada"],
+.dark-theme .status-badge.status-pronto-retirada {
+    background-color: var(--dark-status-readyforpickup-bg);
+    color: var(--dark-status-readyforpickup);
+}
+
+.dark-theme .status-badge[data-status="Aguardando Retirada da Transportadora"],
+.dark-theme .status-badge.status-aguardando-retirada {
+    background-color: var(--dark-status-waitingforpickup-bg);
+    color: var(--dark-status-waitingforpickup);
+}
+
+.dark-theme .status-badge[data-status="Enviado"],
+.dark-theme .status-badge.status-enviado {
+    background-color: var(--dark-status-shipped-bg);
+    color: var(--dark-status-shipped);
+}
+
+.dark-theme .status-badge[data-status="Em Trânsito"],
+.dark-theme .status-badge.status-em-transito {
+    background-color: var(--dark-status-intransit-bg);
+    color: var(--dark-status-intransit);
+}
+
+.dark-theme .status-badge[data-status="Entregue"],
+.dark-theme .status-badge.status-entregue {
+    background-color: var(--dark-status-delivered-bg);
+    color: var(--dark-status-delivered);
+}
+
+.dark-theme .status-badge[data-status="Retornando - Erro na Entrega"],
+.dark-theme .status-badge.status-retornando-erro {
+    background-color: var(--dark-status-returnerror-bg);
+    color: var(--dark-status-returnerror);
+}
+
+.dark-theme .status-badge[data-status="Cancelado"],
+.dark-theme .status-badge.status-cancelado {
     background-color: var(--dark-status-cancelled-bg);
     color: var(--dark-status-cancelled);
 }

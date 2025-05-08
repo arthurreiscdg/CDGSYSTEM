@@ -247,27 +247,18 @@
                                     <td>{{ pedido.data_saida|default:webhook.recebido_em|date:"d/m/Y" }}</td>
                                     <td>
                                         <span class="status-badge 
-                                            {% if pedido.status == 'Novo Pedido' %}status-Novo Pedido
-                                            {% elif pedido.status == 'Enviado para Produção' %}status-Enviado para Produção
-                                            {% elif pedido.status == 'Preparando Envio' %}status-Preparando Envio
-                                            {% elif pedido.status == 'Pronto para Retirada' %}status-Pronto para Retirada
-                                            {% elif pedido.status == 'Aguardando Retirada da Transportadora' %}status-Aguardando Retirada
-                                            {% elif pedido.status == 'Enviado' %}status-Enviado
-                                            {% elif pedido.status == 'Em Trânsito' %}status-Em Trânsito
-                                            {% elif pedido.status == 'Entregue' %}status-Entregue
-                                            {% elif pedido.status == 'Retornando - Erro na Entrega' %}status-Retornando - Erro na Entrega
-                                            {% elif pedido.status == 'Cancelado' %}status-Cancelado
-                                            {% else %}status-processing{% endif %}">
-                                            {% if pedido.status == 'Retornando - Erro na Entrega' %}Retornando - Erro na Entrega
-                                            {% elif pedido.status == 'Cancelado' %}Cancelado
-                                            {% elif pedido.status == 'Em Trânsito' %}Em Trânsito
-                                            {% elif pedido.status == 'Enviado' %}Enviado
-                                            {% elif pedido.status == 'Aguardando Retirada da Transportadora' %}Aguardando Retirada
-                                            {% elif pedido.status == 'Pronto para Retirada' %}Pronto para Retirada
-                                            {% elif pedido.status == 'Preparando Envio' %}Preparando Envio
-                                            {% elif pedido.status == 'Enviado para Produção' %}Enviado para Produção
-                                            {% elif pedido.status == 'Novo Pedido' %}Novo Pedido
-                                            {% else %}Desconhecido{% endif %}
+                                            {% if pedido.status == 'Novo Pedido' %}status-novo-pedido
+                                            {% elif pedido.status == 'Enviado para Produção' %}status-enviado-producao
+                                            {% elif pedido.status == 'Preparando Envio' %}status-preparando-envio
+                                            {% elif pedido.status == 'Pronto para Retirada' %}status-pronto-retirada
+                                            {% elif pedido.status == 'Aguardando Retirada da Transportadora' %}status-aguardando-retirada
+                                            {% elif pedido.status == 'Enviado' %}status-enviado
+                                            {% elif pedido.status == 'Em Trânsito' %}status-em-transito
+                                            {% elif pedido.status == 'Entregue' %}status-entregue
+                                            {% elif pedido.status == 'Retornando - Erro na Entrega' %}status-retornando-erro
+                                            {% elif pedido.status == 'Cancelado' %}status-cancelado
+                                            {% else %}status-processing{% endif %}" data-status="{{ pedido.status }}">
+                                            {{ pedido.status }}
                                         </span>
                                     </td>
                                     <td>{{ pedido.valor_pedido|floatformat:2 }}</td>
@@ -428,7 +419,7 @@
                 <div class="status-options">
                     
                     <div class="status-option" data-status="Novo Pedido">
-                        <div class="status-indicator neworder"></div>
+                        <div class="status-indicator status-novo-pedido"></div>
                         <div class="status-details">
                             <h4>Novo Pedido</h4>
                             <p>Pedido recém criado</p>
@@ -436,7 +427,7 @@
                     </div>
                     
                     <div class="status-option" data-status="Enviado para Produção">
-                        <div class="status-indicator production"></div>
+                        <div class="status-indicator status-enviado-producao"></div>
                         <div class="status-details">
                             <h4>Enviado para Produção</h4>
                             <p>Pedido enviado para o setor de produção</p>
@@ -444,7 +435,7 @@
                     </div>
                     
                     <div class="status-option" data-status="Preparando Envio">
-                        <div class="status-indicator preparing"></div>
+                        <div class="status-indicator status-preparando-envio"></div>
                         <div class="status-details">
                             <h4>Preparando Envio</h4>
                             <p>Em processo de preparação para envio</p>
@@ -452,7 +443,7 @@
                     </div>
 
                     <div class="status-option" data-status="Pronto para Retirada">
-                        <div class="status-indicator readyforpickup"></div>
+                        <div class="status-indicator status-pronto-retirada"></div>
                         <div class="status-details">
                             <h4>Pronto para Retirada</h4>
                             <p>Pedido pronto para ser retirado</p>
@@ -460,7 +451,7 @@
                     </div>
                     
                     <div class="status-option" data-status="Aguardando Retirada da Transportadora">
-                        <div class="status-indicator waitingforpickup"></div>
+                        <div class="status-indicator status-aguardando-retirada"></div>
                         <div class="status-details">
                             <h4>Aguardando Retirada da Transportadora</h4>
                             <p>Aguardando coleta pela transportadora</p>
@@ -468,7 +459,7 @@
                     </div>
                     
                     <div class="status-option" data-status="Enviado">
-                        <div class="status-indicator shipped"></div>
+                        <div class="status-indicator status-enviado"></div>
                         <div class="status-details">
                             <h4>Enviado</h4>
                             <p>Pedido enviado pela transportadora</p>
@@ -476,7 +467,7 @@
                     </div>
                     
                     <div class="status-option" data-status="Em Trânsito">
-                        <div class="status-indicator intransit"></div>
+                        <div class="status-indicator status-em-transito"></div>
                         <div class="status-details">
                             <h4>Em Trânsito</h4>
                             <p>Pedido em trânsito para o destino</p>
@@ -484,7 +475,7 @@
                     </div>
 
                     <div class="status-option" data-status="Entregue">
-                        <div class="status-indicator delivered"></div>
+                        <div class="status-indicator status-entregue"></div>
                         <div class="status-details">
                             <h4>Entregue</h4>
                             <p>Pedido entregue ao destinatário</p>
@@ -492,7 +483,7 @@
                     </div>
                     
                     <div class="status-option" data-status="Retornando - Erro na Entrega">
-                        <div class="status-indicator returnerror"></div>
+                        <div class="status-indicator status-retornando-erro"></div>
                         <div class="status-details">
                             <h4>Retornando - Erro na Entrega</h4>
                             <p>Pedido retornando por problema na entrega</p>
@@ -500,7 +491,7 @@
                     </div>
                     
                     <div class="status-option" data-status="Cancelado">
-                        <div class="status-indicator cancelled"></div>
+                        <div class="status-indicator status-cancelado"></div>
                         <div class="status-details">
                             <h4>Cancelado</h4>
                             <p>Pedido cancelado</p>
