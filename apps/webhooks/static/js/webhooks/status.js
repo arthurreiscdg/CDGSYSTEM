@@ -179,16 +179,61 @@ WebhookApp.Status = (function() {
                 if (statusCell) {
                     // Remover as classes de status existentes
                     const statusSpan = statusCell.querySelector('.status-badge');
-                    statusSpan.classList.remove('status-processing', 'status-pending', 'status-completed', 'status-cancelled');
+                    statusSpan.classList.remove(
+                        'status-neworder', 
+                        'status-processing', 
+                        'status-production',
+                        'status-preparing',
+                        'status-readyforpickup',
+                        'status-waitingforpickup',
+                        'status-shipped',
+                        'status-intransit',
+                        'status-delivered',
+                        'status-pending', 
+                        'status-completed', 
+                        'status-cancelled'
+                    );
                     
                     // Adicionar a nova classe de status
                     let statusClass = '';
                     let statusText = '';
                     
                     switch (newStatus) {
+                        case 'NewOrder':
+                            statusClass = 'status-neworder';
+                            statusText = 'Novo Pedido';
+                            break;
                         case 'Processing':
                             statusClass = 'status-processing';
                             statusText = 'Emitida DANFE';
+                            break;
+                        case 'Production':
+                            statusClass = 'status-production';
+                            statusText = 'Enviado para Produção';
+                            break;
+                        case 'Preparing':
+                            statusClass = 'status-preparing';
+                            statusText = 'Preparando Envio';
+                            break;
+                        case 'ReadyForPickup':
+                            statusClass = 'status-readyforpickup';
+                            statusText = 'Pronto para Retirada';
+                            break;
+                        case 'WaitingForPickup':
+                            statusClass = 'status-waitingforpickup';
+                            statusText = 'Aguardando Retirada';
+                            break;
+                        case 'Shipped':
+                            statusClass = 'status-shipped';
+                            statusText = 'Enviado';
+                            break;
+                        case 'InTransit':
+                            statusClass = 'status-intransit';
+                            statusText = 'Em Trânsito';
+                            break;
+                        case 'Delivered':
+                            statusClass = 'status-delivered';
+                            statusText = 'Entregue';
                             break;
                         case 'Pending':
                             statusClass = 'status-pending';

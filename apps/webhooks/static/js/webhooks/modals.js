@@ -166,9 +166,29 @@ WebhookApp.Modals = (function() {
                     <div class="detail-row">
                         <div class="detail-label">Status:</div>
                         <div class="detail-value">
-                            <span class="status-badge ${pedidoInfo.status === 'Completed' ? 'status-completed' : pedidoInfo.status === 'Pending' ? 'status-pending' : 'status-processing'}">
-                                ${pedidoInfo.status === 'Completed' ? 'Autorizada' : 
-                                  pedidoInfo.status === 'Pending' ? 'Pendente' : 'Emitida DANFE'}
+                            <span class="status-badge 
+                                ${pedidoInfo.status === 'NewOrder' ? 'status-neworder' :
+                                pedidoInfo.status === 'Processing' ? 'status-processing' :
+                                pedidoInfo.status === 'Production' ? 'status-production' :
+                                pedidoInfo.status === 'Preparing' ? 'status-preparing' :
+                                pedidoInfo.status === 'ReadyForPickup' ? 'status-readyforpickup' :
+                                pedidoInfo.status === 'WaitingForPickup' ? 'status-waitingforpickup' :
+                                pedidoInfo.status === 'Shipped' ? 'status-shipped' :
+                                pedidoInfo.status === 'InTransit' ? 'status-intransit' :
+                                pedidoInfo.status === 'Delivered' ? 'status-delivered' :
+                                pedidoInfo.status === 'Completed' ? 'status-completed' :
+                                pedidoInfo.status === 'Pending' ? 'status-pending' : 'status-cancelled'}">
+                                ${pedidoInfo.status === 'NewOrder' ? 'Novo Pedido' :
+                                pedidoInfo.status === 'Processing' ? 'Emitida DANFE' :
+                                pedidoInfo.status === 'Production' ? 'Enviado para Produção' :
+                                pedidoInfo.status === 'Preparing' ? 'Preparando Envio' :
+                                pedidoInfo.status === 'ReadyForPickup' ? 'Pronto para Retirada' :
+                                pedidoInfo.status === 'WaitingForPickup' ? 'Aguardando Retirada' :
+                                pedidoInfo.status === 'Shipped' ? 'Enviado' :
+                                pedidoInfo.status === 'InTransit' ? 'Em Trânsito' :
+                                pedidoInfo.status === 'Delivered' ? 'Entregue' :
+                                pedidoInfo.status === 'Completed' ? 'Autorizada' :
+                                pedidoInfo.status === 'Pending' ? 'Pendente' : 'Cancelada'}
                             </span>
                         </div>
                     </div>

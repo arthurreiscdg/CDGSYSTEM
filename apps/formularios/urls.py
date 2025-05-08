@@ -1,6 +1,6 @@
 from django.urls import path
-from apps.formularios.views.zeroHum import view_zeroHum
-from apps.formularios.views.formularios import view_formularios
+from apps.formularios.views import view_zeroHum
+from apps.formularios.views import view_formularios
 from . import views
 
 urlpatterns = [

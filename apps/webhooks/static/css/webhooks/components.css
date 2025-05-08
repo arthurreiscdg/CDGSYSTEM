@@ -117,9 +117,49 @@
     font-weight: 600;
 }
 
+.status-neworder, .status-neworder {
+    background-color: rgba(136, 132, 255, 0.15);
+    color: #8884FF;
+}
+
 .status-processing, .status-processing {
     background-color: rgba(76, 201, 240, 0.15);
     color: #3391b0;
+}
+
+.status-production, .status-production {
+    background-color: rgba(171, 71, 188, 0.15);
+    color: #AB47BC;
+}
+
+.status-preparing, .status-preparing {
+    background-color: rgba(38, 198, 218, 0.15);
+    color: #26C6DA;
+}
+
+.status-readyforpickup, .status-readyforpickup {
+    background-color: rgba(102, 187, 106, 0.15);
+    color: #66BB6A;
+}
+
+.status-waitingforpickup, .status-waitingforpickup {
+    background-color: rgba(255, 167, 38, 0.15);
+    color: #FFA726;
+}
+
+.status-shipped, .status-shipped {
+    background-color: rgba(66, 165, 245, 0.15);
+    color: #42A5F5;
+}
+
+.status-intransit, .status-intransit {
+    background-color: rgba(41, 182, 246, 0.15);
+    color: #29B6F6;
+}
+
+.status-delivered, .status-delivered {
+    background-color: rgba(102, 187, 106, 0.15);
+    color: #66BB6A;
 }
 
 .status-pending, .status-pending {
@@ -138,6 +178,11 @@
 }
 
 /* Tema escuro para badges de status */
+.dark-theme .status-neworder {
+    background-color: var(--dark-status-neworder-bg);
+    color: var(--dark-status-neworder);
+}
+
 .dark-theme .status-completed {
     background-color: var(--dark-status-authorized-bg);
     color: var(--dark-status-authorized);
@@ -151,6 +196,41 @@
 .dark-theme .status-processing {
     background-color: var(--dark-status-processing-bg);
     color: var(--dark-status-processing);
+}
+
+.dark-theme .status-production {
+    background-color: var(--dark-status-production-bg);
+    color: var(--dark-status-production);
+}
+
+.dark-theme .status-preparing {
+    background-color: var(--dark-status-preparing-bg);
+    color: var(--dark-status-preparing);
+}
+
+.dark-theme .status-readyforpickup {
+    background-color: var(--dark-status-readyforpickup-bg);
+    color: var(--dark-status-readyforpickup);
+}
+
+.dark-theme .status-waitingforpickup {
+    background-color: var(--dark-status-waitingforpickup-bg);
+    color: var(--dark-status-waitingforpickup);
+}
+
+.dark-theme .status-shipped {
+    background-color: var(--dark-status-shipped-bg);
+    color: var(--dark-status-shipped);
+}
+
+.dark-theme .status-intransit {
+    background-color: var(--dark-status-intransit-bg);
+    color: var(--dark-status-intransit);
+}
+
+.dark-theme .status-delivered {
+    background-color: var(--dark-status-delivered-bg);
+    color: var(--dark-status-delivered);
 }
 
 .dark-theme .status-cancelled {

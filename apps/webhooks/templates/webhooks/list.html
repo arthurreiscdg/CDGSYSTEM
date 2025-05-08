@@ -106,8 +106,18 @@
                                 <select class="form-select" name="status" data-filter="status">
                                     <option value="">Selecione uma opção...</option>
                                     <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Autorizada</option>
-                                    <option value="Processing" {% if status_filter == 'Processing' %}selected{% endif %}>Emitida DANFE</option>
                                     <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pendente</option>
+                                    <option value="Cancelled" {% if status_filter == 'Cancelled' %}selected{% endif %}>Cancelada</option>
+                                    <option value="InTransit" {% if status_filter == 'InTransit' %}selected{% endif %}>Em Trânsito</option>
+                                    <option value="Shipped" {% if status_filter == 'Shipped' %}selected{% endif %}>Enviado</option>
+                                    <option value="Delivered" {% if status_filter == 'Delivered' %}selected{% endif %}>Entregue</option>
+                                    <option value="WaitingForPickup" {% if status_filter == 'WaitingForPickup' %}selected{% endif %}>Aguardando Retirada</option>
+                                    <option value="ReadyForPickup" {% if status_filter == 'ReadyForPickup' %}selected{% endif %}>Pronto para Retirada</option>
+                                    <option value="Processing" {% if status_filter == 'Processing' %}selected{% endif %}>Processando</option>
+                                    <option value="Production" {% if status_filter == 'Production' %}selected{% endif %}>Enviado para Produção</option>
+                                    <option value="NewOrder" {% if status_filter == 'NewOrder' %}selected{% endif %}>Novo Pedido</option>
+                                    <option value="Preparing" {% if status_filter == 'Preparing' %}selected{% endif %}>Preparando envio</option>
+
                                 </select>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
@@ -239,11 +249,30 @@
                                         <span class="status-badge 
                                             {% if pedido.status == 'Pending' %}status-pending
                                             {% elif pedido.status == 'Completed' %}status-completed
+                                            {% elif pedido.status == 'Processing' %}status-processing
+                                            {% elif pedido.status == 'Delivered' %}status-delivered
+                                            {% elif pedido.status == 'Cancelled' %}status-cancelled
+                                            {% elif pedido.status == 'InTransit' %}status-intransit
+                                            {% elif pedido.status == 'Shipped' %}status-shipped
+                                            {% elif pedido.status == 'WaitingForPickup' %}status-waitingforpickup
+                                            {% elif pedido.status == 'ReadyForPickup' %}status-readyforpickup
+                                            {% elif pedido.status == 'Preparing' %}status-preparing
+                                            {% elif pedido.status == 'Production' %}status-production
+                                            {% elif pedido.status == 'NewOrder' %}status-neworder
                                             {% else %}status-processing{% endif %}">
                                             {% if pedido.status == 'Pending' %}Pendente
-                                            {% elif pedido.status == 'Completed' %}Autorizada
+                                            {% elif pedido.status == 'Completed' %}Concluído
                                             {% elif pedido.status == 'Processing' %}Processando
-                                            {% else %}Emitida DANFE{% endif %}
+                                            {% elif pedido.status == 'Delivered' %}Entregue
+                                            {% elif pedido.status == 'Cancelled' %}Cancelado
+                                            {% elif pedido.status == 'InTransit' %}Em Trânsito
+                                            {% elif pedido.status == 'Shipped' %}Enviado
+                                            {% elif pedido.status == 'WaitingForPickup' %}Aguardando Retirada
+                                            {% elif pedido.status == 'ReadyForPickup' %}Pronto para Retirada
+                                            {% elif pedido.status == 'Preparing' %}Preparando Envio
+                                            {% elif pedido.status == 'Production' %}Enviado para Produção
+                                            {% elif pedido.status == 'NewOrder' %}Novo Pedido
+                                            {% else %}Desconhecido{% endif %}
                                         </span>
                                     </td>
                                     <td>{{ pedido.valor_pedido|floatformat:2 }}</td>
@@ -402,11 +431,60 @@
                 <p id="statusSelectionText">Selecione o novo status para os <span id="selectedOrdersCount">0</span> itens selecionados:</p>
                 
                 <div class="status-options">
-                    <div class="status-option" data-status="Processing">
-                        <div class="status-indicator processing"></div>
+                    
+                    <div class="status-option" data-status="Production">
+                        <div class="status-indicator production"></div>
                         <div class="status-details">
-                            <h4>Emitida DANFE</h4>
-                            <p>Documento emitido e pronto para envio</p>
+                            <h4>Enviado para Produção</h4>
+                            <p>Pedido enviado para o setor de produção</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-option" data-status="Preparing">
+                        <div class="status-indicator preparing"></div>
+                        <div class="status-details">
+                            <h4>Preparando Envio</h4>
+                            <p>Em processo de preparação para envio</p>
+                        </div>
+                    </div>
+
+                    <div class="status-option" data-status="ReadyForPickup">
+                        <div class="status-indicator readyforpickup"></div>
+                        <div class="status-details">
+                            <h4>Pronto para Retirada</h4>
+                            <p>Pedido pronto para ser retirado</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-option" data-status="WaitingForPickup">
+                        <div class="status-indicator waitingforpickup"></div>
+                        <div class="status-details">
+                            <h4>Aguardando Retirada</h4>
+                            <p>Aguardando coleta pela transportadora</p>
+                        </div>
+                    </div>
+                    
+                    <div class="status-option" data-status="Shipped">
+                        <div class="status-indicator shipped"></div>
+                        <div class="status-details">
+                            <h4>Enviado</h4>
+                            <p>Pedido enviado pela transportadora</p>
+                        </div>
+                    </div>
+
+                    <div class="status-option" data-status="InTransit">
+                        <div class="status-indicator intransit"></div>
+                        <div class="status-details">
+                            <h4>Em Trânsito</h4>
+                            <p>Pedido em trânsito para o destino</p>
+                        </div>
+                    </div>
+
+                    <div class="status-option" data-status="Delivered">
+                        <div class="status-indicator delivered"></div>
+                        <div class="status-details">
+                            <h4>Entregue</h4>
+                            <p>Pedido entregue ao destinatário</p>
                         </div>
                     </div>
                     

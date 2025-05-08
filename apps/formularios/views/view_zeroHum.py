@@ -10,8 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 import holidays
 import logging
 from django.contrib.auth.decorators import login_required
-from ...models import Contato, Unidade, ConfiguracaoImpressao, ArquivoPDF
-from ...utils.drive_uploader import get_timestamp, criar_pasta_drive, upload_arquivo_drive
+from ..models import Contato, Unidade, ConfiguracaoImpressao, ArquivoPDF
+from ..utils.drive_uploader import get_timestamp, criar_pasta_drive, upload_arquivo_drive
 
 # Lista de unidades válidas para processamento
 UNIDADES_LISTA = [

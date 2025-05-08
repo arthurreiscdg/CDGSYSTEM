@@ -36,12 +36,28 @@
     --dark-accent-orange: #FF9800;
     
     /* Cores de status - tema escuro */
+    --dark-status-neworder: #8884FF;
+    --dark-status-neworder-bg: rgba(136, 132, 255, 0.15);
     --dark-status-authorized: #A4E786;
     --dark-status-authorized-bg: rgba(164, 231, 134, 0.15);
     --dark-status-pending: #FF9800;
     --dark-status-pending-bg: rgba(255, 152, 0, 0.15);
     --dark-status-processing: #1E88E5;
     --dark-status-processing-bg: rgba(30, 136, 229, 0.15);
+    --dark-status-production: #AB47BC;
+    --dark-status-production-bg: rgba(171, 71, 188, 0.15);
+    --dark-status-preparing: #26C6DA;
+    --dark-status-preparing-bg: rgba(38, 198, 218, 0.15);
+    --dark-status-readyforpickup: #66BB6A;
+    --dark-status-readyforpickup-bg: rgba(102, 187, 106, 0.15);
+    --dark-status-waitingforpickup: #FFA726;
+    --dark-status-waitingforpickup-bg: rgba(255, 167, 38, 0.15);
+    --dark-status-shipped: #42A5F5;
+    --dark-status-shipped-bg: rgba(66, 165, 245, 0.15);
+    --dark-status-intransit: #29B6F6;
+    --dark-status-intransit-bg: rgba(41, 182, 246, 0.15);
+    --dark-status-delivered: #66BB6A;
+    --dark-status-delivered-bg: rgba(102, 187, 106, 0.15);
     --dark-status-cancelled: #F44336;
     --dark-status-cancelled-bg: rgba(244, 67, 54, 0.15);
     

@@ -72,9 +72,18 @@ class InformacoesAdicionais(models.Model):
 class Pedido(models.Model):
     # Escolhas para o campo de status
     STATUS_CHOICES = [
+        ('NewOrder', 'Novo Pedido'),
         ('Processing', 'Em Processamento'),
+        ('Production', 'Enviado para Produção'),
+        ('Preparing', 'Preparando Envio'),
+        ('ReadyForPickup', 'Pronto para Retirada'),
+        ('WaitingForPickup', 'Aguardando Retirada na Transportadora'),
+        ('Shipped', 'Enviado'),
+        ('InTransit', 'Em Trânsito'),
+        ('Delivered', 'Entregue'),
         ('Pending', 'Pendente'),
         ('Completed', 'Concluído'),
+        ('Cancelled', 'Cancelado'),
     ]
     
     titulo = models.CharField(max_length=255)
@@ -86,7 +95,7 @@ class Pedido(models.Model):
     nome_cliente = models.CharField(max_length=255)
     documento_cliente = models.CharField(max_length=20)
     email_cliente = models.EmailField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Processing')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='NewOrder')
     pdf_path = models.CharField(max_length=255, null=True, blank=True)
     
     # Relacionamentos
