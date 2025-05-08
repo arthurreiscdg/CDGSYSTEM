@@ -105,19 +105,16 @@
                             <div class="select-container">
                                 <select class="form-select" name="status" data-filter="status">
                                     <option value="">Selecione uma opção...</option>
-                                    <option value="Completed" {% if status_filter == 'Completed' %}selected{% endif %}>Autorizada</option>
-                                    <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pendente</option>
-                                    <option value="Cancelled" {% if status_filter == 'Cancelled' %}selected{% endif %}>Cancelada</option>
-                                    <option value="InTransit" {% if status_filter == 'InTransit' %}selected{% endif %}>Em Trânsito</option>
-                                    <option value="Shipped" {% if status_filter == 'Shipped' %}selected{% endif %}>Enviado</option>
-                                    <option value="Delivered" {% if status_filter == 'Delivered' %}selected{% endif %}>Entregue</option>
-                                    <option value="WaitingForPickup" {% if status_filter == 'WaitingForPickup' %}selected{% endif %}>Aguardando Retirada</option>
-                                    <option value="ReadyForPickup" {% if status_filter == 'ReadyForPickup' %}selected{% endif %}>Pronto para Retirada</option>
-                                    <option value="Processing" {% if status_filter == 'Processing' %}selected{% endif %}>Processando</option>
-                                    <option value="Production" {% if status_filter == 'Production' %}selected{% endif %}>Enviado para Produção</option>
-                                    <option value="NewOrder" {% if status_filter == 'NewOrder' %}selected{% endif %}>Novo Pedido</option>
-                                    <option value="Preparing" {% if status_filter == 'Preparing' %}selected{% endif %}>Preparando envio</option>
-
+                                    <option value="Novo Pedido" {% if status_filter == 'Novo Pedido' %}selected{% endif %}>Novo Pedido</option>
+                                    <option value="Enviado para Produção" {% if status_filter == 'Enviado para Produção' %}selected{% endif %}>Enviado para Produção</option>
+                                    <option value="Preparando Envio" {% if status_filter == 'Preparando Envio' %}selected{% endif %}>Preparando Envio</option>
+                                    <option value="Pronto para Retirada" {% if status_filter == 'Pronto para Retirada' %}selected{% endif %}>Pronto para Retirada</option>
+                                    <option value="Aguardando Retirada da Transportadora" {% if status_filter == 'Aguardando Retirada da Transportadora' %}selected{% endif %}>Aguardando Retirada da Transportadora</option>
+                                    <option value="Enviado" {% if status_filter == 'Enviado' %}selected{% endif %}>Enviado</option>
+                                    <option value="Em Trânsito" {% if status_filter == 'Em Trânsito' %}selected{% endif %}>Em Trânsito</option>
+                                    <option value="Entregue" {% if status_filter == 'Entregue' %}selected{% endif %}>Entregue</option>
+                                    <option value="Retornando - Erro na Entrega" {% if status_filter == 'Retornando - Erro na Entrega' %}selected{% endif %}>Retornando - Erro na Entrega</option>
+                                    <option value="Cancelado" {% if status_filter == 'Cancelado' %}selected{% endif %}>Cancelado</option>
                                 </select>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
