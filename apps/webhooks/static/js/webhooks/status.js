@@ -192,55 +192,50 @@ WebhookApp.Status = (function() {
                         'status-cancelled'
                     );
                     
-                    // Adicionar a nova classe de status
+                    // Adicionar a nova classe de status baseada no nome do status
                     let statusClass = '';
-                    let statusText = '';
                     
                     switch (newStatus) {
                         case 'Novo Pedido':
                             statusClass = 'status-neworder';
-                            statusText = 'Novo Pedido';
                             break;
                         case 'Enviado para Produção':
                             statusClass = 'status-production';
-                            statusText = 'Enviado para Produção';
                             break;
                         case 'Preparando Envio':
                             statusClass = 'status-preparing';
-                            statusText = 'Preparando Envio';
                             break;
                         case 'Pronto para Retirada':
                             statusClass = 'status-readyforpickup';
-                            statusText = 'Pronto para Retirada';
                             break;
                         case 'Aguardando Retirada da Transportadora':
                             statusClass = 'status-waitingforpickup';
-                            statusText = 'Aguardando Retirada da Transportadora';
                             break;
                         case 'Enviado':
                             statusClass = 'status-shipped';
-                            statusText = 'Enviado';
                             break;
                         case 'Em Trânsito':
                             statusClass = 'status-intransit';
-                            statusText = 'Em Trânsito';
                             break;
                         case 'Entregue':
                             statusClass = 'status-delivered';
-                            statusText = 'Entregue';
                             break;
                         case 'Retornando - Erro na Entrega':
                             statusClass = 'status-returnerror';
-                            statusText = 'Retornando - Erro na Entrega';
                             break;
                         case 'Cancelado':
                             statusClass = 'status-cancelled';
-                            statusText = 'Cancelado';
                             break;
                     }
                     
+                    // Atualizar a classe e o texto do status
                     statusSpan.classList.add(statusClass);
-                    statusSpan.textContent = statusText;
+                    statusSpan.textContent = newStatus;
+                    
+                    // Atualizar o atributo data-status se existir
+                    if (statusSpan.hasAttribute('data-status')) {
+                        statusSpan.setAttribute('data-status', newStatus);
+                    }
                 }
             }
         });

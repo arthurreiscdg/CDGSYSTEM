@@ -1,8 +1,16 @@
 from rest_framework import serializers
 from .models import (
     Webhook, Pedido, EnderecoEnvio, InformacoesAdicionais,
-    Produto, Design, Mockup, WebhookStatusEnviado
+    Produto, Design, Mockup, WebhookStatusEnviado, StatusPedido
 )
+
+class StatusPedidoSerializer(serializers.ModelSerializer):
+    """
+    Serializer para o modelo StatusPedido.
+    """
+    class Meta:
+        model = StatusPedido
+        fields = ['id', 'nome', 'descricao', 'cor_css', 'ordem']
 
 class DesignSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,6 +45,8 @@ class PedidoSerializer(serializers.ModelSerializer):
     produtos = ProdutoSerializer(many=True, read_only=True)
     endereco_envio = EnderecoEnvioSerializer()
     informacoes_adicionais = InformacoesAdicionaisSerializer()
+    status_obj = StatusPedidoSerializer(source='status', read_only=True)
+    status_nome = serializers.CharField(source='status.nome', read_only=True)
     
     class Meta:
         model = Pedido
@@ -44,7 +54,7 @@ class PedidoSerializer(serializers.ModelSerializer):
             'id', 'titulo', 'numero_pedido', 'valor_pedido', 'custo_envio',
             'etiqueta_envio', 'metodo_envio', 'nome_cliente', 'documento_cliente',
             'email_cliente', 'criado_em', 'atualizado_em', 'produtos',
-            'endereco_envio', 'informacoes_adicionais'
+            'endereco_envio', 'informacoes_adicionais', 'status', 'status_obj', 'status_nome'
         ]
 
 class WebhookSerializer(serializers.ModelSerializer):
@@ -114,7 +124,8 @@ class WebhookDetailSerializer(serializers.ModelSerializer):
             'numero_pedido': pedido.numero_pedido,
             'valor_pedido': pedido.valor_pedido,
             'nome_cliente': pedido.nome_cliente,
-            'status': pedido.status,
+            'status': pedido.status.nome if pedido.status else 'Desconhecido',
+            'cor_css': pedido.status.cor_css if pedido.status else '',
             'pdf_path': pedido.pdf_path if hasattr(pedido, 'pdf_path') else None,
             'cod_op': getattr(pedido, 'cod_op', None),
             'configuracao': self._get_configuracao_info(pedido),

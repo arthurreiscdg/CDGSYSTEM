@@ -8,7 +8,7 @@ from django.conf import settings
 from ..models import (
     WebhookConfig, Webhook, Pedido, EnderecoEnvio, 
     InformacoesAdicionais, Produto, Design, Mockup,
-    WebhookStatusEnviado
+    WebhookStatusEnviado, StatusPedido
 )
 
 logger = logging.getLogger('apps.webhooks')
@@ -33,6 +33,42 @@ class WebhookDBService:
             return WebhookConfig.objects.filter(ativo=True).first()
         except Exception as e:
             logger.error(f"Erro ao buscar configuração ativa: {str(e)}")
+            return None
+    
+    @staticmethod
+    def obter_status_padrao():
+        """
+        Obtém o status padrão para novos pedidos.
+        
+        Returns:
+            StatusPedido: O objeto StatusPedido padrão (Novo Pedido) ou o status com ID 1 se não existir
+        """
+        try:
+            status = StatusPedido.objects.filter(nome="Novo Pedido").first()
+            if not status:
+                # Se não encontrar o status "Novo Pedido", tenta obter o status com ID 1
+                status = StatusPedido.objects.filter(id=1).first()
+                logger.info("Status 'Novo Pedido' não encontrado, usando status ID 1")
+            return status
+        except Exception as e:
+            logger.error(f"Erro ao obter status padrão: {str(e)}")
+            return None
+    
+    @staticmethod
+    def obter_status_por_nome(nome_status):
+        """
+        Obtém um status pelo nome.
+        
+        Args:
+            nome_status (str): O nome do status
+            
+        Returns:
+            StatusPedido: O objeto StatusPedido correspondente ou None se não existir
+        """
+        try:
+            return StatusPedido.objects.filter(nome=nome_status).first()
+        except Exception as e:
+            logger.error(f"Erro ao obter status '{nome_status}': {str(e)}")
             return None
     
     @staticmethod
@@ -122,6 +158,22 @@ class WebhookDBService:
             Pedido: O objeto Pedido criado
         """
         try:
+            # Obter status padrão (Novo Pedido)
+            status_padrao = WebhookDBService.obter_status_padrao()
+            
+            # Se ainda não encontrou status, força a busca pelo ID 1
+            if not status_padrao:
+                status_padrao = StatusPedido.objects.filter(id=1).first()
+                logger.warning("Status padrão não encontrado, usando status com ID 1 diretamente.")
+                
+                # Se ainda não encontrou, cria um status padrão para evitar erro
+                if not status_padrao:
+                    status_padrao = StatusPedido.objects.create(
+                        nome="Novo Pedido",
+                        descricao="Status padrão para novos pedidos"
+                    )
+                    logger.warning("Status ID 1 não encontrado, criado status padrão para evitar erro.")
+            
             # Criar endereço e informações
             endereco = WebhookDBService.criar_endereco_envio(dados['endereco_envio'])
             info_adicionais = WebhookDBService.criar_info_adicionais(dados['informacoes_adicionais'])
@@ -139,7 +191,8 @@ class WebhookDBService:
                 email_cliente=str(dados['email_cliente']),
                 webhook=webhook,
                 endereco_envio=endereco,
-                informacoes_adicionais=info_adicionais
+                informacoes_adicionais=info_adicionais,
+                status=status_padrao
             )
         except Exception as e:
             logger.error(f"Erro ao criar pedido: {str(e)}")
@@ -242,14 +295,45 @@ class WebhookDBService:
             return None
     
     @staticmethod
-    def enviar_webhook_status(numero_pedido, url_destino, status, informacoes_adicionais=None):
+    def atualizar_status_pedido(pedido_id, novo_status_nome):
+        """
+        Atualiza o status de um pedido.
+        
+        Args:
+            pedido_id (int): O ID do pedido
+            novo_status_nome (str): O nome do novo status
+            
+        Returns:
+            Pedido: O objeto Pedido atualizado ou None se falhar
+        """
+        try:
+            pedido = Pedido.objects.get(pk=pedido_id)
+            status = WebhookDBService.obter_status_por_nome(novo_status_nome)
+            
+            if not status:
+                logger.error(f"Status '{novo_status_nome}' não encontrado")
+                return None
+                
+            pedido.status = status
+            pedido.save(update_fields=['status', 'atualizado_em'])
+            logger.info(f"Status do pedido #{pedido.numero_pedido} atualizado para '{novo_status_nome}'")
+            return pedido
+        except Pedido.DoesNotExist:
+            logger.error(f"Pedido com ID {pedido_id} não encontrado")
+            return None
+        except Exception as e:
+            logger.error(f"Erro ao atualizar status do pedido: {str(e)}")
+            return None
+    
+    @staticmethod
+    def enviar_webhook_status(numero_pedido, url_destino, status_nome, informacoes_adicionais=None):
         """
         Envia um webhook de status para um sistema externo.
         
         Args:
             numero_pedido (int): O número do pedido
             url_destino (str): A URL para onde enviar o webhook
-            status (str): O status atual do pedido
+            status_nome (str): O nome do status atual do pedido
             informacoes_adicionais (dict, optional): Informações adicionais a incluir
             
         Returns:
@@ -268,7 +352,7 @@ class WebhookDBService:
                 "nome_cliente": pedido.nome_cliente,
                 "email_cliente": pedido.email_cliente,
                 "valor_pedido": float(pedido.valor_pedido),
-                "status": status,
+                "status": status_nome,
                 "timestamp": datetime.now().isoformat(),
                 "quantidade_produtos": pedido.produtos.count()
             }
@@ -300,7 +384,7 @@ class WebhookDBService:
                 # Registrar a resposta
                 status_webhook = WebhookStatusEnviado.objects.create(
                     pedido=pedido,
-                    status=status,
+                    status=status_nome,
                     url_destino=url_destino,
                     payload=payload_json,
                     resposta=resposta.text,
@@ -314,7 +398,7 @@ class WebhookDBService:
                 # Registrar erro
                 status_webhook = WebhookStatusEnviado.objects.create(
                     pedido=pedido,
-                    status=status,
+                    status=status_nome,
                     url_destino=url_destino,
                     payload=payload_json,
                     resposta=str(e),

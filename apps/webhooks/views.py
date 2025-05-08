@@ -31,7 +31,7 @@ from .serializers import (
 from .models import (
     WebhookConfig, Webhook, Pedido, EnderecoEnvio, 
     InformacoesAdicionais, Produto, Design, Mockup,
-    WebhookStatusEnviado
+    WebhookStatusEnviado, StatusPedido
 )
 
 # Configuração de logging
@@ -620,55 +620,68 @@ def webhook_detail_api(request, webhook_id):
 @permission_classes([IsAuthenticated])
 def update_status(request):
     """
-    API para atualizar o status de múltiplos pedidos de uma vez.
-    Recebe uma lista de IDs de webhooks e um novo status.
+    Endpoint para atualizar o status de um ou mais pedidos.
+    
+    Recebe uma lista de IDs de webhook e um novo status para aplicar a todos
+    os pedidos associados. Válida a existência do status antes de aplicar
+    e retorna os resultados da operação.
+    
+    Args:
+        request (Request): Objeto de requisição com webhook_ids e status
+        
+    Returns:
+        Response: Resposta com os resultados da atualização ou mensagens de erro
     """
     try:
         # Validar dados de entrada
         webhook_ids = request.data.get('webhook_ids', [])
-        new_status = request.data.get('status')
+        novo_status_nome = request.data.get('status')
         
-        if not webhook_ids or not new_status:
-            return Response(
-                {'error': 'É necessário fornecer IDs de webhooks e um novo status'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        if not webhook_ids or not isinstance(webhook_ids, list):
+            return Response({'erro': 'IDs de webhook inválidos'}, status=400)
+        
+        if not novo_status_nome:
+            return Response({'erro': 'Status não informado'}, status=400)
+        
+        # Buscar o objeto StatusPedido correspondente
+        novo_status = StatusPedido.objects.filter(nome=novo_status_nome).first()
+        if not novo_status:
+            return Response({'erro': f'Status "{novo_status_nome}" não encontrado'}, status=404)
             
-        # Validar o status
-        valid_statuses = [
-            'Novo Pedido', 'Enviado para Produção', 'Preparando Envio', 
-            'Pronto para Retirada', 'Aguardando Retirada da Transportadora', 
-            'Enviado', 'Em Trânsito', 'Entregue', 
-            'Retornando - Erro na Entrega', 'Cancelado'
-        ]
-        if new_status not in valid_statuses:
-            return Response(
-                {'error': f'Status inválido. Deve ser um dos seguintes: {", ".join(valid_statuses)}'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        # Buscar webhooks e seus pedidos
+        webhooks = Webhook.objects.filter(id__in=webhook_ids).prefetch_related('pedidos')
         
-        # Buscar webhooks e seus pedidos associados
-        webhooks = Webhook.objects.filter(id__in=webhook_ids)
-        pedidos_atualizados = 0
+        # Resultados para retornar
+        resultados = {
+            'sucesso': [],
+            'erro': []
+        }
         
-        # Atualizar o status de cada pedido associado aos webhooks
+        # Atualizar status de cada pedido
         for webhook in webhooks:
-            pedidos = webhook.pedidos.all()
-            for pedido in pedidos:
-                pedido.status = new_status
-                pedido.save()
-                pedidos_atualizados += 1
+            for pedido in webhook.pedidos.all():
+                try:
+                    pedido.status = novo_status
+                    pedido.save(update_fields=['status', 'atualizado_em'])
+                    resultados['sucesso'].append({
+                        'pedido_id': pedido.id,
+                        'numero_pedido': pedido.numero_pedido,
+                        'status': novo_status.nome
+                    })
+                    logger.info(f"Status do pedido #{pedido.numero_pedido} atualizado para '{novo_status.nome}'")
+                except Exception as e:
+                    resultados['erro'].append({
+                        'pedido_id': pedido.id,
+                        'numero_pedido': pedido.numero_pedido,
+                        'erro': str(e)
+                    })
+                    logger.error(f"Erro ao atualizar status do pedido #{pedido.numero_pedido}: {str(e)}")
         
-        logger.info(f"Status de {pedidos_atualizados} pedidos atualizado para '{new_status}'")
-        
+        # Retornar resultados
         return Response({
-            'message': f'Status atualizado com sucesso para {pedidos_atualizados} pedidos',
-            'pedidos_atualizados': pedidos_atualizados
+            'mensagem': f'{len(resultados["sucesso"])} pedidos atualizados com sucesso, {len(resultados["erro"])} com erro',
+            'resultados': resultados
         })
-        
     except Exception as e:
-        logger.error(f"Erro ao atualizar status dos pedidos: {str(e)}")
-        return Response(
-            {'error': f'Erro ao atualizar status: {str(e)}'},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        logger.error(f"Erro ao atualizar status: {str(e)}")
+        return Response({'erro': str(e)}, status=500)

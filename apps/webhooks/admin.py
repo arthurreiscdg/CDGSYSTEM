@@ -2,20 +2,32 @@ from django.contrib import admin
 from .models import (
     WebhookConfig, Webhook, Pedido, EnderecoEnvio,
     InformacoesAdicionais, Produto, Design, Mockup,
-    WebhookStatusEnviado
+    WebhookStatusEnviado, StatusPedido
 )
 
 class ProdutoInline(admin.TabularInline):
     model = Produto
     extra = 0
 
+@admin.register(StatusPedido)
+class StatusPedidoAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'descricao', 'cor_css', 'ordem', 'ativo')
+    list_filter = ('ativo',)
+    search_fields = ('nome', 'descricao')
+    ordering = ('ordem',)
+
 @admin.register(Pedido)
 class PedidoAdmin(admin.ModelAdmin):
-    list_display = ('numero_pedido', 'nome_cliente', 'valor_pedido', 'criado_em')
-    list_filter = ('criado_em',)
+    list_display = ('numero_pedido', 'nome_cliente', 'valor_pedido', 'get_status', 'criado_em')
+    list_filter = ('criado_em', 'status')
     search_fields = ('numero_pedido', 'nome_cliente', 'email_cliente')
     inlines = [ProdutoInline]
     readonly_fields = ('webhook', 'criado_em', 'atualizado_em')
+    
+    def get_status(self, obj):
+        return obj.status.nome if obj.status else 'Sem status'
+    get_status.short_description = 'Status'
+    get_status.admin_order_field = 'status__nome'
 
 @admin.register(WebhookConfig)
 class WebhookConfigAdmin(admin.ModelAdmin):

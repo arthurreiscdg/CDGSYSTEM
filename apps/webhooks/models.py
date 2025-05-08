@@ -48,6 +48,27 @@ class Mockup(models.Model):
     def __str__(self):
         return "Mockup"
 
+class StatusPedido(models.Model):
+    """
+    Modelo para armazenar os diferentes status que um pedido pode ter.
+    
+    Este modelo representa os possíveis estados de um pedido durante seu ciclo de vida,
+    desde a criação até a entrega ou cancelamento.
+    """
+    nome = models.CharField(max_length=50, unique=True)
+    descricao = models.TextField(blank=True, null=True)
+    cor_css = models.CharField(max_length=50, blank=True, null=True)
+    ordem = models.IntegerField(default=0)
+    ativo = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        verbose_name = "Status de Pedido"
+        verbose_name_plural = "Status de Pedidos"
+        ordering = ['ordem']
+
 class Produto(models.Model):
     pedido = models.ForeignKey('Pedido', on_delete=models.CASCADE, related_name='produtos')
     nome = models.CharField(max_length=255)
@@ -70,20 +91,6 @@ class InformacoesAdicionais(models.Model):
         return self.nome
 
 class Pedido(models.Model):
-    # Escolhas para o campo de status
-    STATUS_CHOICES = [
-        ('Novo Pedido', 'Novo Pedido'),
-        ('Enviado para Produção', 'Enviado para Produção'),
-        ('Preparando Envio', 'Preparando Envio'),
-        ('Pronto para Retirada', 'Pronto para Retirada'),
-        ('Aguardando Retirada da Transportadora', 'Aguardando Retirada da Transportadora'),
-        ('Enviado', 'Enviado'),
-        ('Em Trânsito', 'Em Trânsito'),
-        ('Entregue', 'Entregue'),
-        ('Retornando - Erro na Entrega', 'Retornando - Erro na Entrega'),
-        ('Cancelado', 'Cancelado'),
-    ]
-    
     titulo = models.CharField(max_length=255)
     valor_pedido = models.DecimalField(max_digits=10, decimal_places=2)
     custo_envio = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -93,7 +100,7 @@ class Pedido(models.Model):
     nome_cliente = models.CharField(max_length=255)
     documento_cliente = models.CharField(max_length=20)
     email_cliente = models.EmailField()
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Novo Pedido')
+    status = models.ForeignKey(StatusPedido, on_delete=models.PROTECT, related_name='pedidos')
     pdf_path = models.CharField(max_length=255, null=True, blank=True)
     
     # Relacionamentos
