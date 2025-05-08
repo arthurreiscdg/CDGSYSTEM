@@ -58,6 +58,8 @@
     --dark-status-intransit-bg: rgba(41, 182, 246, 0.15);
     --dark-status-delivered: #66BB6A;
     --dark-status-delivered-bg: rgba(102, 187, 106, 0.15);
+    --dark-status-returnerror: #E53935;
+    --dark-status-returnerror-bg: rgba(229, 57, 53, 0.15);
     --dark-status-cancelled: #F44336;
     --dark-status-cancelled-bg: rgba(244, 67, 54, 0.15);
     

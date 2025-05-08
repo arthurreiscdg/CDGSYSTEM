@@ -635,8 +635,12 @@ def update_status(request):
             )
             
         # Validar o status
-        valid_statuses = ['NewOrder', 'Processing', 'Production', 'Preparing', 'ReadyForPickup', 
-                         'WaitingForPickup', 'Shipped', 'InTransit', 'Delivered', 'Pending', 'Completed', 'Cancelled']
+        valid_statuses = [
+            'Novo Pedido', 'Enviado para Produção', 'Preparando Envio', 
+            'Pronto para Retirada', 'Aguardando Retirada da Transportadora', 
+            'Enviado', 'Em Trânsito', 'Entregue', 
+            'Retornando - Erro na Entrega', 'Cancelado'
+        ]
         if new_status not in valid_statuses:
             return Response(
                 {'error': f'Status inválido. Deve ser um dos seguintes: {", ".join(valid_statuses)}'},

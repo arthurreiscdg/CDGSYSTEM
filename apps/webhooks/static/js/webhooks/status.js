@@ -181,7 +181,6 @@ WebhookApp.Status = (function() {
                     const statusSpan = statusCell.querySelector('.status-badge');
                     statusSpan.classList.remove(
                         'status-neworder', 
-                        'status-processing', 
                         'status-production',
                         'status-preparing',
                         'status-readyforpickup',
@@ -189,8 +188,7 @@ WebhookApp.Status = (function() {
                         'status-shipped',
                         'status-intransit',
                         'status-delivered',
-                        'status-pending', 
-                        'status-completed', 
+                        'status-returnerror',
                         'status-cancelled'
                     );
                     
@@ -199,53 +197,45 @@ WebhookApp.Status = (function() {
                     let statusText = '';
                     
                     switch (newStatus) {
-                        case 'NewOrder':
+                        case 'Novo Pedido':
                             statusClass = 'status-neworder';
                             statusText = 'Novo Pedido';
                             break;
-                        case 'Processing':
-                            statusClass = 'status-processing';
-                            statusText = 'Emitida DANFE';
-                            break;
-                        case 'Production':
+                        case 'Enviado para Produção':
                             statusClass = 'status-production';
                             statusText = 'Enviado para Produção';
                             break;
-                        case 'Preparing':
+                        case 'Preparando Envio':
                             statusClass = 'status-preparing';
                             statusText = 'Preparando Envio';
                             break;
-                        case 'ReadyForPickup':
+                        case 'Pronto para Retirada':
                             statusClass = 'status-readyforpickup';
                             statusText = 'Pronto para Retirada';
                             break;
-                        case 'WaitingForPickup':
+                        case 'Aguardando Retirada da Transportadora':
                             statusClass = 'status-waitingforpickup';
-                            statusText = 'Aguardando Retirada';
+                            statusText = 'Aguardando Retirada da Transportadora';
                             break;
-                        case 'Shipped':
+                        case 'Enviado':
                             statusClass = 'status-shipped';
                             statusText = 'Enviado';
                             break;
-                        case 'InTransit':
+                        case 'Em Trânsito':
                             statusClass = 'status-intransit';
                             statusText = 'Em Trânsito';
                             break;
-                        case 'Delivered':
+                        case 'Entregue':
                             statusClass = 'status-delivered';
                             statusText = 'Entregue';
                             break;
-                        case 'Pending':
-                            statusClass = 'status-pending';
-                            statusText = 'Pendente';
+                        case 'Retornando - Erro na Entrega':
+                            statusClass = 'status-returnerror';
+                            statusText = 'Retornando - Erro na Entrega';
                             break;
-                        case 'Completed':
-                            statusClass = 'status-completed';
-                            statusText = 'Autorizada';
-                            break;
-                        case 'Cancelled':
+                        case 'Cancelado':
                             statusClass = 'status-cancelled';
-                            statusText = 'Cancelada';
+                            statusText = 'Cancelado';
                             break;
                     }
                     

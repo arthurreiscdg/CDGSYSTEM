@@ -72,18 +72,16 @@ class InformacoesAdicionais(models.Model):
 class Pedido(models.Model):
     # Escolhas para o campo de status
     STATUS_CHOICES = [
-        ('NewOrder', 'Novo Pedido'),
-        ('Processing', 'Em Processamento'),
-        ('Production', 'Enviado para Produção'),
-        ('Preparing', 'Preparando Envio'),
-        ('ReadyForPickup', 'Pronto para Retirada'),
-        ('WaitingForPickup', 'Aguardando Retirada na Transportadora'),
-        ('Shipped', 'Enviado'),
-        ('InTransit', 'Em Trânsito'),
-        ('Delivered', 'Entregue'),
-        ('Pending', 'Pendente'),
-        ('Completed', 'Concluído'),
-        ('Cancelled', 'Cancelado'),
+        ('Novo Pedido', 'Novo Pedido'),
+        ('Enviado para Produção', 'Enviado para Produção'),
+        ('Preparando Envio', 'Preparando Envio'),
+        ('Pronto para Retirada', 'Pronto para Retirada'),
+        ('Aguardando Retirada da Transportadora', 'Aguardando Retirada da Transportadora'),
+        ('Enviado', 'Enviado'),
+        ('Em Trânsito', 'Em Trânsito'),
+        ('Entregue', 'Entregue'),
+        ('Retornando - Erro na Entrega', 'Retornando - Erro na Entrega'),
+        ('Cancelado', 'Cancelado'),
     ]
     
     titulo = models.CharField(max_length=255)
@@ -95,7 +93,7 @@ class Pedido(models.Model):
     nome_cliente = models.CharField(max_length=255)
     documento_cliente = models.CharField(max_length=20)
     email_cliente = models.EmailField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='NewOrder')
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Novo Pedido')
     pdf_path = models.CharField(max_length=255, null=True, blank=True)
     
     # Relacionamentos

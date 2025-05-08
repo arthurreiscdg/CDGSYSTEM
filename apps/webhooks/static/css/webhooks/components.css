@@ -172,6 +172,11 @@
     color: #1a8a7e;
 }
 
+.status-returnerror, .status-returnerror {
+    background-color: rgba(229, 57, 53, 0.15);
+    color: #E53935;
+}
+
 .status-cancelled {
     background-color: rgba(229, 62, 62, 0.15);
     color: #c53030;
@@ -231,6 +236,11 @@
 .dark-theme .status-delivered {
     background-color: var(--dark-status-delivered-bg);
     color: var(--dark-status-delivered);
+}
+
+.dark-theme .status-returnerror {
+    background-color: var(--dark-status-returnerror-bg);
+    color: var(--dark-status-returnerror);
 }
 
 .dark-theme .status-cancelled {
