@@ -94,10 +94,14 @@ WebhookApp.Selection = (function() {
         if (changeStatusBtn) {
             changeStatusBtn.addEventListener('click', function() {
                 const selectedIds = getSelectedIds();
-                
-                if (selectedIds.length > 0) {
-                    // Mostrar o modal de seleção de status
-                    WebhookApp.Status.openStatusModal(selectedIds);
+                  if (selectedIds.length > 0) {
+                    // Mostrar o modal de seleção de status usando o módulo dinamico
+                    if (WebhookApp.StatusDinamico && typeof WebhookApp.StatusDinamico.openStatusModal === 'function') {
+                        WebhookApp.StatusDinamico.openStatusModal(selectedIds);
+                    } else {
+                        // Fallback para o módulo antigo caso o novo não esteja disponível
+                        WebhookApp.Status.openStatusModal(selectedIds);
+                    }
                 }
             });
         }

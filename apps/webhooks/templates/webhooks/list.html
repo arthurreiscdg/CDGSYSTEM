@@ -103,18 +103,10 @@
                         <div class="filter-group">
                             <label>Situação</label>
                             <div class="select-container">
-                                <select class="form-select" name="status" data-filter="status">
-                                    <option value="">Selecione uma opção...</option>
-                                    <option value="Novo Pedido" {% if status_filter == 'Novo Pedido' %}selected{% endif %}>Novo Pedido</option>
-                                    <option value="Enviado para Produção" {% if status_filter == 'Enviado para Produção' %}selected{% endif %}>Enviado para Produção</option>
-                                    <option value="Preparando Envio" {% if status_filter == 'Preparando Envio' %}selected{% endif %}>Preparando Envio</option>
-                                    <option value="Pronto para Retirada" {% if status_filter == 'Pronto para Retirada' %}selected{% endif %}>Pronto para Retirada</option>
-                                    <option value="Aguardando Retirada da Transportadora" {% if status_filter == 'Aguardando Retirada da Transportadora' %}selected{% endif %}>Aguardando Retirada da Transportadora</option>
-                                    <option value="Enviado" {% if status_filter == 'Enviado' %}selected{% endif %}>Enviado</option>
-                                    <option value="Em Trânsito" {% if status_filter == 'Em Trânsito' %}selected{% endif %}>Em Trânsito</option>
-                                    <option value="Entregue" {% if status_filter == 'Entregue' %}selected{% endif %}>Entregue</option>
-                                    <option value="Retornando - Erro na Entrega" {% if status_filter == 'Retornando - Erro na Entrega' %}selected{% endif %}>Retornando - Erro na Entrega</option>
-                                    <option value="Cancelado" {% if status_filter == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                                <select class="form-select" name="status" data-filter="status">                                    <option value="">Selecione uma opção...</option>
+                                    {% for status in status_pedidos %}
+                                    <option value="{{ status.id }}" {% if status_filter == status.id|stringformat:"i" %}selected{% endif %}>{{ status.nome }}</option>
+                                    {% endfor %}
                                 </select>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
@@ -242,20 +234,8 @@
                                     <td>{{ pedido.nome_cliente }}</td>
                                     <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
                                     <td>{{ pedido.data_saida|default:webhook.recebido_em|date:"d/m/Y" }}</td>
-                                    <td>
-                                        <span class="status-badge 
-                                            {% if pedido.status == 'Novo Pedido' %}status-novo-pedido
-                                            {% elif pedido.status == 'Enviado para Produção' %}status-enviado-producao
-                                            {% elif pedido.status == 'Preparando Envio' %}status-preparando-envio
-                                            {% elif pedido.status == 'Pronto para Retirada' %}status-pronto-retirada
-                                            {% elif pedido.status == 'Aguardando Retirada da Transportadora' %}status-aguardando-retirada
-                                            {% elif pedido.status == 'Enviado' %}status-enviado
-                                            {% elif pedido.status == 'Em Trânsito' %}status-em-transito
-                                            {% elif pedido.status == 'Entregue' %}status-entregue
-                                            {% elif pedido.status == 'Retornando - Erro na Entrega' %}status-retornando-erro
-                                            {% elif pedido.status == 'Cancelado' %}status-cancelado
-                                            {% else %}status-processing{% endif %}" data-status="{{ pedido.status }}">
-                                            {{ pedido.status }}
+                                    <td>                                        <span class="status-badge {{ pedido.status.cor_css|default:'status-processing' }}" data-status="{{ pedido.status.nome }}">
+                                            {{ pedido.status.nome }}
                                         </span>
                                     </td>
                                     <td>{{ pedido.valor_pedido|floatformat:2 }}</td>
@@ -283,7 +263,7 @@
                                     <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
                                     <td>--/--/----</td>
                                     <td>
-                                        <span class="status-badge status-pending">Pendente</span>
+                                        <span class="status-badge status-pending" data-status="Pendente">Pendente</span>
                                     </td>
                                     <td>0,00</td>
                                     <td class="actions-cell">
@@ -410,90 +390,22 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body">
-                <p id="statusSelectionText">Selecione o novo status para os <span id="selectedOrdersCount">0</span> itens selecionados:</p>
+            <div class="modal-body">                <p id="statusSelectionText">Selecione o novo status para os <span id="selectedOrdersCount">0</span> itens selecionados:</p>
                 
                 <div class="status-options">
-                    
-                    <div class="status-option" data-status="Novo Pedido">
-                        <div class="status-indicator status-novo-pedido"></div>
+                    {% for status in status_pedidos %}
+                    <div class="status-option" data-status="{{ status.nome }}" data-css="{{ status.cor_css }}">
+                        <div class="status-indicator {{ status.cor_css }}"></div>
                         <div class="status-details">
-                            <h4>Novo Pedido</h4>
-                            <p>Pedido recém criado</p>
+                            <h4>{{ status.nome }}</h4>
+                            <p>{{ status.descricao|default:"" }}</p>
                         </div>
                     </div>
-                    
-                    <div class="status-option" data-status="Enviado para Produção">
-                        <div class="status-indicator status-enviado-producao"></div>
-                        <div class="status-details">
-                            <h4>Enviado para Produção</h4>
-                            <p>Pedido enviado para o setor de produção</p>
-                        </div>
+                    {% empty %}
+                    <div class="no-status">
+                        <p>Nenhum status disponível. Cadastre status no painel administrativo.</p>
                     </div>
-                    
-                    <div class="status-option" data-status="Preparando Envio">
-                        <div class="status-indicator status-preparando-envio"></div>
-                        <div class="status-details">
-                            <h4>Preparando Envio</h4>
-                            <p>Em processo de preparação para envio</p>
-                        </div>
-                    </div>
-
-                    <div class="status-option" data-status="Pronto para Retirada">
-                        <div class="status-indicator status-pronto-retirada"></div>
-                        <div class="status-details">
-                            <h4>Pronto para Retirada</h4>
-                            <p>Pedido pronto para ser retirado</p>
-                        </div>
-                    </div>
-                    
-                    <div class="status-option" data-status="Aguardando Retirada da Transportadora">
-                        <div class="status-indicator status-aguardando-retirada"></div>
-                        <div class="status-details">
-                            <h4>Aguardando Retirada da Transportadora</h4>
-                            <p>Aguardando coleta pela transportadora</p>
-                        </div>
-                    </div>
-                    
-                    <div class="status-option" data-status="Enviado">
-                        <div class="status-indicator status-enviado"></div>
-                        <div class="status-details">
-                            <h4>Enviado</h4>
-                            <p>Pedido enviado pela transportadora</p>
-                        </div>
-                    </div>
-                    
-                    <div class="status-option" data-status="Em Trânsito">
-                        <div class="status-indicator status-em-transito"></div>
-                        <div class="status-details">
-                            <h4>Em Trânsito</h4>
-                            <p>Pedido em trânsito para o destino</p>
-                        </div>
-                    </div>
-
-                    <div class="status-option" data-status="Entregue">
-                        <div class="status-indicator status-entregue"></div>
-                        <div class="status-details">
-                            <h4>Entregue</h4>
-                            <p>Pedido entregue ao destinatário</p>
-                        </div>
-                    </div>
-                    
-                    <div class="status-option" data-status="Retornando - Erro na Entrega">
-                        <div class="status-indicator status-retornando-erro"></div>
-                        <div class="status-details">
-                            <h4>Retornando - Erro na Entrega</h4>
-                            <p>Pedido retornando por problema na entrega</p>
-                        </div>
-                    </div>
-                    
-                    <div class="status-option" data-status="Cancelado">
-                        <div class="status-indicator status-cancelado"></div>
-                        <div class="status-details">
-                            <h4>Cancelado</h4>
-                            <p>Pedido cancelado</p>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
                 
                 <div class="modal-footer">
@@ -504,12 +416,11 @@
         </div>
     </div>
 
-    <!-- Importar os módulos JavaScript em ordem -->
-    <script src="{% static 'js/webhooks/core.js' %}"></script>
+    <!-- Importar os módulos JavaScript em ordem -->    <script src="{% static 'js/webhooks/core.js' %}"></script>
     <script src="{% static 'js/webhooks/notifications.js' %}"></script>
     <script src="{% static 'js/webhooks/selection.js' %}"></script>
     <script src="{% static 'js/webhooks/modals.js' %}"></script>
-    <script src="{% static 'js/webhooks/status.js' %}"></script>
+    <script src="{% static 'js/webhooks/status-dinamico.js' %}"></script>
     <script src="{% static 'js/webhooks/filters.js' %}"></script>
     <script src="{% static 'js/webhooks/main.js' %}"></script>
 </body>

@@ -27,6 +27,7 @@ from .serializers import (
     WebhookStatusEnviadoSerializer,
     WebhookStatusEnviadoCreateSerializer,
     WebhookDetailSerializer,
+    StatusPedidoSerializer,
 )
 from .models import (
     WebhookConfig, Webhook, Pedido, EnderecoEnvio, 
@@ -62,14 +63,13 @@ def webhook_list(request):
     
     # Iniciar queryset de webhooks - sem usar select_related para pedido
     queryset = Webhook.objects.all().prefetch_related('pedidos').order_by('-recebido_em')
-    
-    # Aplicar filtros se fornecidos
+      # Aplicar filtros se fornecidos
     status_filter = request.GET.get('status')
     search_query = request.GET.get('q')
     
     if status_filter:
         # Filtramos baseado nos pedidos relacionados
-        queryset = queryset.filter(pedidos__status=status_filter)
+        queryset = queryset.filter(pedidos__status__id=status_filter)
     
     if search_query:
         # Buscar por número do pedido ou evento
@@ -84,6 +84,8 @@ def webhook_list(request):
     # Calcular estatísticas
     total_webhooks = Webhook.objects.count()
     total_pedidos = Pedido.objects.count()
+      # Buscar todos os status de pedido ativos
+    status_pedidos = StatusPedido.objects.filter(ativo=True).order_by('ordem')
     
     # Contexto para o template
     context = {
@@ -92,6 +94,7 @@ def webhook_list(request):
         'total_pedidos': total_pedidos,
         'status_filter': status_filter,
         'search_query': search_query,
+        'status_pedidos': status_pedidos,
     }
     
     # Renderizar o template com o contexto
@@ -601,6 +604,20 @@ class WebhookStatusEnviadoViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def status_pedido_list(request):
+    """
+    API para obter a lista de status de pedido.
+    Usado para atualizar dinamicamente os status no modal.
+    """
+    try:
+        status_pedidos = StatusPedido.objects.filter(ativo=True).order_by('ordem')
+        serializer = StatusPedidoSerializer(status_pedidos, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def webhook_detail_api(request, webhook_id):
     """
     API para obter detalhes de um webhook específico.
@@ -642,9 +659,12 @@ def update_status(request):
         
         if not novo_status_nome:
             return Response({'erro': 'Status não informado'}, status=400)
-        
-        # Buscar o objeto StatusPedido correspondente
-        novo_status = StatusPedido.objects.filter(nome=novo_status_nome).first()
+          # Buscar o objeto StatusPedido correspondente (por nome ou por ID)
+        if novo_status_nome.isdigit():
+            novo_status = StatusPedido.objects.filter(id=novo_status_nome).first()
+        else:
+            novo_status = StatusPedido.objects.filter(nome=novo_status_nome).first()
+            
         if not novo_status:
             return Response({'erro': f'Status "{novo_status_nome}" não encontrado'}, status=404)
             
