@@ -655,18 +655,19 @@ def update_status(request):
         novo_status_nome = request.data.get('status')
         
         if not webhook_ids or not isinstance(webhook_ids, list):
-            return Response({'erro': 'IDs de webhook inválidos'}, status=400)
+            return Response({'erro': 'IDs de webhook não fornecidos ou inválidos'}, status=400)
         
         if not novo_status_nome:
-            return Response({'erro': 'Status não informado'}, status=400)
-          # Buscar o objeto StatusPedido correspondente (por nome ou por ID)
+            return Response({'erro': 'Status não fornecido'}, status=400)
+        
+        # Buscar o objeto StatusPedido correspondente (por nome ou por ID)
         if novo_status_nome.isdigit():
-            novo_status = StatusPedido.objects.filter(id=novo_status_nome).first()
+            novo_status = StatusPedido.objects.filter(id=novo_status_nome, ativo=True).first()
         else:
-            novo_status = StatusPedido.objects.filter(nome=novo_status_nome).first()
+            novo_status = StatusPedido.objects.filter(nome=novo_status_nome, ativo=True).first()
             
         if not novo_status:
-            return Response({'erro': f'Status "{novo_status_nome}" não encontrado'}, status=404)
+            return Response({'erro': f'Status "{novo_status_nome}" não encontrado ou inativo'}, status=400)
             
         # Buscar webhooks e seus pedidos
         webhooks = Webhook.objects.filter(id__in=webhook_ids).prefetch_related('pedidos')
@@ -674,28 +675,52 @@ def update_status(request):
         # Resultados para retornar
         resultados = {
             'sucesso': [],
-            'erro': []
+            'erro': [],
+            'notificacoes': []  # Lista para armazenar notificações de alteração
         }
         
         # Atualizar status de cada pedido
         for webhook in webhooks:
-            for pedido in webhook.pedidos.all():
-                try:
-                    pedido.status = novo_status
-                    pedido.save(update_fields=['status', 'atualizado_em'])
+            try:
+                with transaction.atomic():
+                    for pedido in webhook.pedidos.all():
+                        # Guardar status anterior para comparação
+                        status_anterior = pedido.status
+                        
+                        # Atualizar status
+                        pedido.status = novo_status
+                        pedido.save()
+                        
+                        # Adicionar notificação de alteração de status
+                        data_alteracao = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+                        notificacao = {
+                            'data': data_alteracao,
+                            'status_id': novo_status.id,
+                            'status': novo_status.nome,
+                            'id': pedido.id,
+                            'numero_pedido': pedido.numero_pedido,
+                            'status_anterior': status_anterior.nome if status_anterior else "Sem status"
+                        }
+                        resultados['notificacoes'].append(notificacao)
+                        
+                        # Log da alteração
+                        logger.info(
+                            f"Status do pedido #{pedido.numero_pedido} alterado de "
+                            f"'{status_anterior.nome if status_anterior else 'Sem status'}' para '{novo_status.nome}'"
+                        )
+                        
+                    # Adicionar webhook à lista de sucesso
                     resultados['sucesso'].append({
-                        'pedido_id': pedido.id,
-                        'numero_pedido': pedido.numero_pedido,
-                        'status': novo_status.nome
+                        'webhook_id': webhook.id,
+                        'pedidos': [p.numero_pedido for p in webhook.pedidos.all()]
                     })
-                    logger.info(f"Status do pedido #{pedido.numero_pedido} atualizado para '{novo_status.nome}'")
-                except Exception as e:
-                    resultados['erro'].append({
-                        'pedido_id': pedido.id,
-                        'numero_pedido': pedido.numero_pedido,
-                        'erro': str(e)
-                    })
-                    logger.error(f"Erro ao atualizar status do pedido #{pedido.numero_pedido}: {str(e)}")
+                    
+            except Exception as e:
+                logger.error(f"Erro ao atualizar pedidos do webhook {webhook.id}: {str(e)}")
+                resultados['erro'].append({
+                    'webhook_id': webhook.id,
+                    'erro': str(e)
+                })
         
         # Retornar resultados
         return Response({

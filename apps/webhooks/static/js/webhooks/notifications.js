@@ -9,6 +9,7 @@ WebhookApp.Notifications = (function() {
     
     // Elementos DOM
     let toastContainer = null;
+    let alertContainer = null;
     
     // Inicializa o módulo
     const init = function() {
@@ -18,6 +19,14 @@ WebhookApp.Notifications = (function() {
             toastContainer = document.createElement('div');
             toastContainer.id = 'toast-container';
             document.body.appendChild(toastContainer);
+        }
+        
+        // Criar o container de alertas se ele não existir
+        alertContainer = document.getElementById('alert-container');
+        if (!alertContainer) {
+            alertContainer = document.createElement('div');
+            alertContainer.id = 'alert-container';
+            document.body.appendChild(alertContainer);
         }
     };
     
@@ -68,6 +77,39 @@ WebhookApp.Notifications = (function() {
         return toast;
     };
     
+    // Mostra um alerta detalhado
+    const showAlert = function(content, type, duration = 0) {
+        init(); // Garantir que o container existe
+        
+        // Criar o alerta
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        
+        // Criar botão de fechar
+        const closeButton = document.createElement('button');
+        closeButton.className = 'alert-close';
+        closeButton.innerHTML = '<i class="fas fa-times"></i>';
+        closeButton.addEventListener('click', () => {
+            removeAlert(alert);
+        });
+        
+        // Adicionar conteúdo ao alerta
+        alert.innerHTML = content;
+        alert.appendChild(closeButton);
+        
+        // Adicionar o alerta ao container
+        alertContainer.appendChild(alert);
+        
+        // Configurar tempo para remover o alerta
+        if (duration > 0) {
+            setTimeout(() => {
+                removeAlert(alert);
+            }, duration);
+        }
+        
+        return alert;
+    };
+    
     // Remove um toast
     const removeToast = function(toast) {
         if (toast && toast.parentNode) {
@@ -75,6 +117,18 @@ WebhookApp.Notifications = (function() {
             setTimeout(() => {
                 if (toast.parentNode) {
                     toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }
+    };
+    
+    // Remove um alerta
+    const removeAlert = function(alert) {
+        if (alert && alert.parentNode) {
+            alert.classList.add('alert-hide');
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
                 }
             }, 300);
         }
@@ -88,11 +142,22 @@ WebhookApp.Notifications = (function() {
         }
     };
     
+    // Remove todos os alertas
+    const removeAllAlerts = function() {
+        if (alertContainer) {
+            const alerts = alertContainer.querySelectorAll('.alert');
+            alerts.forEach(alert => removeAlert(alert));
+        }
+    };
+    
     // Interface pública
     return {
         init: init,
         showToast: showToast,
+        showAlert: showAlert,
         removeToast: removeToast,
-        removeAllToasts: removeAllToasts
+        removeAlert: removeAlert,
+        removeAllToasts: removeAllToasts,
+        removeAllAlerts: removeAllAlerts
     };
 })();

@@ -199,6 +199,11 @@ WebhookApp.StatusDinamico = (function() {
             // Remover o toast de carregamento e mostrar sucesso
             WebhookApp.Notifications.removeToast(loadingToast);
             WebhookApp.Notifications.showToast(`Status atualizado com sucesso: ${data.mensagem}`, 'success', 3000);
+
+            // Processar notificações de alteração de status
+            if (data.resultados && data.resultados.notificacoes && data.resultados.notificacoes.length > 0) {
+                processStatusChangeNotifications(data.resultados.notificacoes);
+            }
         })
         .catch(error => {
             console.error('Erro:', error);
@@ -207,6 +212,47 @@ WebhookApp.StatusDinamico = (function() {
             WebhookApp.Notifications.removeToast(loadingToast);
             WebhookApp.Notifications.showToast('Erro ao atualizar status', 'error', 5000);
         });
+    };
+    
+    // Processa e exibe notificações de alteração de status
+    const processStatusChangeNotifications = function(notifications) {
+        notifications.forEach(notif => {
+            const message = `
+                <div class="status-notification">
+                    <div class="notification-header">Alteração de Status</div>
+                    <div class="notification-content">
+                        <p><strong>Pedido:</strong> #${notif.numero_pedido}</p>
+                        <p><strong>Data:</strong> ${notif.data}</p>
+                        <p><strong>Status Anterior:</strong> ${notif.status_anterior}</p>
+                        <p><strong>Novo Status:</strong> ${notif.status}</p>
+                        <p><strong>ID do Status:</strong> ${notif.status_id}</p>
+                        <p><strong>ID do Pedido:</strong> ${notif.id}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Mostrar notificação detalhada como um alerta
+            WebhookApp.Notifications.showAlert(message, 'info', 10000);
+            
+            // Enviar a notificação para sistemas externos (opcional)
+            sendStatusNotificationToExternalSystems(notif);
+        });
+    };
+    
+    // Envia notificação de alteração de status para sistemas externos
+    const sendStatusNotificationToExternalSystems = function(notification) {
+        // Implementação futura: aqui você pode adicionar código para enviar a notificação
+        // para sistemas externos, webhooks, APIs, etc.
+        console.log('Notificação de alteração de status para sistemas externos:', notification);
+        
+        // Exemplo: Armazenar no localStorage para persistência entre sessões
+        try {
+            const storedNotifications = JSON.parse(localStorage.getItem('statusNotifications') || '[]');
+            storedNotifications.push(notification);
+            localStorage.setItem('statusNotifications', JSON.stringify(storedNotifications));
+        } catch (e) {
+            console.error('Erro ao armazenar notificação:', e);
+        }
     };
     
     // Atualiza o status na interface
