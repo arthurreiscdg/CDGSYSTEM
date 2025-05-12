@@ -150,14 +150,18 @@ WebhookApp.Status = (function() {
                 throw new Error('Erro ao atualizar status');
             }
             return response.json();
-        })
-        .then(data => {
+        })        .then(data => {
             // Atualizar a interface com os novos status
             updateStatusInUI(orderIds, newStatus);
             
             // Remover o toast de carregamento e mostrar sucesso
             WebhookApp.Notifications.removeToast(loadingToast);
             WebhookApp.Notifications.showToast(`Status atualizado com sucesso`, 'success', 3000);
+            
+            // Atualizar a página após um pequeno delay para garantir que o usuário veja a mensagem de sucesso
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
         })
         .catch(error => {
             console.error('Erro:', error);

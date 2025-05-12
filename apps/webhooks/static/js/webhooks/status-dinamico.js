@@ -195,8 +195,7 @@ WebhookApp.StatusDinamico = (function() {
             
             // Atualizar a interface com os novos status
             updateStatusInUI(orderIds, newStatus, statusObj ? statusObj.cor_css : '');
-            
-            // Remover o toast de carregamento e mostrar sucesso
+              // Remover o toast de carregamento e mostrar sucesso
             WebhookApp.Notifications.removeToast(loadingToast);
             WebhookApp.Notifications.showToast(`Status atualizado com sucesso: ${data.mensagem}`, 'success', 3000);
 
@@ -209,6 +208,11 @@ WebhookApp.StatusDinamico = (function() {
             if (data.resultados && data.resultados.webhooks_enviados && data.resultados.webhooks_enviados.length > 0) {
                 processWebhooksEnviados(data.resultados.webhooks_enviados);
             }
+            
+            // Atualizar a página após um pequeno delay para garantir que o usuário veja a mensagem de sucesso
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
         })
         .catch(error => {
             console.error('Erro:', error);
