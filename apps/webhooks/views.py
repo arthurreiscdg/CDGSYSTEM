@@ -681,8 +681,7 @@ def update_status(request):
             'notificacoes': [],  # Lista para armazenar notificações de alteração
             'webhooks_enviados': []  # Lista para armazenar informações dos webhooks enviados
         }
-        
-        # Atualizar status de cada pedido
+          # Atualizar status de cada pedido
         for webhook in webhooks:
             try:
                 with transaction.atomic():
@@ -690,11 +689,7 @@ def update_status(request):
                         # Guardar status anterior para comparação
                         status_anterior = pedido.status
                         
-                        # Atualizar status
-                        pedido.status = novo_status
-                        pedido.save()
-                        
-                        # Adicionar notificação de alteração de status
+                        # Preparar notificação de alteração de status
                         data_alteracao = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
                         notificacao = {
                             'data': data_alteracao,
@@ -704,25 +699,20 @@ def update_status(request):
                             'numero_pedido': pedido.numero_pedido,
                             'status_anterior': status_anterior.nome if status_anterior else "Sem status"
                         }
-                        resultados['notificacoes'].append(notificacao)
                         
-                        # Log da alteração
-                        logger.info(
-                            f"Status do pedido #{pedido.numero_pedido} alterado de "
-                            f"'{status_anterior.nome if status_anterior else 'Sem status'}' para '{novo_status.nome}'"
-                        )
-                          # Enviar webhook para todos os endpoints configurados
+                        # Informações adicionais para o webhook
+                        info_adicionais = {
+                            'data_alteracao': data_alteracao,
+                            'status_anterior': status_anterior.nome if status_anterior else "Sem status",
+                            'status_anterior_id': status_anterior.id if status_anterior else None,
+                            'alterado_por': request.user.username,
+                            'cliente': pedido.nome_cliente,
+                            'documento_cliente': pedido.documento_cliente
+                        }
+                        
+                        # Enviar webhooks para todos os endpoints ativos
+                        webhook_falhou = False
                         try:
-                            # Informações adicionais para o webhook
-                            info_adicionais = {
-                                'data_alteracao': data_alteracao,
-                                'status_anterior': status_anterior.nome if status_anterior else "Sem status",
-                                'status_anterior_id': status_anterior.id if status_anterior else None,
-                                'alterado_por': request.user.username,
-                                'cliente': pedido.nome_cliente,
-                                'documento_cliente': pedido.documento_cliente
-                            }
-                            
                             # Enviar webhooks para todos os endpoints ativos
                             webhooks_enviados = WebhookDBService.enviar_webhook_status_para_todos_endpoints(
                                 pedido.numero_pedido, 
@@ -730,43 +720,125 @@ def update_status(request):
                                 info_adicionais
                             )
                             
-                            # Registrar resultados dos webhooks enviados
-                            for webhook_enviado in webhooks_enviados:
-                                resultados['webhooks_enviados'].append({
-                                    'numero_pedido': pedido.numero_pedido,
-                                    'status': novo_status.nome,
-                                    'sucesso': webhook_enviado.sucesso,
-                                    'url': webhook_enviado.url_destino,
-                                    'codigo_http': webhook_enviado.codigo_http
-                                })
-                                
-                                logger.info(
-                                    f"Webhook enviado para pedido #{pedido.numero_pedido} para {webhook_enviado.url_destino}: "
-                                    f"{'sucesso' if webhook_enviado.sucesso else 'falha'}"
-                                )
-                            
-                            if not webhooks_enviados:
+                            # Verificar se algum webhook falhou
+                            if webhooks_enviados:
+                                for webhook_enviado in webhooks_enviados:
+                                    resultados['webhooks_enviados'].append({
+                                        'numero_pedido': pedido.numero_pedido,
+                                        'status': novo_status.nome,
+                                        'sucesso': webhook_enviado.sucesso,
+                                        'url': webhook_enviado.url_destino,
+                                        'codigo_http': webhook_enviado.codigo_http
+                                    })
+                                    
+                                    logger.info(
+                                        f"Webhook enviado para pedido #{pedido.numero_pedido} para {webhook_enviado.url_destino}: "
+                                        f"{'sucesso' if webhook_enviado.sucesso else 'falha'}"
+                                    )
+                                    
+                                    # Se algum webhook falhou, marca a flag
+                                    if not webhook_enviado.sucesso:
+                                        webhook_falhou = True
+                            else:
                                 logger.info(f"Nenhum endpoint de webhook ativo configurado para o pedido #{pedido.numero_pedido}")
                                 
                         except Exception as e:
                             logger.error(f"Erro ao enviar webhooks para pedido #{pedido.numero_pedido}: {str(e)}")
+                            webhook_falhou = True
                         
-                    # Adicionar webhook à lista de sucesso
-                    resultados['sucesso'].append({
-                        'webhook_id': webhook.id,
-                        'pedidos': [p.numero_pedido for p in webhook.pedidos.all()]
-                    })
+                        # Determinar se deve atualizar o status
+                        # - O status é atualizado se não houve falha
+                        # - OU se não há endpoints configurados (webhooks_enviados vazio)
+                        atualizar_status = not webhook_falhou or len(webhooks_enviados) == 0
+                        
+                        # Log do resultado do envio de webhooks
+                        if len(webhooks_enviados) > 0:
+                            logger.info(
+                                f"Webhook para pedido #{pedido.numero_pedido}: "
+                                f"{'Todos enviados com sucesso' if not webhook_falhou else 'Houve falhas no envio'}"
+                            )
+                        else:
+                            logger.info(f"Nenhum endpoint de webhook configurado para o pedido #{pedido.numero_pedido}")
+                            
+                        # Só atualizar o status se os webhooks foram enviados com sucesso ou se não há endpoints configurados
+                        if atualizar_status:
+                            # Atualizar status
+                            pedido.status = novo_status
+                            pedido.save()
+                            
+                            # Adicionar notificação que o status foi alterado
+                            resultados['notificacoes'].append(notificacao)
+                            
+                            # Log da alteração
+                            logger.info(
+                                f"Status do pedido #{pedido.numero_pedido} alterado de "
+                                f"'{status_anterior.nome if status_anterior else 'Sem status'}' para '{novo_status.nome}'"
+                            )
+                        else:
+                            # Log que o status não foi alterado devido a falha no webhook
+                            logger.warning(
+                                f"Status do pedido #{pedido.numero_pedido} NÃO foi alterado para '{novo_status.nome}' "
+                                f"devido a falha no envio do webhook"
+                            )
+                
+                # Obter informações sobre todos os pedidos do webhook para a resposta
+                pedidos_sucesso = []
+                pedidos_falha_webhook = []
+                
+                for p in webhook.pedidos.all():
+                    # Verificar se este pedido teve seu status atualizado com sucesso
+                    # (Se foi adicionado na lista de notificações)
+                    pedido_atualizado = False
+                    for notif in resultados['notificacoes']:
+                        if notif['numero_pedido'] == p.numero_pedido:
+                            pedido_atualizado = True
+                            pedidos_sucesso.append(p.numero_pedido)
+                            break
                     
+                    # Se não foi atualizado, foi devido a falha no webhook
+                    if not pedido_atualizado:
+                        pedidos_falha_webhook.append(p.numero_pedido)
+                
+                # Adicionar webhook à lista de sucesso
+                resultados['sucesso'].append({
+                    'webhook_id': webhook.id,
+                    'pedidos': pedidos_sucesso
+                })
+                
+                # Se algum pedido não teve o status alterado por falha do webhook, registrar
+                if pedidos_falha_webhook:
+                    resultados['erro'].append({
+                        'webhook_id': webhook.id,
+                        'erro': 'Falha no envio do webhook, status não alterado conforme solicitado',
+                        'pedidos': pedidos_falha_webhook,
+                        'tipo_erro': 'webhook_falha' # Identificador para o front-end diferenciar o tipo de erro
+                    })
+                        
             except Exception as e:
                 logger.error(f"Erro ao atualizar pedidos do webhook {webhook.id}: {str(e)}")
                 resultados['erro'].append({
                     'webhook_id': webhook.id,
-                    'erro': str(e)
+                    'erro': str(e),
+                    'tipo_erro': 'erro_geral',
+                    'pedidos': [p.numero_pedido for p in webhook.pedidos.all()]
                 })
+        
+        # Contar pedidos atualizados e não atualizados
+        total_sucesso = sum(len(item.get('pedidos', [])) for item in resultados['sucesso'])
+        total_erro_webhook = sum(len(item.get('pedidos', [])) for item in resultados['erro'] 
+                             if item.get('tipo_erro') == 'webhook_falha')
+        total_erro_outros = sum(len(item.get('pedidos', [])) for item in resultados['erro'] 
+                            if item.get('tipo_erro') != 'webhook_falha')
+        
+        mensagem = f'{total_sucesso} pedidos atualizados com sucesso'
+        if total_erro_webhook > 0:
+            mensagem += f', {total_erro_webhook} não atualizados devido a falhas no webhook'
+        if total_erro_outros > 0:
+            mensagem += f', {total_erro_outros} com outros erros'
         
         # Retornar resultados
         return Response({
-            'mensagem': f'{len(resultados["sucesso"])} pedidos atualizados com sucesso, {len(resultados["erro"])} com erro',
+            'mensagem': mensagem,
             'resultados': resultados
         })
     except Exception as e:
