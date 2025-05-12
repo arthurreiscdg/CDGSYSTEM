@@ -399,8 +399,7 @@ class WebhookDBService:
                     headers=headers,
                     timeout=settings.WEBHOOK_TIMEOUT
                 )
-                
-                # Registrar a resposta
+                  # Registrar a resposta
                 status_webhook = WebhookStatusEnviado.objects.create(
                     pedido=pedido,
                     status=status_nome,
@@ -408,20 +407,21 @@ class WebhookDBService:
                     payload=payload_json,
                     resposta=resposta.text,
                     codigo_http=resposta.status_code,
-                    sucesso=resposta.status_code >= 200 and resposta.status_code < 300
+                    sucesso=resposta.status_code >= 200 and resposta.status_code < 300,
+                    tentativa_numero=1
                 )
                 
                 return status_webhook
                 
-            except requests.RequestException as e:
-                # Registrar erro
+            except requests.RequestException as e:                # Registrar erro
                 status_webhook = WebhookStatusEnviado.objects.create(
                     pedido=pedido,
                     status=status_nome,
                     url_destino=url_final,
                     payload=payload_json,
                     resposta=str(e),
-                    sucesso=False
+                    sucesso=False,
+                    tentativa_numero=1
                 )
                 
                 logger.error(f"Erro ao enviar webhook para {url_final}: {str(e)}")

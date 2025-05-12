@@ -133,6 +133,7 @@ class WebhookStatusEnviado(models.Model):
     codigo_http = models.IntegerField(null=True, blank=True)
     sucesso = models.BooleanField(default=False)
     enviado_em = models.DateTimeField(auto_now_add=True)
+    tentativa_numero = models.IntegerField(default=1)
     
     def __str__(self):
         return f"Status webhook para pedido #{self.pedido.numero_pedido} - {'Sucesso' if self.sucesso else 'Falha'}"
