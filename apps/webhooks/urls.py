@@ -18,7 +18,9 @@ urlpatterns = [
     path('list/', views.webhook_list, name='webhook_list'),
     
     # API REST
-    path('api/', include(router.urls)),    path('api/pedidos/<int:numero_pedido>/', views.buscar_pedido, name='buscar_pedido'),
+    path('api/', include(router.urls)),
+    path('api/pedidos/<int:numero_pedido>/', views.buscar_pedido, name='buscar_pedido'),
+    path('api/pedidos/<int:numero_pedido>/webhooks/', views.listar_webhooks_enviados_por_pedido, name='webhooks_enviados_pedido'),
     path('api/enviar-status/', views.enviar_webhook_status, name='enviar_status'),
     path('api/webhook/<int:webhook_id>/', views.webhook_detail_api, name='webhook_detail_api'),
     path('api/update-status/', views.update_status, name='update_status'),

@@ -8,7 +8,7 @@ from django.conf import settings
 from ..models import (
     WebhookConfig, Webhook, Pedido, EnderecoEnvio, 
     InformacoesAdicionais, Produto, Design, Mockup,
-    WebhookStatusEnviado, StatusPedido
+    WebhookStatusEnviado, StatusPedido, WebhookEndpointConfig
 )
 
 logger = logging.getLogger('apps.webhooks')
@@ -324,17 +324,18 @@ class WebhookDBService:
         except Exception as e:
             logger.error(f"Erro ao atualizar status do pedido: {str(e)}")
             return None
-    
+      
     @staticmethod
-    def enviar_webhook_status(numero_pedido, url_destino, status_nome, informacoes_adicionais=None):
+    def enviar_webhook_status(numero_pedido, url_destino, status_nome, informacoes_adicionais=None, endpoint_config=None):
         """
         Envia um webhook de status para um sistema externo.
         
         Args:
             numero_pedido (int): O número do pedido
-            url_destino (str): A URL para onde enviar o webhook
+            url_destino (str): A URL para onde enviar o webhook (ignorado se endpoint_config for fornecido)
             status_nome (str): O nome do status atual do pedido
             informacoes_adicionais (dict, optional): Informações adicionais a incluir
+            endpoint_config (WebhookEndpointConfig, optional): Configuração específica do endpoint
             
         Returns:
             WebhookStatusEnviado: O objeto WebhookStatusEnviado criado ou None em caso de erro
@@ -345,6 +346,9 @@ class WebhookDBService:
             if not pedido:
                 logger.error(f"Pedido #{numero_pedido} não encontrado para envio de webhook")
                 return None
+            
+            # Determinar URL de destino
+            url_final = endpoint_config.url if endpoint_config else url_destino
             
             # Preparar payload
             payload = {
@@ -366,16 +370,31 @@ class WebhookDBService:
             # Converter para JSON
             payload_json = json.dumps(payload)
             
-            # Enviar webhook
+            # Preparar headers básicos
             headers = {
                 'Content-Type': 'application/json',
                 'User-Agent': 'PDFlow-Webhook/1.0',
             }
             
+            # Adicionar headers e autenticação caso tenha configuração específica
+            if endpoint_config:
+                # Adicionar token de autenticação se configurado
+                if endpoint_config.token_autenticacao:
+                    headers['Authorization'] = f'Bearer {endpoint_config.token_autenticacao}'
+                
+                # Adicionar headers adicionais se configurados
+                if endpoint_config.headers_adicionais:
+                    try:
+                        headers_adicionais = json.loads(endpoint_config.headers_adicionais)
+                        if isinstance(headers_adicionais, dict):
+                            headers.update(headers_adicionais)
+                    except json.JSONDecodeError:
+                        logger.warning(f"Headers adicionais mal formatados para o endpoint {endpoint_config.nome}")
+            
             # Tentar enviar a requisição
             try:
                 resposta = requests.post(
-                    url_destino,
+                    url_final,
                     data=payload_json,
                     headers=headers,
                     timeout=settings.WEBHOOK_TIMEOUT
@@ -385,7 +404,7 @@ class WebhookDBService:
                 status_webhook = WebhookStatusEnviado.objects.create(
                     pedido=pedido,
                     status=status_nome,
-                    url_destino=url_destino,
+                    url_destino=url_final,
                     payload=payload_json,
                     resposta=resposta.text,
                     codigo_http=resposta.status_code,
@@ -399,15 +418,75 @@ class WebhookDBService:
                 status_webhook = WebhookStatusEnviado.objects.create(
                     pedido=pedido,
                     status=status_nome,
-                    url_destino=url_destino,
+                    url_destino=url_final,
                     payload=payload_json,
                     resposta=str(e),
                     sucesso=False
                 )
                 
-                logger.error(f"Erro ao enviar webhook para {url_destino}: {str(e)}")
+                logger.error(f"Erro ao enviar webhook para {url_final}: {str(e)}")
                 return status_webhook
                 
         except Exception as e:
             logger.error(f"Erro ao processar envio de webhook: {str(e)}")
             return None
+    
+    @staticmethod
+    def buscar_endpoints_webhook_ativos():
+        """
+        Busca todos os endpoints de webhook configurados e ativos.
+        
+        Returns:
+            list: Lista de objetos WebhookEndpointConfig ativos
+        """
+        try:
+            return WebhookEndpointConfig.objects.filter(ativo=True)
+        except Exception as e:
+            logger.error(f"Erro ao buscar endpoints de webhook ativos: {str(e)}")
+            return []
+
+    @staticmethod
+    def enviar_webhook_status_para_todos_endpoints(numero_pedido, status_nome, informacoes_adicionais=None):
+        """
+        Envia um webhook de status para todos os endpoints ativos configurados.
+        
+        Args:
+            numero_pedido (int): O número do pedido
+            status_nome (str): O nome do status atual do pedido
+            informacoes_adicionais (dict, optional): Informações adicionais a incluir
+            
+        Returns:
+            list: Lista de objetos WebhookStatusEnviado criados
+        """
+        resultados = []
+        
+        # Buscar todos os endpoints ativos
+        endpoints = WebhookDBService.buscar_endpoints_webhook_ativos()
+        
+        # Caso não tenha endpoints configurados, tenta usar a URL padrão das configurações
+        if not endpoints and hasattr(settings, 'WEBHOOK_STATUS_ENDPOINT') and settings.WEBHOOK_STATUS_AUTO_NOTIFY:
+            webhook = WebhookDBService.enviar_webhook_status(
+                numero_pedido, 
+                settings.WEBHOOK_STATUS_ENDPOINT,
+                status_nome, 
+                informacoes_adicionais
+            )
+            if webhook:
+                resultados.append(webhook)
+            return resultados
+        
+        # Enviar para cada endpoint configurado e ativo
+        for endpoint in endpoints:
+            # Verificar se o endpoint está configurado para envio automático
+            if endpoint.auto_enviar:
+                webhook = WebhookDBService.enviar_webhook_status(
+                    numero_pedido, 
+                    None,  # URL será obtida da configuração do endpoint
+                    status_nome, 
+                    informacoes_adicionais,
+                    endpoint
+                )
+                if webhook:
+                    resultados.append(webhook)
+        
+        return resultados

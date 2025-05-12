@@ -160,6 +160,39 @@
     margin-right: 5px;
 }
 
+/* Webhook notification styles */
+.webhook-notification {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.webhook-notification .notification-header {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.webhook-notification .notification-header i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.webhook-notification .notification-content {
+    font-size: 14px;
+}
+
+.webhook-notification .notification-content p {
+    margin: 5px 0;
+    padding: 0;
+}
+
+.webhook-notification .notification-content strong {
+    font-weight: 600;
+    margin-right: 5px;
+}
+
 /* Animações */
 @keyframes slideIn {
     from {
@@ -210,5 +243,9 @@
 }
 
 .dark-theme .notification-header {
+    color: #ddd;
+}
+
+.dark-theme .webhook-notification .notification-header {
     color: #ddd;
 }

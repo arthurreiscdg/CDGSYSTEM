@@ -204,6 +204,11 @@ WebhookApp.StatusDinamico = (function() {
             if (data.resultados && data.resultados.notificacoes && data.resultados.notificacoes.length > 0) {
                 processStatusChangeNotifications(data.resultados.notificacoes);
             }
+            
+            // Processar informações sobre webhooks enviados
+            if (data.resultados && data.resultados.webhooks_enviados && data.resultados.webhooks_enviados.length > 0) {
+                processWebhooksEnviados(data.resultados.webhooks_enviados);
+            }
         })
         .catch(error => {
             console.error('Erro:', error);
@@ -253,6 +258,38 @@ WebhookApp.StatusDinamico = (function() {
         } catch (e) {
             console.error('Erro ao armazenar notificação:', e);
         }
+    };
+    
+    // Processa informações sobre webhooks enviados para sistemas externos
+    const processWebhooksEnviados = function(webhooksInfo) {
+        webhooksInfo.forEach(webhook => {
+            const statusIcon = webhook.sucesso ? 
+                '<i class="fas fa-check-circle" style="color: #28a745;"></i>' : 
+                '<i class="fas fa-times-circle" style="color: #dc3545;"></i>';
+                
+            const message = `
+                <div class="webhook-notification">
+                    <div class="notification-header">
+                        ${statusIcon} Webhook Enviado
+                    </div>
+                    <div class="notification-content">
+                        <p><strong>Pedido:</strong> #${webhook.numero_pedido}</p>
+                        <p><strong>Status:</strong> ${webhook.status}</p>
+                        <p><strong>Destino:</strong> ${webhook.url}</p>
+                        <p><strong>Resultado:</strong> ${webhook.sucesso ? 'Sucesso' : 'Falha'} ${webhook.codigo_http ? `(HTTP ${webhook.codigo_http})` : ''}</p>
+                        <button class="btn btn-sm btn-outline view-history-btn" onclick="loadWebhookHistory(${webhook.numero_pedido})">
+                            Ver Histórico Completo
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Mostrar notificação detalhada como um alerta
+            WebhookApp.Notifications.showAlert(message, webhook.sucesso ? 'success' : 'warning', 15000);
+            
+            // Registrar no console para debugging
+            console.log('Webhook enviado:', webhook);
+        });
     };
     
     // Atualiza o status na interface

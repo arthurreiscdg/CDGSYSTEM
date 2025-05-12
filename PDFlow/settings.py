@@ -194,6 +194,12 @@ LOGGING = {
 # Garantir que o diretório de logs existe
 os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 
+# Configurações para Webhooks
+WEBHOOK_REQUIRE_SIGNATURE = os.environ.get('WEBHOOK_REQUIRE_SIGNATURE', 'False') == 'True'
+WEBHOOK_TIMEOUT = int(os.environ.get('WEBHOOK_TIMEOUT', '5'))  # Timeout em segundos
+WEBHOOK_STATUS_ENDPOINT = os.environ.get('WEBHOOK_STATUS_ENDPOINT', 'https://webhook.site/your-endpoint')
+WEBHOOK_STATUS_AUTO_NOTIFY = os.environ.get('WEBHOOK_STATUS_AUTO_NOTIFY', 'True') == 'True'
+
 # Configurações de autenticação
 LOGIN_URL = '/usuarios/login/'
 LOGOUT_REDIRECT_URL = '/'

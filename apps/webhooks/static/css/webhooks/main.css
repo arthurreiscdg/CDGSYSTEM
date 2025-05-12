@@ -9,6 +9,7 @@
 @import url('modals.css');
 @import url('responsive.css');
 @import url('notifications.css');
+@import url('webhook-history.css');
 
 /* Estilos extras ou sobrescritas específicas que não se encaixem nos outros arquivos */
 .webhook-specific-utility {

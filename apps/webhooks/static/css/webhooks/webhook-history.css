@@ -1,0 +1,133 @@
+/* Estilos para o histórico de webhooks */
+
+.webhook-history-modal {
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+}
+
+.webhook-history-stats {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.webhook-history-list {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.webhook-history-item {
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #ccc;
+    background-color: #f8f9fa;
+    overflow: hidden;
+}
+
+.webhook-history-item.success {
+    border-left-color: #28a745;
+}
+
+.webhook-history-item.failure {
+    border-left-color: #dc3545;
+}
+
+.webhook-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.webhook-status {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.webhook-status i {
+    margin-right: 5px;
+}
+
+.webhook-status.success {
+    color: #28a745;
+}
+
+.webhook-status.failure {
+    color: #dc3545;
+}
+
+.webhook-date {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.webhook-history-content {
+    padding: 15px;
+}
+
+.webhook-history-content p {
+    margin-bottom: 8px;
+}
+
+.webhook-payload-toggle,
+.webhook-response-toggle {
+    margin-top: 10px;
+}
+
+.webhook-payload,
+.webhook-response {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.webhook-payload pre,
+.webhook-response pre {
+    margin: 0;
+    white-space: pre-wrap;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+}
+
+.no-webhooks {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+/* Dark theme */
+.dark-theme .webhook-history-stats {
+    background-color: #2a2a2a;
+    color: #eee;
+}
+
+.dark-theme .webhook-history-item {
+    background-color: #2a2a2a;
+}
+
+.dark-theme .webhook-history-header {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-theme .webhook-date {
+    color: #aaa;
+}
+
+.dark-theme .webhook-payload,
+.dark-theme .webhook-response {
+    background-color: #222;
+    color: #eee;
+}
+
+.dark-theme .no-webhooks {
+    color: #aaa;
+}

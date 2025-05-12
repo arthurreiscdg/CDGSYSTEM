@@ -643,6 +643,8 @@ def update_status(request):
     os pedidos associados. Válida a existência do status antes de aplicar
     e retorna os resultados da operação.
     
+    Também envia webhooks para o endpoint configurado sempre que o status é alterado.
+    
     Args:
         request (Request): Objeto de requisição com webhook_ids e status
         
@@ -676,7 +678,8 @@ def update_status(request):
         resultados = {
             'sucesso': [],
             'erro': [],
-            'notificacoes': []  # Lista para armazenar notificações de alteração
+            'notificacoes': [],  # Lista para armazenar notificações de alteração
+            'webhooks_enviados': []  # Lista para armazenar informações dos webhooks enviados
         }
         
         # Atualizar status de cada pedido
@@ -708,6 +711,45 @@ def update_status(request):
                             f"Status do pedido #{pedido.numero_pedido} alterado de "
                             f"'{status_anterior.nome if status_anterior else 'Sem status'}' para '{novo_status.nome}'"
                         )
+                          # Enviar webhook para todos os endpoints configurados
+                        try:
+                            # Informações adicionais para o webhook
+                            info_adicionais = {
+                                'data_alteracao': data_alteracao,
+                                'status_anterior': status_anterior.nome if status_anterior else "Sem status",
+                                'status_anterior_id': status_anterior.id if status_anterior else None,
+                                'alterado_por': request.user.username,
+                                'cliente': pedido.nome_cliente,
+                                'documento_cliente': pedido.documento_cliente
+                            }
+                            
+                            # Enviar webhooks para todos os endpoints ativos
+                            webhooks_enviados = WebhookDBService.enviar_webhook_status_para_todos_endpoints(
+                                pedido.numero_pedido, 
+                                novo_status.nome,
+                                info_adicionais
+                            )
+                            
+                            # Registrar resultados dos webhooks enviados
+                            for webhook_enviado in webhooks_enviados:
+                                resultados['webhooks_enviados'].append({
+                                    'numero_pedido': pedido.numero_pedido,
+                                    'status': novo_status.nome,
+                                    'sucesso': webhook_enviado.sucesso,
+                                    'url': webhook_enviado.url_destino,
+                                    'codigo_http': webhook_enviado.codigo_http
+                                })
+                                
+                                logger.info(
+                                    f"Webhook enviado para pedido #{pedido.numero_pedido} para {webhook_enviado.url_destino}: "
+                                    f"{'sucesso' if webhook_enviado.sucesso else 'falha'}"
+                                )
+                            
+                            if not webhooks_enviados:
+                                logger.info(f"Nenhum endpoint de webhook ativo configurado para o pedido #{pedido.numero_pedido}")
+                                
+                        except Exception as e:
+                            logger.error(f"Erro ao enviar webhooks para pedido #{pedido.numero_pedido}: {str(e)}")
                         
                     # Adicionar webhook à lista de sucesso
                     resultados['sucesso'].append({
@@ -730,3 +772,41 @@ def update_status(request):
     except Exception as e:
         logger.error(f"Erro ao atualizar status: {str(e)}")
         return Response({'erro': str(e)}, status=500)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def listar_webhooks_enviados_por_pedido(request, numero_pedido):
+    """
+    Lista todos os webhooks de status enviados para um pedido específico.
+    
+    Args:
+        request (Request): O objeto de requisição
+        numero_pedido (int): O número do pedido
+        
+    Returns:
+        Response: Lista de webhooks enviados para o pedido
+    """
+    try:
+        pedido = WebhookDBService.buscar_pedido(numero_pedido)
+        if not pedido:
+            return Response(
+                {'erro': f'Pedido #{numero_pedido} não encontrado'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+            
+        webhooks_enviados = WebhookStatusEnviado.objects.filter(pedido=pedido).order_by('-enviado_em')
+        serializer = WebhookStatusEnviadoSerializer(webhooks_enviados, many=True)
+        
+        return Response({
+            'numero_pedido': numero_pedido,
+            'total_webhooks': webhooks_enviados.count(),
+            'webhooks': serializer.data
+        })
+        
+    except Exception as e:
+        logger.error(f"Erro ao buscar webhooks enviados para pedido #{numero_pedido}: {str(e)}")
+        return Response(
+            {'erro': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

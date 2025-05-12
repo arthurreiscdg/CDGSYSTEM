@@ -286,3 +286,193 @@ WebhookApp.Modals = (function() {
         hideDetailsModal: hideDetailsModal
     };
 })();
+
+/**
+ * Carrega e exibe o histórico de webhooks para um pedido
+ * @param {number} numeroPedido - Número do pedido
+ */
+function loadWebhookHistory(numeroPedido) {
+    // Mostrar indicador de carregamento
+    const loadingToast = WebhookApp.Notifications.showToast('Carregando histórico de webhooks...', 'loading');
+    
+    fetch(`/webhooks/api/pedidos/${numeroPedido}/webhooks/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': WebhookApp.Core.getCsrfToken()
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro ao carregar histórico de webhooks');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Remover o toast de carregamento
+        WebhookApp.Notifications.removeToast(loadingToast);
+        
+        // Mostrar histórico em um modal
+        showWebhookHistoryModal(data);
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        
+        // Remover o toast de carregamento e mostrar erro
+        WebhookApp.Notifications.removeToast(loadingToast);
+        WebhookApp.Notifications.showToast('Erro ao carregar histórico de webhooks', 'error', 5000);
+    });
+}
+
+/**
+ * Exibe o histórico de webhooks em um modal
+ * @param {Object} data - Dados recebidos da API
+ */
+function showWebhookHistoryModal(data) {
+    // Criar o modal dinamicamente
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    modalOverlay.id = 'webhookHistoryModal';
+    
+    const modalHTML = `
+        <div class="modal webhook-history-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Histórico de Webhooks - Pedido #${data.numero_pedido}</h3>
+                <button type="button" class="modal-close" id="closeWebhookHistoryModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="webhook-history-stats">
+                    <p>Total de webhooks enviados: <strong>${data.total_webhooks}</strong></p>
+                </div>
+                
+                <div class="webhook-history-list">
+                    ${data.webhooks.length > 0 ? 
+                        data.webhooks.map(webhook => `
+                            <div class="webhook-history-item ${webhook.sucesso ? 'success' : 'failure'}">
+                                <div class="webhook-history-header">
+                                    <span class="webhook-status ${webhook.sucesso ? 'success' : 'failure'}">
+                                        <i class="fas fa-${webhook.sucesso ? 'check' : 'times'}-circle"></i>
+                                        ${webhook.sucesso ? 'Sucesso' : 'Falha'}
+                                    </span>
+                                    <span class="webhook-date">
+                                        ${new Date(webhook.enviado_em).toLocaleString()}
+                                    </span>
+                                </div>
+                                <div class="webhook-history-content">
+                                    <p><strong>Status:</strong> ${webhook.status}</p>
+                                    <p><strong>URL:</strong> ${webhook.url_destino}</p>
+                                    ${webhook.codigo_http ? `<p><strong>Código HTTP:</strong> ${webhook.codigo_http}</p>` : ''}
+                                    <div class="webhook-payload-toggle">
+                                        <button class="btn btn-sm btn-outline" onclick="togglePayload(this)">
+                                            Ver Payload
+                                        </button>
+                                        <div class="webhook-payload" style="display: none;">
+                                            <pre>${formatJSON(webhook.payload)}</pre>
+                                        </div>
+                                    </div>
+                                    ${webhook.resposta ? `
+                                    <div class="webhook-response-toggle">
+                                        <button class="btn btn-sm btn-outline" onclick="toggleResponse(this)">
+                                            Ver Resposta
+                                        </button>
+                                        <div class="webhook-response" style="display: none;">
+                                            <pre>${webhook.resposta}</pre>
+                                        </div>
+                                    </div>` : ''}
+                                </div>
+                            </div>
+                        `).join('') : 
+                        '<div class="no-webhooks">Nenhum webhook enviado para este pedido.</div>'
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="closeWebhookHistoryBtn" class="btn btn-outline">Fechar</button>
+            </div>
+        </div>
+    `;
+    
+    modalOverlay.innerHTML = modalHTML;
+    document.body.appendChild(modalOverlay);
+    
+    // Adicionar listeners
+    document.getElementById('closeWebhookHistoryModal').addEventListener('click', () => {
+        closeWebhookHistoryModal();
+    });
+    
+    document.getElementById('closeWebhookHistoryBtn').addEventListener('click', () => {
+        closeWebhookHistoryModal();
+    });
+    
+    // Fechar ao clicar fora
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeWebhookHistoryModal();
+        }
+    });
+    
+    // Exibir o modal
+    modalOverlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevenir rolagem
+}
+
+/**
+ * Fecha o modal de histórico de webhooks
+ */
+function closeWebhookHistoryModal() {
+    const modal = document.getElementById('webhookHistoryModal');
+    if (modal) {
+        modal.remove();
+        document.body.style.overflow = ''; // Restaurar rolagem
+    }
+}
+
+/**
+ * Formata JSON para melhor visualização
+ * @param {string} jsonStr - String JSON para formatar
+ * @returns {string} - HTML escapado com formatação preservada
+ */
+function formatJSON(jsonStr) {
+    try {
+        const obj = JSON.parse(jsonStr);
+        return JSON.stringify(obj, null, 2)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    } catch (e) {
+        return jsonStr
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+}
+
+/**
+ * Alterna a exibição do payload
+ * @param {HTMLElement} button - Botão clicado
+ */
+function togglePayload(button) {
+    const payloadDiv = button.nextElementSibling;
+    const isHidden = payloadDiv.style.display === 'none';
+    
+    payloadDiv.style.display = isHidden ? 'block' : 'none';
+    button.textContent = isHidden ? 'Ocultar Payload' : 'Ver Payload';
+}
+
+/**
+ * Alterna a exibição da resposta
+ * @param {HTMLElement} button - Botão clicado
+ */
+function toggleResponse(button) {
+    const responseDiv = button.nextElementSibling;
+    const isHidden = responseDiv.style.display === 'none';
+    
+    responseDiv.style.display = isHidden ? 'block' : 'none';
+    button.textContent = isHidden ? 'Ocultar Resposta' : 'Ver Resposta';
+}

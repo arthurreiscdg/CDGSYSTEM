@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     WebhookConfig, Webhook, Pedido, EnderecoEnvio,
     InformacoesAdicionais, Produto, Design, Mockup,
-    WebhookStatusEnviado, StatusPedido
+    WebhookStatusEnviado, StatusPedido, WebhookEndpointConfig
 )
 
 class ProdutoInline(admin.TabularInline):
@@ -78,3 +78,23 @@ class WebhookStatusEnviadoAdmin(admin.ModelAdmin):
         return obj.pedido.numero_pedido
     get_numero_pedido.short_description = 'Número do Pedido'
     get_numero_pedido.admin_order_field = 'pedido__numero_pedido'
+
+@admin.register(WebhookEndpointConfig)
+class WebhookEndpointConfigAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'url', 'ativo', 'auto_enviar', 'criado_em')
+    list_filter = ('ativo', 'auto_enviar')
+    search_fields = ('nome', 'url')
+    readonly_fields = ('criado_em', 'atualizado_em')
+    fieldsets = (
+        ('Informações Básicas', {
+            'fields': ('nome', 'url', 'ativo', 'auto_enviar')
+        }),
+        ('Autenticação & Headers', {
+            'fields': ('token_autenticacao', 'headers_adicionais'),
+            'classes': ('collapse',)
+        }),
+        ('Datas', {
+            'fields': ('criado_em', 'atualizado_em'),
+            'classes': ('collapse',)
+        }),
+    )
