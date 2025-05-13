@@ -1,0 +1,34 @@
+<div id="statusModal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Alterar Status</h3>
+            <button type="button" class="modal-close" id="closeStatusModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p id="statusSelectionText">Selecione o novo status para os <span id="selectedOrdersCount">0</span> itens selecionados:</p>
+            
+            <div class="status-options">
+                {% for status in status_pedidos %}
+                <div class="status-option" data-status="{{ status.nome }}" data-css="{{ status.cor_css }}">
+                    <div class="status-indicator {{ status.cor_css }}"></div>
+                    <div class="status-details">
+                        <h4>{{ status.nome }}</h4>
+                        <p>{{ status.descricao|default:"" }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="no-status">
+                    <p>Nenhum status disponível. Cadastre status no painel administrativo.</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="modal-footer">
+                <button id="applyStatusBtn" class="btn btn-primary">Aplicar Status</button>
+                <button id="cancelStatusBtn" class="btn btn-outline">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

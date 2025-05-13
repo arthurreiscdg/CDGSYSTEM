@@ -1,0 +1,93 @@
+<aside class="filter-panel">
+    <div class="filter-header">
+        <h4><i class="fas fa-filter"></i> Filtrar</h4>
+        <button class="clear-filter"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div class="filter-content">
+        <!-- Situação -->
+        <div class="filter-group">
+            <label>Situação</label>
+            <div class="select-container">
+                <select class="form-select" name="status" data-filter="status">
+                    <option value="">Selecione uma opção...</option>
+                    {% for status in status_pedidos %}
+                    <option value="{{ status.id }}" {% if status_filter == status.id|stringformat:"i" %}selected{% endif %}>{{ status.nome }}</option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+
+        <!-- Produto -->
+        <div class="filter-group">
+            <label>Produto</label>
+            <div class="select-container">
+                <select class="form-select" name="produto" data-filter="produto">
+                    <option value="">Selecione um produto...</option>
+                </select>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+
+        <!-- Vendedor -->
+        <div class="filter-group">
+            <label>Vendedor</label>
+            <div class="select-container">
+                <select class="form-select" name="vendedor" data-filter="vendedor">
+                    <option value="">Selecione um vendedor...</option>
+                </select>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+
+        <!-- Rastreamento -->
+        <div class="filter-group">
+            <label>Rastreamento</label>
+            <div class="select-container">
+                <select class="form-select" name="rastreamento" data-filter="rastreamento">
+                    <option value="">Todos</option>
+                </select>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+
+        <!-- Código de rastreio -->
+        <div class="filter-group">
+            <label>Código de rastreio</label>
+            <input type="text" class="form-control" name="cod_rastreio" data-filter="cod_rastreio">
+        </div>
+
+        <!-- Nº do pedido na loja -->
+        <div class="filter-group">
+            <label>Nº do pedido na loja</label>
+            <input type="text" class="form-control" name="num_pedido" data-filter="num_pedido">
+        </div>
+
+        <!-- UF -->
+        <div class="filter-group">
+            <label>UF</label>
+            <div class="select-container">
+                <select class="form-select" name="uf" data-filter="uf">
+                    <option value="">Selecione uma UF...</option>
+                    <option value="SP">SP</option>
+                    <option value="RJ">RJ</option>
+                    <option value="MG">MG</option>
+                </select>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+
+        <!-- Busca customizada -->
+        <div class="filter-group custom-search">
+            <label>Busca customizada</label>
+            <div class="custom-search-input">
+                <input type="text" class="form-control" name="busca_customizada" data-filter="busca_customizada" placeholder="Adicionar filtros">
+                <button class="add-filter-btn"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+
+        <!-- Botão Filtrar -->
+        <button class="filter-btn">Filtrar</button>
+    </div>
+</aside>

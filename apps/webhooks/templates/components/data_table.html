@@ -1,0 +1,111 @@
+<div class="main-table-container">
+    <!-- Status da seleção e ações em lote -->
+    <div class="batch-actions" id="selected-actions">
+        <div class="selected-info">
+            <span id="items-selected">0</span> itens selecionados
+        </div>
+        <div class="batch-buttons">
+            <button class="batch-btn"><i class="fas fa-file-download"></i> Download PDFs</button>
+            <button class="batch-btn"><i class="fas fa-sync-alt"></i> Alterar Status</button>
+            <button class="batch-btn outline"><i class="fas fa-times"></i> Limpar Seleção</button>
+        </div>
+    </div>
+
+    <!-- Tabela de Montink -->
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="40">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="select-all" class="checkbox">
+                            <label for="select-all"></label>
+                        </div>
+                    </th>
+                    <th>Número</th>
+                    <th>Nome</th>
+                    <th>Data emissão</th>
+                    <th>Data de saída</th>
+                    <th>Situação</th>
+                    <th>Valor (R$)</th>
+                    <th width="80"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for webhook in webhooks %}
+                {% if webhook.pedidos.all %}
+                {% with pedido=webhook.pedidos.first %}
+                <tr>
+                    <td>
+                        <div class="checkbox-container">
+                            <input type="checkbox" class="webhook-select checkbox" id="item-{{ webhook.id }}" value="{{ webhook.id }}">
+                            <label for="item-{{ webhook.id }}"></label>
+                        </div>
+                    </td>
+                    <td>{{ pedido.numero_pedido|stringformat:"06d" }}</td>
+                    <td>{{ pedido.nome_cliente }}</td>
+                    <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
+                    <td>{{ pedido.data_saida|default:webhook.recebido_em|date:"d/m/Y" }}</td>
+                    <td>
+                        <span class="status-badge {{ pedido.status.cor_css|default:'status-processing' }}" data-status="{{ pedido.status.nome }}">
+                            {{ pedido.status.nome }}
+                        </span>
+                    </td>
+                    <td>{{ pedido.valor_pedido|floatformat:2 }}</td>
+                    <td class="actions-cell">
+                        <div class="document-icons">
+                            <span class="doc-icon sent" title="Enviado"><span>S</span></span>
+                            <span class="doc-icon canceled" title="Cancelado"><span>C</span></span>
+                            <span class="doc-icon verified" title="Verificado"><span>V</span></span>
+                            <span class="doc-icon exported" title="Exportado"><span>E</span></span>
+                        </div>
+                        <button class="row-actions-btn"><i class="fas fa-ellipsis-v"></i></button>
+                    </td>
+                </tr>
+                {% endwith %}
+                {% else %}
+                <tr>
+                    <td>
+                        <div class="checkbox-container">
+                            <input type="checkbox" class="webhook-select checkbox" id="item-{{ webhook.id }}" value="{{ webhook.id }}">
+                            <label for="item-{{ webhook.id }}"></label>
+                        </div>
+                    </td>
+                    <td>{{ webhook.id|stringformat:"06d" }}</td>
+                    <td>Sem cliente</td>
+                    <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
+                    <td>--/--/----</td>
+                    <td>
+                        <span class="status-badge status-pending" data-status="Pendente">Pendente</span>
+                    </td>
+                    <td>0,00</td>
+                    <td class="actions-cell">
+                        <div class="document-icons">
+                            <span class="doc-icon" title="Sem documentos"></span>
+                        </div>
+                        <button class="row-actions-btn"><i class="fas fa-ellipsis-v"></i></button>
+                    </td>
+                </tr>
+                {% endif %}
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="no-data">Nenhum pedido encontrado</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-footer">
+        <div class="showing-entries">
+            Exibindo 1-{{ webhooks|length }} de {{ total_webhooks }} registros
+        </div>
+        <div class="pagination">
+            <button class="pagination-btn disabled"><i class="fas fa-chevron-left"></i></button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</div>

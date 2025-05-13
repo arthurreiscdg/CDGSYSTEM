@@ -1,0 +1,128 @@
+<div id="detailsModal" class="modal-overlay">
+    <div class="modal modal-large">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-file-invoice"></i>
+                <span id="modalOrderTitle">Detalhes do Pedido</span>
+            </h3>
+            <button type="button" class="modal-close" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body" id="modalContent">
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <p>Carregando detalhes...</p>
+            </div>
+            
+            <div id="pedidoDetails" class="modern-details">
+                <!-- Content will be dynamically populated -->
+            </div>
+            
+            <!-- Tabs para organizar as informações -->
+            <div class="modal-tabs" id="detailsTabs">
+                <button class="tab-button active" data-tab="overview">
+                    <i class="fas fa-th-large"></i> Visão Geral
+                </button>
+                <button class="tab-button" data-tab="products">
+                    <i class="fas fa-box-open"></i> Produtos
+                </button>
+                <button class="tab-button" data-tab="shipping">
+                    <i class="fas fa-shipping-fast"></i> Envio
+                </button>
+                <button class="tab-button" data-tab="timeline">
+                    <i class="fas fa-history"></i> Timeline
+                </button>
+                <button class="tab-button" data-tab="raw">
+                    <i class="fas fa-code"></i> Dados Brutos
+                </button>
+            </div>
+            
+            <!-- Conteúdo das abas -->
+            <div class="tab-content">
+                <div id="tab-overview" class="tab-pane active">
+                    <div class="order-summary">
+                        <div class="card order-header">
+                            <div class="order-status">
+                                <span id="orderStatusBadge" class="status-badge">Processando</span>
+                            </div>
+                            <h2 id="orderNumber">Pedido #0000</h2>
+                            <div class="order-meta">
+                                <div><i class="fas fa-calendar"></i> <span id="orderDate">00/00/0000</span></div>
+                                <div><i class="fas fa-user"></i> <span id="customerName">Cliente</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-grid">
+                            <div class="summary-card">
+                                <h4><i class="fas fa-tags"></i> Valor Total</h4>
+                                <div class="summary-value" id="orderValue">R$ 0,00</div>
+                            </div>
+                            <div class="summary-card">
+                                <h4><i class="fas fa-boxes"></i> Produtos</h4>
+                                <div class="summary-value" id="productsCount">0</div>
+                            </div>
+                            <div class="summary-card">
+                                <h4><i class="fas fa-truck"></i> Frete</h4>
+                                <div class="summary-value" id="shippingValue">R$ 0,00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="tab-products" class="tab-pane">
+                    <div id="productsList" class="products-grid">
+                        <!-- Produtos serão inseridos aqui dinamicamente -->
+                    </div>
+                </div>
+                
+                <div id="tab-shipping" class="tab-pane">
+                    <div class="shipping-info-container">
+                        <div class="shipping-address" id="shippingAddress">
+                            <!-- Informações de endereço serão inseridas aqui -->
+                        </div>
+                        <div class="shipping-map">
+                            <div id="addressMap">
+                                <img src="https://via.placeholder.com/500x300/f5f5f5/999999?text=Mapa+do+Endereço" 
+                                     alt="Mapa do endereço" id="addressMapImg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="tab-timeline" class="tab-pane">
+                    <div class="order-timeline" id="orderTimeline">
+                        <!-- Timeline será inserida aqui -->
+                    </div>
+                </div>
+                
+                <div id="tab-raw" class="tab-pane">
+                    <div class="raw-data">
+                        <div class="code-header">
+                            <h4>Payload do Webhook</h4>
+                            <button id="copyPayloadBtn" class="btn-icon" title="Copiar">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <pre id="webhookPayload" class="json-view">
+                            <!-- JSON formatado será inserido aqui -->
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Barra de ações -->
+            <div class="modal-actions">
+                <button id="changeStatusBtn" class="btn btn-primary">
+                    <i class="fas fa-exchange-alt"></i> Alterar Status
+                </button>
+                <button id="viewDocumentsBtn" class="btn btn-secondary">
+                    <i class="fas fa-file-pdf"></i> Documentos
+                </button>
+                <button id="printOrderBtn" class="btn btn-outline">
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
