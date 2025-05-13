@@ -13,45 +13,12 @@
 </head>
 <body class="dark-theme">
     <!-- Barra de Navegação Superior -->
-    <header class="main-header">
-        <div class="container-fluid">
-            <nav class="navbar">
-                <div class="logo-container">
-                    <i class="fa-solid fa-circle-exclamation logo-icon"></i>
-                    <div class="logo">Montink</div>
-                    {% comment %} <span class="access-badge">Acesse agora</span> {% endcomment %}
-                </div>
-                
-                <div class="nav-sections">
-                    <a href="#" class="nav-section">Cadastros <i class="fas fa-chevron-down"></i></a>
-                    <a href="#" class="nav-section">Vendas <i class="fas fa-chevron-down"></i></a>
-                    <a href="#" class="nav-section">Estoque <i class="fas fa-chevron-down"></i></a>
-                    <a href="#" class="nav-section">Financeiro <i class="fas fa-chevron-down"></i></a>
-                </div>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/formularios/header.css' %}">
+ <!-- Header -->
+            {% include "components/header.html" %}
 
-                <div class="nav-actions">
-                    {% comment %} <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Pesquisar">
-                    </div> {% endcomment %}
-                    {% comment %} <div class="action-icons">
-                        <a href="#" class="action-icon"><i class="fas fa-th"></i></a>
-                        <a href="#" class="action-icon notification-icon"><i class="fas fa-bell"></i><span class="badge">1</span></a>
-                        <a href="#" class="action-icon"><i class="fas fa-cog"></i></a>
-                    </div> {% endcomment %}
-                </div>
-            </nav>
-        </div>
-    </header>
 
-    <!-- Breadcrumb e Título da Seção -->
-    <div class="breadcrumb-section">
-        <div class="container-fluid">
-            <div class="breadcrumb">
-                <h2>Pedidos Montink</h2>
-            </div>
-        </div>
-    </div>
 
     <!-- Área Principal de Conteúdo -->
     <section class="main-content">

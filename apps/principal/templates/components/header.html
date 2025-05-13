@@ -20,12 +20,11 @@
             <button id="theme-toggle-btn" class="icon-button">
                 <i class="fas fa-moon"></i>
             </button>
-        </div>
-        <div class="user-profile">
-            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Usuário">
+        </div>        <div class="user-profile">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="Usuário">
             <div class="user-info">
-                <span class="user-name">João Silva</span>
-                <span class="user-role">Administrador</span>
+                <span class="user-name">{{ request.user.first_name }} {{ request.user.last_name|default:request.user.username }}</span>
+                <span class="user-role">{{ request.user.get_tipo_formulario_display|default:"Usuário" }}</span>
             </div>
         </div>
     </div>
