@@ -40,7 +40,7 @@
 }
   
 body {
-    background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+    background: #121212;
     color: var(--gray-800);
     line-height: 1.5;
     min-height: 100vh;

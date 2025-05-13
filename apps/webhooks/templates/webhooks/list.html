@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notas Fiscais de Saída - PDFlow</title>
+    <title>Montink - PDFlow</title>
     <link rel="stylesheet" href="{% static 'css/home/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/formularios/forms.css' %}">
     <link rel="stylesheet" href="{% static 'css/webhooks/main.css' %}">
@@ -27,7 +27,7 @@
             <div class="action-toolbar">
                 <!-- Campo de busca específico -->
                 <div class="search-bar">
-                    <input type="text" placeholder="Pesquisar por nome, CPF/CNPJ ou n° da nota" class="search-input">
+                    <input type="text" placeholder="Pesquisar por nome..." class="search-input">
                     <i class="fas fa-search"></i>
                 </div>
                 
@@ -49,10 +49,10 @@
                     </button>
                 </div>
                 
-                <!-- Botão de adicionar nova nota fiscal -->
+                <!-- Botão de adicionar nova -->
                 <div class="add-button-container">
                     <button class="add-button">
-                        <i class="fas fa-plus"></i> Incluir nota fiscal
+                        <i class="fas fa-plus"></i> Incluir 
                     </button>
                 </div>
             </div>
@@ -166,7 +166,7 @@
                         </div>
                     </div>
 
-                    <!-- Tabela de Notas Fiscais -->
+                    <!-- Tabela de Montink -->
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
@@ -243,7 +243,7 @@
                                 {% endif %}
                                 {% empty %}
                                 <tr>
-                                    <td colspan="8" class="no-data">Nenhuma nota fiscal encontrada</td>
+                                    <td colspan="8" class="no-data">Nenhum pedido encontrado</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -282,7 +282,7 @@
                             </button>
                             <button class="action-card-btn">
                                 <i class="fas fa-envelope"></i>
-                                <span>Enviar notas pendentes</span>
+                                <span>Enviar pendentes</span>
                             </button>
                         </div>
                     </div>
@@ -333,7 +333,7 @@
     <div id="detailsModal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Detalhes da Nota Fiscal</h3>
+                <h3 class="modal-title">Detalhes</h3>
                 <button type="button" class="modal-close" id="closeModal">
                     <i class="fas fa-times"></i>
                 </button>
