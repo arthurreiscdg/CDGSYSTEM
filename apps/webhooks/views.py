@@ -624,12 +624,16 @@ def webhook_detail_api(request, webhook_id):
     Usado para carregar informações detalhadas no modal.
     """
     try:
+        logger.info(f"Buscando detalhes para o webhook ID: {webhook_id}")
         webhook = Webhook.objects.get(pk=webhook_id)
         serializer = WebhookDetailSerializer(webhook)
+        logger.info(f"Webhook {webhook_id} serializado com sucesso")
         return Response(serializer.data)
     except Webhook.DoesNotExist:
+        logger.warning(f"Webhook ID {webhook_id} não encontrado")
         return Response({'error': 'Webhook não encontrado'}, status=404)
     except Exception as e:
+        logger.error(f"Erro ao processar webhook ID {webhook_id}: {str(e)}", exc_info=True)
         return Response({'error': str(e)}, status=500)
 
 
