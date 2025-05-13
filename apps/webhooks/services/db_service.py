@@ -349,23 +349,21 @@ class WebhookDBService:
             
             # Determinar URL de destino
             url_final = endpoint_config.url if endpoint_config else url_destino
+              # Preparar payload no formato específico solicitado
+            data_atual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             
-            # Preparar payload
+            # Buscar o status_id do status pelo nome
+            status_obj = WebhookDBService.obter_status_por_nome(status_nome)
+            status_id = status_obj.id if status_obj else 0
+            
             payload = {
-                "numero_pedido": pedido.numero_pedido,
-                "nome_cliente": pedido.nome_cliente,
-                "email_cliente": pedido.email_cliente,
-                "valor_pedido": float(pedido.valor_pedido),
-                "status": status_nome,
-                "timestamp": datetime.now().isoformat(),
-                "quantidade_produtos": pedido.produtos.count()
+                "data": data_atual,
+                "json": {
+                    "casa_grafica_id": str(pedido.numero_pedido),
+                    "status_id": status_id,
+                    "status": status_nome
+                }
             }
-            
-            # Adicionar informações adicionais, se houver
-            if informacoes_adicionais:
-                for chave, valor in informacoes_adicionais.items():
-                    if chave not in payload:
-                        payload[chave] = valor
             
             # Converter para JSON
             payload_json = json.dumps(payload)
