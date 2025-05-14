@@ -1,5 +1,7 @@
 <div class="main-table-container">
-    <!-- Status da seleção e ações em lote -->
+    <!--                    <td>{{ pedido.numero_pedido|stringformat:"06d" }}</td>
+                    <td>{{ pedido.produtos.first.sku|default:"Sem SKU" }}</td>
+                    <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>atus da seleção e ações em lote -->
     <div class="batch-actions" id="selected-actions">
         <div class="selected-info">
             <span id="items-selected">0</span> itens selecionados
@@ -23,9 +25,9 @@
                         </div>
                     </th>
                     <th>Número</th>
-                    <th>Nome</th>
+                    <th>SKU</th>
                     <th>Data emissão</th>
-                    <th>Data de saída</th>
+                    <th>Mé. envio</th>
                     <th>Situação</th>
                     <th>Valor (R$)</th>
                     <th width="80"></th>
@@ -43,9 +45,9 @@
                         </div>
                     </td>
                     <td>{{ pedido.numero_pedido|stringformat:"06d" }}</td>
-                    <td>{{ pedido.nome_cliente }}</td>
+                    <td>{{ pedido.produtos.first.sku }}</td>
                     <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
-                    <td>{{ pedido.data_saida|default:webhook.recebido_em|date:"d/m/Y" }}</td>
+                    <td>{{ pedido.metodo_envio }}</td>
                     <td>
                         <span class="status-badge {{ pedido.status.cor_css|default:'status-processing' }}" data-status="{{ pedido.status.nome }}">
                             {{ pedido.status.nome }}

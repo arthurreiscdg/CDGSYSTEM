@@ -169,10 +169,11 @@
 }
 
 /* Produtos */
-.products-grid {
+.products-grid, #productsList {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
 }
 
 .product-card {
@@ -194,7 +195,7 @@
 
 .product-image {
     width: 100%;
-    height: 180px;
+    height: 150px; /* Reduzido para melhor visualização lado a lado */
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -237,7 +238,41 @@
 .product-actions {
     margin-top: 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+/* Estilos para exibição das imagens frente e verso nos produtos */
+.product-images-container {
+    display: flex;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.product-image-wrapper {
+    flex: 1;
+    padding: 0 5px;
+}
+
+.product-image-wrapper:first-child {
+    padding-left: 0;
+}
+
+.product-image-wrapper:last-child {
+    padding-right: 0;
+}
+
+.product-image-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-weight: 500;
+    font-size: 0.7rem;
 }
 
 /* Endereço */

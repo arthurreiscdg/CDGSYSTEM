@@ -113,7 +113,7 @@ class WebhookDetailSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Webhook
-        fields = ['id', 'evento', 'verificado', 'recebido_em', 'pedido_info']
+        fields = ['id', 'evento', 'verificado', 'recebido_em', 'payload', 'pedido_info']
     
     def get_pedido_info(self, obj):
         pedido = obj.pedidos.first()
