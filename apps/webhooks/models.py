@@ -154,6 +154,10 @@ class WebhookEndpointConfig(models.Model):
     url = models.URLField(help_text="URL para onde os webhooks serão enviados")
     ativo = models.BooleanField(default=True, help_text="Se desativado, webhooks não serão enviados para este endpoint")
     auto_enviar = models.BooleanField(default=True, help_text="Se ativado, webhooks serão enviados automaticamente")
+    access_token = models.CharField(
+        max_length=255, blank=True, null=True, 
+        help_text="Token de autenticação opcional para incluir na URL"
+    )
     token_autenticacao = models.CharField(
         max_length=255, blank=True, null=True, 
         help_text="Token de autenticação opcional para incluir nos cabeçalhos de requisição"

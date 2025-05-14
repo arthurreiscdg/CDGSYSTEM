@@ -90,7 +90,7 @@ class WebhookEndpointConfigAdmin(admin.ModelAdmin):
             'fields': ('nome', 'url', 'ativo', 'auto_enviar')
         }),
         ('Autenticação & Headers', {
-            'fields': ('token_autenticacao', 'headers_adicionais'),
+            'fields': ('token_autenticacao', 'access_token', 'headers_adicionais'),
             'classes': ('collapse',)
         }),
         ('Datas', {
