@@ -1,11 +1,22 @@
+/* Estilo no body ou outro container pai */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Altura total da tela */
+    margin: 0; /* Remove espaçamento padrão */
+    background-color: #1e1e1e; /* Opcional: fundo escuro para contraste */
+}
+
+/* Estilo do container de login */
 .login-container {
     max-width: 500px;
-    margin: 50px auto;
     padding: 2rem;
     background-color: #2A2A2D;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(255, 254, 254, 0.151);
 }
+
 
 .login-header {
     text-align: center;
@@ -13,7 +24,7 @@
 }
 
 .login-header h1 {
-    color: #2563eb;
+    color: #ffffff;
     font-size: 2rem;
     margin-bottom: 0.5rem;
 }
@@ -43,7 +54,7 @@
 
 .form-group input:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 

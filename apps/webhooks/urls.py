@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from . import views
+from . import views as views
 
 app_name = 'webhooks'
 
@@ -12,17 +12,17 @@ router.register(r'status-enviados', views.WebhookStatusEnviadoViewSet, basename=
 
 urlpatterns = [
     # Endpoint de recebimento de webhook
-    path('pedido/', views.receber, name='receber_webhook'),
+    path('pedido/', views.WebhookReceiverView.as_view(), name='receber_webhook'),
     
     # Página de listagem de webhooks
-    path('list/', views.webhook_list, name='webhook_list'),
+    path('list/', views.WebhookListView.as_view(), name='webhook_list'),
     
     # API REST
     path('api/', include(router.urls)),
-    path('api/pedidos/<int:numero_pedido>/', views.buscar_pedido, name='buscar_pedido'),
-    path('api/pedidos/<int:numero_pedido>/webhooks/', views.listar_webhooks_enviados_por_pedido, name='webhooks_enviados_pedido'),
-    path('api/enviar-status/', views.enviar_webhook_status, name='enviar_status'),
-    path('api/webhook/<int:webhook_id>/', views.webhook_detail_api, name='webhook_detail_api'),
-    path('api/update-status/', views.update_status, name='update_status'),
-    path('api/status-pedido/', views.status_pedido_list, name='status_pedido_list'),
+    path('api/pedidos/<int:numero_pedido>/', views.PedidoBuscaAPIView.as_view(), name='buscar_pedido'),
+    path('api/pedidos/<int:numero_pedido>/webhooks/', views.WebhooksEnviadosPorPedidoAPIView.as_view(), name='webhooks_enviados_pedido'),
+    path('api/enviar-status/', views.WebhookStatusEnviarAPIView.as_view(), name='enviar_status'),
+    path('api/webhook/<int:webhook_id>/', views.WebhookDetailAPIView.as_view(), name='webhook_detail_api'),
+    path('api/update-status/', views.UpdateStatusAPIView.as_view(), name='update_status'),
+    path('api/status-pedido/', views.StatusPedidoListAPIView.as_view(), name='status_pedido_list'),
 ]
