@@ -96,5 +96,5 @@ class WebhookEndpointConfigAdmin(admin.ModelAdmin):
         ('Datas', {
             'fields': ('criado_em', 'atualizado_em'),
             'classes': ('collapse',)
-        }),
+        })
     )

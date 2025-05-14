@@ -746,15 +746,27 @@ class UpdateStatusAPIView(APIView):
                                 'numero_pedido': pedido.numero_pedido,
                                 'status_anterior': status_anterior.nome if status_anterior else "Sem status"
                             }
-                            
-                            # Informações adicionais para o webhook
+                              # Informações adicionais para o webhook
                             info_adicionais = {
                                 'data_alteracao': data_alteracao,
                                 'status_anterior': status_anterior.nome if status_anterior else "Sem status",
                                 'status_anterior_id': status_anterior.id if status_anterior else None,
                                 'alterado_por': request.user.username,
                                 'cliente': pedido.nome_cliente,
-                                'documento_cliente': pedido.documento_cliente
+                                'documento_cliente': pedido.documento_cliente,
+                                'data_criacao': pedido.criado_em.strftime('%Y-%m-%d %H:%M:%S'),
+                                'data_atualizacao': pedido.atualizado_em.strftime('%Y-%m-%d %H:%M:%S'),
+                                'produtos': [
+                                    {
+                                        'nome': produto.nome,
+                                        'sku': produto.sku,
+                                        'quantidade': produto.quantidade
+                                    } for produto in pedido.produtos.all()[:5]  # Limitado a 5 produtos para evitar payloads muito grandes
+                                ],
+                                'endereco': {
+                                    'cidade': pedido.endereco_envio.cidade,
+                                    'uf': pedido.endereco_envio.uf
+                                }
                             }
                             
                             # Enviar webhooks para todos os endpoints ativos

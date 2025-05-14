@@ -346,24 +346,37 @@ class WebhookDBService:
             if not pedido:
                 logger.error(f"Pedido #{numero_pedido} não encontrado para envio de webhook")
                 return None
-            
-            # Determinar URL de destino
+              # Determinar URL de destino
             url_final = endpoint_config.url if endpoint_config else url_destino
-              # Preparar payload no formato específico solicitado
+            
+            # Formatar data atual no formato exato solicitado
             data_atual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             
             # Buscar o status_id do status pelo nome
             status_obj = WebhookDBService.obter_status_por_nome(status_nome)
             status_id = status_obj.id if status_obj else 0
+              # Determinar qual access_token usar
+            # Prioridade: 1. informacoes_adicionais, 2. endpoint_config.access_token, 3. valor padrão
+            access_token_value = "error"
             
+            # Usar token do endpoint se disponível
+            if endpoint_config and endpoint_config.access_token:
+                access_token_value = endpoint_config.access_token
+            
+            # Criar payload exatamente no formato solicitado
             payload = {
                 "data": data_atual,
+                "access_token": access_token_value,
                 "json": {
                     "casa_grafica_id": str(pedido.numero_pedido),
                     "status_id": status_id,
                     "status": status_nome
                 }
             }
+            
+            # Atualizar access_token se fornecido nas informações adicionais (maior prioridade)
+            if informacoes_adicionais and 'access_token' in informacoes_adicionais:
+                payload['access_token'] = informacoes_adicionais['access_token']
             
             # Converter para JSON
             payload_json = json.dumps(payload)
