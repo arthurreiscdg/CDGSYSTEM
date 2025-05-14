@@ -7,7 +7,7 @@
     <div class="filter-content">
         <!-- Situação -->
         <div class="filter-group">
-            <label>Situação</label>
+            <label>Status do Pedido</label>
             <div class="select-container">
                 <select class="form-select" name="status" data-filter="status">
                     <option value="">Selecione uma opção...</option>
@@ -19,73 +19,31 @@
             </div>
         </div>
 
-        <!-- Produto -->
+        <!-- SKU -->
         <div class="filter-group">
-            <label>Produto</label>
+            <label>Sku</label>
             <div class="select-container">
-                <select class="form-select" name="produto" data-filter="produto">
-                    <option value="">Selecione um produto...</option>
-                </select>
-                <i class="fas fa-chevron-down"></i>
+                <input type="text" class="form-control" name="sku" data-filter="sku" placeholder="Informe o SKU">
             </div>
         </div>
 
-        <!-- Vendedor -->
+        <!-- Data -->
         <div class="filter-group">
             <label>Vendedor</label>
             <div class="select-container">
-                <select class="form-select" name="vendedor" data-filter="vendedor">
-                    <option value="">Selecione um vendedor...</option>
-                </select>
-                <i class="fas fa-chevron-down"></i>
+                <input type="Date" class="form-control" name="data_emissao" data-filter="data_emissao" placeholder="Informe a data de emissão">
             </div>
         </div>
 
-        <!-- Rastreamento -->
+        <!-- num_pedido -->
         <div class="filter-group">
-            <label>Rastreamento</label>
+            <label>Numero Pedido</label>
             <div class="select-container">
-                <select class="form-select" name="rastreamento" data-filter="rastreamento">
-                    <option value="">Todos</option>
-                </select>
-                <i class="fas fa-chevron-down"></i>
+                <input type="number" class="form-control" name="num_pedido" data-filter="num_pedido" placeholder="Informe o numero do pedido">
             </div>
         </div>
 
-        <!-- Código de rastreio -->
-        <div class="filter-group">
-            <label>Código de rastreio</label>
-            <input type="text" class="form-control" name="cod_rastreio" data-filter="cod_rastreio">
-        </div>
-
-        <!-- Nº do pedido na loja -->
-        <div class="filter-group">
-            <label>Nº do pedido na loja</label>
-            <input type="text" class="form-control" name="num_pedido" data-filter="num_pedido">
-        </div>
-
-        <!-- UF -->
-        <div class="filter-group">
-            <label>UF</label>
-            <div class="select-container">
-                <select class="form-select" name="uf" data-filter="uf">
-                    <option value="">Selecione uma UF...</option>
-                    <option value="SP">SP</option>
-                    <option value="RJ">RJ</option>
-                    <option value="MG">MG</option>
-                </select>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-        </div>
-
-        <!-- Busca customizada -->
-        <div class="filter-group custom-search">
-            <label>Busca customizada</label>
-            <div class="custom-search-input">
-                <input type="text" class="form-control" name="busca_customizada" data-filter="busca_customizada" placeholder="Adicionar filtros">
-                <button class="add-filter-btn"><i class="fas fa-plus"></i></button>
-            </div>
-        </div>
+        
 
         <!-- Botão Filtrar -->
         <button class="filter-btn">Filtrar</button>

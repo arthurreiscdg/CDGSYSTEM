@@ -29,7 +29,7 @@
                     <th>Data emissão</th>
                     <th>Mé. envio</th>
                     <th>Situação</th>
-                    <th>Valor (R$)</th>
+                    {% comment %} <th>Valor (R$)</th> {% endcomment %}
                     <th width="80"></th>
                 </tr>
             </thead>
@@ -53,7 +53,7 @@
                             {{ pedido.status.nome }}
                         </span>
                     </td>
-                    <td>{{ pedido.valor_pedido|floatformat:2 }}</td>
+                    {% comment %} <td>{{ pedido.valor_pedido|floatformat:2 }}</td> {% endcomment %}
                     <td class="actions-cell">
                         <div class="document-icons">
                             <span class="doc-icon sent" title="Enviado"><span>S</span></span>
