@@ -6,8 +6,8 @@ var WebhookApp = WebhookApp || {};
 
 WebhookApp.Filters = (function() {
     'use strict';
-    
-    // Elementos DOM
+      // Elementos DOM
+    let filterForm = null;
     let filterBtn = null;
     let clearFilterBtn = null;
     let filterSelects = [];
@@ -17,6 +17,7 @@ WebhookApp.Filters = (function() {
     // Inicializa o módulo
     const init = function() {
         // Obter referências aos elementos DOM
+        filterForm = document.getElementById('filter-form');
         filterBtn = document.querySelector('.filter-btn');
         clearFilterBtn = document.querySelector('.clear-filter');
         filterSelects = document.querySelectorAll('.filter-panel .form-select');
@@ -32,12 +33,12 @@ WebhookApp.Filters = (function() {
         // Adicionar estilos para os filtros personalizados
         addFilterStyles();
     };
-    
-    // Inicializa os event listeners
+      // Inicializa os event listeners
     const initEventListeners = function() {
-        // Event listener para o botão de filtro
-        if (filterBtn) {
-            filterBtn.addEventListener('click', function() {
+        // Event listener para o formulário de filtro
+        if (filterForm) {
+            filterForm.addEventListener('submit', function(e) {
+                e.preventDefault();  // Impedir o envio padrão do formulário
                 applyFilters();
             });
         }
@@ -53,6 +54,7 @@ WebhookApp.Filters = (function() {
         filterInputs.forEach(input => {
             input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
+                    e.preventDefault();  // Impedir o envio padrão do formulário
                     applyFilters();
                 }
             });
@@ -65,10 +67,12 @@ WebhookApp.Filters = (function() {
             });
         }
     };
-    
-    // Aplica os filtros selecionados
+      // Aplica os filtros selecionados
     const applyFilters = function() {
+        console.log("applyFilters() chamado");
+        
         const filters = getFilterValues();
+        console.log("Filtros obtidos:", filters);
         
         // Verificar se há algum filtro a ser aplicado
         if (Object.keys(filters).length === 0) {
@@ -84,31 +88,43 @@ WebhookApp.Filters = (function() {
         
         // Adicionar cada filtro à query string
         for (const [key, value] of Object.entries(filters)) {
+            console.log(`Adicionando filtro: ${key}=${value}`);
             queryParams.append(key, value);
         }
         
+        const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
+        console.log("Redirecionando para:", newUrl);
+        
         // Redirecionar para a URL com os filtros
-        window.location.href = `${window.location.pathname}?${queryParams.toString()}`;
+        window.location.href = newUrl;
     };
-    
-    // Limpa todos os filtros
+      // Limpa todos os filtros
     const clearFilters = function() {
+        console.log("Limpando todos os filtros...");
+        
         // Limpar os campos de filtro
         filterSelects.forEach(select => {
             select.selectedIndex = 0;
+            console.log(`Limpando select: ${select.name || select.getAttribute('data-filter') || select.id}`);
         });
         
         filterInputs.forEach(input => {
             input.value = '';
+            console.log(`Limpando input: ${input.name || input.getAttribute('data-filter') || input.id}`);
         });
         
         // Remover filtros personalizados
         const filterTagsContainer = document.querySelector('.custom-filter-tags');
         if (filterTagsContainer) {
             filterTagsContainer.innerHTML = '';
+            console.log("Limpando filtros customizados");
         }
         
+        // Mostrar toast de carregamento
+        WebhookApp.Notifications.showToast('Removendo filtros...', 'info', 2000);
+        
         // Redirecionar para a URL sem parâmetros
+        console.log("Redirecionando para:", window.location.pathname);
         window.location.href = window.location.pathname;
     };
     
@@ -150,17 +166,19 @@ WebhookApp.Filters = (function() {
                 });
             }
         }
-    };
-    
-    // Coleta os valores dos filtros do formulário
+    };    // Coleta os valores dos filtros do formulário
     const getFilterValues = function() {
         const filters = {};
+        console.log("Coletando valores dos filtros...");
+        let hasFilters = false;
         
         // Coletar valores dos selects
         filterSelects.forEach(select => {
             const name = select.name || select.getAttribute('data-filter') || select.id;
             if (name && select.value) {
+                console.log(`Select ${name} = ${select.value}`);
                 filters[name] = select.value;
+                hasFilters = true;
             }
         });
         
@@ -168,7 +186,9 @@ WebhookApp.Filters = (function() {
         filterInputs.forEach(input => {
             const name = input.name || input.getAttribute('data-filter') || input.id;
             if (name && input.value.trim()) {
+                console.log(`Input ${name} = ${input.value.trim()}`);
                 filters[name] = input.value.trim();
+                hasFilters = true;
             }
         });
         
@@ -178,9 +198,12 @@ WebhookApp.Filters = (function() {
             const customFilters = Array.from(customFilterTags).map(tag => tag.textContent.trim());
             if (customFilters.length > 0) {
                 filters['custom'] = customFilters.join(',');
+                console.log(`Custom filters: ${filters['custom']}`);
+                hasFilters = true;
             }
         }
         
+        console.log("Filtros coletados:", filters, "Há filtros:", hasFilters);
         return filters;
     };
     

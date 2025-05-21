@@ -1,10 +1,11 @@
 <aside class="filter-panel">
     <div class="filter-header">
         <h4><i class="fas fa-filter"></i> Filtrar</h4>
-        <button class="clear-filter"><i class="fas fa-times"></i></button>
+        <button type="button" class="clear-filter"><i class="fas fa-times"></i></button>
     </div>
 
     <div class="filter-content">
+        <form id="filter-form" method="GET" action="">
         <!-- Situação -->
         <div class="filter-group">
             <label>Status do Pedido</label>
@@ -17,35 +18,39 @@
                 </select>
                 <i class="fas fa-chevron-down"></i>
             </div>
-        </div>
-
-        <!-- SKU -->
+        </div>        <!-- SKU -->
         <div class="filter-group">
-            <label>Sku</label>
+            <label>SKU</label>
             <div class="select-container">
-                <input type="text" class="form-control" name="sku" data-filter="sku" placeholder="Informe o SKU">
+                <input type="text" class="form-control" name="sku" data-filter="sku" value="{{ request.GET.sku|default:'' }}" placeholder="Informe o SKU">
             </div>
         </div>
-
-        <!-- Data -->
-        <div class="filter-group">
-            <label>Vendedor</label>
-            <div class="select-container">
-                <input type="Date" class="form-control" name="data_emissao" data-filter="data_emissao" placeholder="Informe a data de emissão">
-            </div>
-        </div>
-
-        <!-- num_pedido -->
-        <div class="filter-group">
-            <label>Numero Pedido</label>
-            <div class="select-container">
-                <input type="number" class="form-control" name="num_pedido" data-filter="num_pedido" placeholder="Informe o numero do pedido">
-            </div>
-        </div>
-
         
+        <!-- Data de Emissão -->
+        <div class="filter-group">
+            <label>Data de Emissão</label>
+            <div class="select-container">
+                <input type="date" class="form-control" name="data_emissao" data-filter="data_emissao" value="{{ request.GET.data_emissao|default:'' }}">
+            </div>
+        </div>
+
+        <!-- Número do Pedido -->
+        <div class="filter-group">
+            <label>Número do Pedido</label>
+            <div class="select-container">
+                <input type="number" class="form-control" name="num_pedido" data-filter="num_pedido" value="{{ request.GET.num_pedido|default:'' }}" placeholder="Informe o número do pedido">
+            </div>
+        </div>
+          <!-- Nome do Cliente -->
+        <div class="filter-group">
+            <label>Nome do Cliente</label>
+            <div class="select-container">
+                <input type="text" class="form-control" name="nome_cliente" data-filter="nome_cliente" value="{{ request.GET.nome_cliente|default:'' }}" placeholder="Nome do cliente">
+            </div>
+        </div>
 
         <!-- Botão Filtrar -->
-        <button class="filter-btn">Filtrar</button>
+        <button type="submit" class="filter-btn">Filtrar</button>
+        </form>
     </div>
 </aside>

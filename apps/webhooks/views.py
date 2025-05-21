@@ -200,21 +200,51 @@ class WebhookListView(View):
             return redirect('/home')  # Redirecionamento para a URL direta ao invés de usar namespace
         
         # Iniciar queryset de webhooks - sem usar select_related para pedido
-        queryset = Webhook.objects.all().prefetch_related('pedidos').order_by('-recebido_em')
-          # Aplicar filtros se fornecidos
+        queryset = Webhook.objects.all().prefetch_related('pedidos').order_by('-recebido_em')        # Aplicar filtros se fornecidos
         status_filter = request.GET.get('status')
         search_query = request.GET.get('q')
+        sku_filter = request.GET.get('sku')
+        data_emissao_filter = request.GET.get('data_emissao')
+        num_pedido_filter = request.GET.get('num_pedido')
+        nome_cliente_filter = request.GET.get('nome_cliente')
         
+        # Filtrar por status
         if status_filter:
             # Filtramos baseado nos pedidos relacionados
             queryset = queryset.filter(pedidos__status__id=status_filter)
         
+        # Filtrar por texto de busca geral
         if search_query:
             # Buscar por número do pedido ou evento
             queryset = queryset.filter(
                 Q(pedidos__numero_pedido__icontains=search_query) | 
                 Q(evento__icontains=search_query)
             )
+            
+        # Filtrar por SKU
+        if sku_filter:
+            queryset = queryset.filter(pedidos__produtos__sku__icontains=sku_filter)
+            
+        # Filtrar por data de emissão
+        if data_emissao_filter:
+            try:
+                from datetime import datetime
+                data = datetime.strptime(data_emissao_filter, '%Y-%m-%d').date()
+                queryset = queryset.filter(pedidos__criado_em__date=data)
+            except ValueError:
+                # Se a data não for válida, ignorar este filtro
+                logger.warning(f"Formato de data inválido: {data_emissao_filter}")
+                
+        # Filtrar por número de pedido
+        if num_pedido_filter:
+            queryset = queryset.filter(pedidos__numero_pedido=num_pedido_filter)
+            
+        # Filtrar por nome do cliente
+        if nome_cliente_filter:
+            queryset = queryset.filter(pedidos__nome_cliente__icontains=nome_cliente_filter)
+            
+        # Remover duplicatas que podem surgir devido a junções
+        queryset = queryset.distinct()
         
         # Limitar a 100 resultados para performance
         webhooks = queryset[:100]
@@ -224,8 +254,7 @@ class WebhookListView(View):
         total_pedidos = Pedido.objects.count()
           # Buscar todos os status de pedido ativos
         status_pedidos = StatusPedido.objects.filter(ativo=True).order_by('ordem')
-        
-        # Contexto para o template
+          # Contexto para o template
         context = {
             'webhooks': webhooks,
             'total_webhooks': total_webhooks,
@@ -233,6 +262,11 @@ class WebhookListView(View):
             'status_filter': status_filter,
             'search_query': search_query,
             'status_pedidos': status_pedidos,
+            'sku_filter': sku_filter,
+            'data_emissao_filter': data_emissao_filter,
+            'num_pedido_filter': num_pedido_filter,
+            'nome_cliente_filter': nome_cliente_filter,
+            'request': request,  # Para acessar request.GET no template
         }
         
         # Renderizar o template com o contexto
@@ -388,7 +422,8 @@ class PedidoViewSet(viewsets.ReadOnlyModelViewSet):
         """
         Retorna o queryset base para o ViewSet, aplicando filtros conforme parâmetros.
         
-        Permite filtrar por número de pedido ou nome do cliente (busca parcial).
+        Permite filtrar por número de pedido, nome do cliente, SKU dos produtos,
+        data de emissão e status do pedido.
         
         Returns:
             QuerySet: Queryset filtrado e ordenado por data de criação decrescente
@@ -396,7 +431,7 @@ class PedidoViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = Pedido.objects.all().order_by('-criado_em')
         
         # Filtrar por número de pedido
-        numero_pedido = self.request.query_params.get('numero_pedido')
+        numero_pedido = self.request.query_params.get('num_pedido')
         if numero_pedido:
             queryset = queryset.filter(numero_pedido=numero_pedido)
             
@@ -404,6 +439,27 @@ class PedidoViewSet(viewsets.ReadOnlyModelViewSet):
         nome_cliente = self.request.query_params.get('nome_cliente')
         if nome_cliente:
             queryset = queryset.filter(nome_cliente__icontains=nome_cliente)
+        
+        # Filtrar por SKU (busca nos produtos relacionados)
+        sku = self.request.query_params.get('sku')
+        if sku:
+            queryset = queryset.filter(produtos__sku__icontains=sku).distinct()
+        
+        # Filtrar por data de emissão (criado_em)
+        data_emissao = self.request.query_params.get('data_emissao')
+        if data_emissao:
+            try:
+                from datetime import datetime
+                data = datetime.strptime(data_emissao, '%Y-%m-%d').date()
+                queryset = queryset.filter(criado_em__date=data)
+            except ValueError:
+                # Se a data não for válida, ignorar este filtro
+                logger.warning(f"Formato de data inválido: {data_emissao}")
+                
+        # Filtrar por status
+        status = self.request.query_params.get('status')
+        if status:
+            queryset = queryset.filter(status_id=status)
             
         return queryset
 
