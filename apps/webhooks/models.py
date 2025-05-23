@@ -1,5 +1,26 @@
 from django.db import models
 
+class EmailNotificacao(models.Model):
+    """
+    Modelo para armazenar endereços de e-mail para notificação de novos pedidos.
+    
+    Este modelo armazena os endereços de e-mail que receberão notificações
+    automáticas quando novos pedidos forem recebidos via webhook.
+    """
+    email = models.EmailField(unique=True, verbose_name="Endereço de E-mail")
+    nome = models.CharField(max_length=100, verbose_name="Nome do Destinatário")
+    ativo = models.BooleanField(default=True, verbose_name="Ativo")
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.nome} <{self.email}> - {'Ativo' if self.ativo else 'Inativo'}"
+    
+    class Meta:
+        verbose_name = "E-mail de Notificação"
+        verbose_name_plural = "E-mails de Notificação"
+        ordering = ['nome']
+
 class WebhookConfig(models.Model):
     secret_key = models.CharField(max_length=255)
     ativo = models.BooleanField(default=True)

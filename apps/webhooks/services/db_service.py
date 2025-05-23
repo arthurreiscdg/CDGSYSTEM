@@ -8,8 +8,10 @@ from django.conf import settings
 from ..models import (
     WebhookConfig, Webhook, Pedido, EnderecoEnvio, 
     InformacoesAdicionais, Produto, Design, Mockup,
-    WebhookStatusEnviado, StatusPedido, WebhookEndpointConfig
+    WebhookStatusEnviado, StatusPedido, WebhookEndpointConfig,
+    EmailNotificacao
 )
+from .email_service import EmailService
 
 logger = logging.getLogger('apps.webhooks')
 
@@ -239,7 +241,22 @@ class WebhookDBService:
         except Exception as e:
             logger.error(f"Erro ao criar produto: {str(e)}")
             raise
-    
+            
+    @staticmethod
+    def obter_emails_notificacao_ativos():
+        """
+        Busca todos os e-mails de notificação ativos.
+        
+        Returns:
+            list: Lista de endereços de e-mail ativos para notificação
+        """
+        try:
+            emails_notificacao = EmailNotificacao.objects.filter(ativo=True)
+            return [email.email for email in emails_notificacao]
+        except Exception as e:
+            logger.error(f"Erro ao buscar e-mails de notificação: {str(e)}")
+            return []
+
     @staticmethod
     @transaction.atomic
     def criar_pedido_completo(dados, webhook_data):
@@ -270,6 +287,16 @@ class WebhookDBService:
             for produto_dados in dados['produtos']:
                 produto = WebhookDBService.criar_produto(produto_dados, pedido)
                 produtos_criados.append(produto)
+            
+            # Enviar e-mail de notificação
+            try:
+                emails_destinatarios = WebhookDBService.obter_emails_notificacao_ativos()
+                if emails_destinatarios:
+                    EmailService.enviar_notificacao_novo_pedido(pedido, emails_destinatarios)
+                    logger.info(f"E-mail de notificação enviado para {len(emails_destinatarios)} destinatários sobre o pedido #{pedido.numero_pedido}")
+            except Exception as e:
+                # Não interromper o fluxo de criação do pedido se o envio de e-mail falhar
+                logger.error(f"Erro ao enviar e-mail de notificação: {str(e)}")
             
             return pedido, produtos_criados
         except Exception as e:

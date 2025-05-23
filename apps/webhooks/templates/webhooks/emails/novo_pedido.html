@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Pedido Recebido - Montink</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .info-block {
+            margin-bottom: 20px;
+        }
+        .info-block h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .product-table th, .product-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .product-table th {
+            background-color: #f2f2f2;
+        }
+        .link-section {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .link-section h4 {
+            margin: 0 0 8px 0;
+            color: #495057;
+        }
+        .link-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .link-list li {
+            margin: 5px 0;
+        }
+        .link-list a {
+            color: #007bff;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .link-list a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Novo Pedido Recebido - Montink</h1>
+        </div>
+        <div class="content">            <div class="info-block">
+                <h2>Informações do Pedido</h2>
+                <p><strong>Número do pedido:</strong> #{{ pedido.numero_pedido }}</p>
+                <p><strong>Cliente:</strong> {{ pedido.nome_cliente }}</p>
+                <p><strong>Valor total:</strong> R$ {{ pedido.valor_pedido }}</p>
+                <p><strong>Data:</strong> {{ pedido.criado_em|date:"d/m/Y H:i" }}</p>
+                {% if pedido.etiqueta_envio %}
+                <p><strong>Etiqueta de Envio:</strong> <a href="{{ pedido.etiqueta_envio }}" target="_blank">{{ pedido.etiqueta_envio }}</a></p>
+                {% endif %}
+            </div>
+              <div class="info-block">
+                <h2>Produtos</h2>
+                {% for produto in produtos %}
+                <div class="link-section">
+                    <h3>{{ produto.nome }} ({{ produto.sku }}) - Qtd: {{ produto.quantidade }}</h3>
+                    
+                    {% if produto.designs %}
+                    <div class="link-section">
+                        <h4>🎨 Designs:</h4>
+                        <ul class="link-list">
+                            {% if produto.designs.capa_frente %}
+                            <li><strong>Frente:</strong> <a href="{{ produto.designs.capa_frente }}" target="_blank">{{ produto.designs.capa_frente }}</a></li>
+                            {% endif %}
+                            {% if produto.designs.capa_verso %}
+                            <li><strong>Verso:</strong> <a href="{{ produto.designs.capa_verso }}" target="_blank">{{ produto.designs.capa_verso }}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    {% if produto.mockups %}
+                    <div class="link-section">
+                        <h4>🖼️ Mockups:</h4>
+                        <ul class="link-list">
+                            {% if produto.mockups.capa_frente %}
+                            <li><strong>Frente:</strong> <a href="{{ produto.mockups.capa_frente }}" target="_blank">{{ produto.mockups.capa_frente }}</a></li>
+                            {% endif %}
+                            {% if produto.mockups.capa_costas %}
+                            <li><strong>Costas:</strong> <a href="{{ produto.mockups.capa_costas }}" target="_blank">{{ produto.mockups.capa_costas }}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    {% if produto.arquivo_pdf %}
+                    <div class="link-section">
+                        <h4>📄 Arquivo PDF:</h4>
+                        <ul class="link-list">
+                            <li><a href="{{ produto.arquivo_pdf }}" target="_blank">{{ produto.arquivo_pdf }}</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if not forloop.last %}<hr>{% endif %}
+                {% endfor %}
+            </div>
+            
+            <div class="info-block">
+                <h2>Endereço de Envio</h2>
+                <p>{{ pedido.endereco_envio.nome_destinatario }}<br>
+                {{ pedido.endereco_envio.endereco }}, {{ pedido.endereco_envio.numero }}
+                {% if pedido.endereco_envio.complemento %}, {{ pedido.endereco_envio.complemento }}{% endif %}<br>
+                {{ pedido.endereco_envio.bairro }}<br>
+                {{ pedido.endereco_envio.cidade }}/{{ pedido.endereco_envio.uf }}<br>
+                CEP: {{ pedido.endereco_envio.cep }}<br>
+                {{ pedido.endereco_envio.pais }}</p>
+            </div>
+            
+            <a href="{{ url_admin }}" class="btn">Ver Detalhes no Sistema</a>
+        </div>
+        <div class="footer">
+            <p>Esta é uma mensagem automática, por favor não responda.</p>
+            <p>© {% now "Y" %} CDGSYSTEM. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</body>
+</html>

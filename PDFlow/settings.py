@@ -205,6 +205,17 @@ LOGIN_URL = '/usuarios/login/'
 LOGOUT_REDIRECT_URL = '/'
 # O redirecionamento pós-login é feito pelo get_success_url() na CustomLoginView
 
+# Configurações de e-mail
+# Para ambiente de desenvolvimento, forçar uso do SMTP para envios reais
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'arthur.casadagrafica@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'hegnhtftctcwftik')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'arthur.casadagrafica@gmail.com')
+SITE_URL = os.environ.get('SITE_URL', 'http://localhost:8000')
+
 # Configuração para credenciais do Google Drive
 # Garante que a pasta static exista
 os.makedirs(os.path.join(BASE_DIR, 'static'), exist_ok=True)
