@@ -22,7 +22,6 @@ class Usuario(AbstractUser):
     def is_admin_form(self):
         """Verifica se o usuário é um administrador de formulários"""
         return self.tipo_formulario == 'admin' or self.is_superuser
-        
     def get_allowed_forms(self):
         """Retorna os formulários permitidos para este usuário"""
         if self.is_admin_form():
@@ -32,7 +31,7 @@ class Usuario(AbstractUser):
     def get_redirect_url(self):
         """Retorna a URL para redirecionamento pós-login com base no tipo de usuário"""
         if self.is_admin_form():
-            return 'formularios'
+            return 'principal_home'  # Redirecionar administradores para a página home
         
         # Mapeamento do tipo de formulário para a URL correspondente
         form_urls = {
