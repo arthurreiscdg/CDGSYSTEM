@@ -1,3 +1,5 @@
+{% load webhook_tags %}
+
 <div class="main-table-container">
     <!--                    <td>{{ pedido.numero_pedido|stringformat:"06d" }}</td>
                     <td>{{ pedido.produtos.first.sku|default:"Sem SKU" }}</td>
@@ -32,82 +34,57 @@
                     {% comment %} <th>Valor (R$)</th> {% endcomment %}
                     <th width="80"></th>
                 </tr>
-            </thead>
-            <tbody>
-                {% for webhook in webhooks %}
-                {% if webhook.pedidos.all %}
-                {% with pedido=webhook.pedidos.first %}
-                <tr>
-                    <td>
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="webhook-select checkbox" id="item-{{ webhook.id }}" value="{{ webhook.id }}">
-                            <label for="item-{{ webhook.id }}"></label>
-                        </div>
-                    </td>
-                    <td>{{ pedido.numero_pedido|stringformat:"06d" }}</td>
-                    <td>{{ pedido.produtos.first.sku }}</td>
-                    <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
-                    <td>{{ pedido.metodo_envio }}</td>
-                    <td>
-                        <span class="status-badge {{ pedido.status.cor_css|default:'status-processing' }}" data-status="{{ pedido.status.nome }}">
-                            {{ pedido.status.nome }}
-                        </span>
-                    </td>
-                    {% comment %} <td>{{ pedido.valor_pedido|floatformat:2 }}</td> {% endcomment %}
-                    <td class="actions-cell">
-                        <div class="document-icons">
-                            <span class="doc-icon sent" title="Enviado"><span>S</span></span>
-                            <span class="doc-icon canceled" title="Cancelado"><span>C</span></span>
-                            <span class="doc-icon verified" title="Verificado"><span>V</span></span>
-                            <span class="doc-icon exported" title="Exportado"><span>E</span></span>
-                        </div>
-                        <button class="row-actions-btn"><i class="fas fa-ellipsis-v"></i></button>
-                    </td>
-                </tr>
-                {% endwith %}
-                {% else %}
-                <tr>
-                    <td>
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="webhook-select checkbox" id="item-{{ webhook.id }}" value="{{ webhook.id }}">
-                            <label for="item-{{ webhook.id }}"></label>
-                        </div>
-                    </td>
-                    <td>{{ webhook.id|stringformat:"06d" }}</td>
-                    <td>Sem cliente</td>
-                    <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
-                    <td>--/--/----</td>
-                    <td>
-                        <span class="status-badge status-pending" data-status="Pendente">Pendente</span>
-                    </td>
-                    <td>0,00</td>
-                    <td class="actions-cell">
-                        <div class="document-icons">
-                            <span class="doc-icon" title="Sem documentos"></span>
-                        </div>
-                        <button class="row-actions-btn"><i class="fas fa-ellipsis-v"></i></button>
-                    </td>
-                </tr>
-                {% endif %}
-                {% empty %}
-                <tr>
-                    <td colspan="8" class="no-data">Nenhum pedido encontrado</td>
-                </tr>
-                {% endfor %}
+            </thead>            <tbody id="webhook-table-body">
+                {% include "components/webhook_table_rows.html" %}
             </tbody>
         </table>
-    </div>
-
-    <div class="table-footer">
+    </div>    <div class="table-footer">
         <div class="showing-entries">
-            Exibindo 1-{{ webhooks|length }} de {{ total_webhooks }} registros
-        </div>
-        <div class="pagination">
-            <button class="pagination-btn disabled"><i class="fas fa-chevron-left"></i></button>
-            <button class="pagination-btn active">1</button>
-            <button class="pagination-btn">2</button>
-            <button class="pagination-btn">3</button>
-            <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+            {% if webhooks %}
+                Exibindo {{ page_obj.start_index }}-{{ page_obj.end_index }} de {{ total_webhooks }} registros
+            {% else %}
+                Nenhum registro encontrado
+            {% endif %}
+        </div>        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="{% url_replace page=1 %}" class="pagination-btn" title="Primeira página">
+                    <i class="fas fa-angle-double-left"></i>
+                </a>
+                <a href="{% url_replace page=page_obj.previous_page_number %}" class="pagination-btn" title="Página anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            {% else %}
+                <span class="pagination-btn disabled">
+                    <i class="fas fa-angle-double-left"></i>
+                </span>
+                <span class="pagination-btn disabled">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span class="pagination-btn active">{{ num }}</span>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="{% url_replace page=num %}" class="pagination-btn">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="{% url_replace page=page_obj.next_page_number %}" class="pagination-btn" title="Próxima página">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <a href="{% url_replace page=page_obj.paginator.num_pages %}" class="pagination-btn" title="Última página">
+                    <i class="fas fa-angle-double-right"></i>
+                </a>
+            {% else %}
+                <span class="pagination-btn disabled">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+                <span class="pagination-btn disabled">
+                    <i class="fas fa-angle-double-right"></i>
+                </span>
+            {% endif %}
         </div>
     </div>
 </div>

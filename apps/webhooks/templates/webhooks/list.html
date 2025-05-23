@@ -33,15 +33,14 @@
     {% include "components/details_modal.html" %}
 
     <!-- Modal para alterar status -->
-    {% include "components/status_modal.html" %}
-
-    <!-- Importar os módulos JavaScript em ordem -->
+    {% include "components/status_modal.html" %}    <!-- Importar os módulos JavaScript em ordem -->
     <script src="{% static 'js/webhooks/core.js' %}"></script>
     <script src="{% static 'js/webhooks/notifications.js' %}"></script>
     <script src="{% static 'js/webhooks/selection.js' %}"></script>
     <script src="{% static 'js/webhooks/modals.js' %}"></script>
     <script src="{% static 'js/webhooks/status-dinamico.js' %}"></script>
     <script src="{% static 'js/webhooks/filters.js' %}"></script>
+    <script src="{% static 'js/webhooks/infinite-scroll.js' %}"></script>
     <script src="{% static 'js/webhooks/main.js' %}"></script>
 </body>
 </html>

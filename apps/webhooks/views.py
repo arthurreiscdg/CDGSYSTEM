@@ -242,19 +242,39 @@ class WebhookListView(View):
         # Filtrar por nome do cliente
         if nome_cliente_filter:
             queryset = queryset.filter(pedidos__nome_cliente__icontains=nome_cliente_filter)
-            
-        # Remover duplicatas que podem surgir devido a junções
+              # Remover duplicatas que podem surgir devido a junções
         queryset = queryset.distinct()
         
-        # Limitar a 100 resultados para performance
-        webhooks = queryset[:100]
+        # Implementar paginação
+        from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+        
+        # Número de itens por página
+        items_per_page = 20
+        
+        # Obter número da página da requisição
+        page_number = request.GET.get('page', 1)
+        
+        # Criar paginador
+        paginator = Paginator(queryset, items_per_page)
+        
+        try:
+            page_obj = paginator.get_page(page_number)
+            webhooks = page_obj.object_list
+        except (EmptyPage, PageNotAnInteger):
+            page_obj = paginator.get_page(1)
+            webhooks = page_obj.object_list
         
         # Calcular estatísticas
-        total_webhooks = Webhook.objects.count()
+        total_webhooks = queryset.count()  # Total de webhooks após filtros
         total_pedidos = Pedido.objects.count()
-          # Buscar todos os status de pedido ativos
+        
+        # Buscar todos os status de pedido ativos
         status_pedidos = StatusPedido.objects.filter(ativo=True).order_by('ordem')
-          # Contexto para o template
+        
+        # Verificar se é uma requisição AJAX para paginação infinita
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
+        # Contexto para o template
         context = {
             'webhooks': webhooks,
             'total_webhooks': total_webhooks,
@@ -267,6 +287,12 @@ class WebhookListView(View):
             'num_pedido_filter': num_pedido_filter,
             'nome_cliente_filter': nome_cliente_filter,
             'request': request,  # Para acessar request.GET no template
+            'page_obj': page_obj,
+            'current_page': page_obj.number,
+            'total_pages': paginator.num_pages,
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+            'is_ajax': is_ajax,
         }
         
         # Renderizar o template com o contexto

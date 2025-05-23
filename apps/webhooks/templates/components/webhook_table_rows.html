@@ -1,0 +1,58 @@
+{% for webhook in webhooks %}
+{% if webhook.pedidos.all %}
+{% with pedido=webhook.pedidos.first %}
+<tr>
+    <td>
+        <div class="checkbox-container">
+            <input type="checkbox" class="webhook-select checkbox" id="item-{{ webhook.id }}" value="{{ webhook.id }}">
+            <label for="item-{{ webhook.id }}"></label>
+        </div>
+    </td>
+    <td>{{ pedido.numero_pedido|stringformat:"06d" }}</td>
+    <td>{{ pedido.produtos.first.sku }}</td>
+    <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
+    <td>{{ pedido.metodo_envio }}</td>
+    <td>
+        <span class="status-badge {{ pedido.status.cor_css|default:'status-processing' }}" data-status="{{ pedido.status.nome }}">
+            {{ pedido.status.nome }}
+        </span>
+    </td>
+    <td class="actions-cell">
+        <div class="document-icons">
+            <span class="doc-icon sent" title="Enviado"><span>S</span></span>
+            <span class="doc-icon canceled" title="Cancelado"><span>C</span></span>
+            <span class="doc-icon verified" title="Verificado"><span>V</span></span>
+            <span class="doc-icon exported" title="Exportado"><span>E</span></span>
+        </div>
+        <button class="row-actions-btn"><i class="fas fa-ellipsis-v"></i></button>
+    </td>
+</tr>
+{% endwith %}
+{% else %}
+<tr>
+    <td>
+        <div class="checkbox-container">
+            <input type="checkbox" class="webhook-select checkbox" id="item-{{ webhook.id }}" value="{{ webhook.id }}">
+            <label for="item-{{ webhook.id }}"></label>
+        </div>
+    </td>
+    <td>{{ webhook.id|stringformat:"06d" }}</td>
+    <td>Sem cliente</td>
+    <td>{{ webhook.recebido_em|date:"d/m/Y" }}</td>
+    <td>--/--/----</td>
+    <td>
+        <span class="status-badge status-pending" data-status="Pendente">Pendente</span>
+    </td>
+    <td class="actions-cell">
+        <div class="document-icons">
+            <span class="doc-icon" title="Sem documentos"></span>
+        </div>
+        <button class="row-actions-btn"><i class="fas fa-ellipsis-v"></i></button>
+    </td>
+</tr>
+{% endif %}
+{% empty %}
+<tr>
+    <td colspan="7" class="no-data">Nenhum pedido encontrado</td>
+</tr>
+{% endfor %}
