@@ -9,18 +9,13 @@
         <div class="search-box">
             <i class="fas fa-search"></i>
             <input type="text" placeholder="Pesquisar...">
-        </div>
-        <div class="notifications">
+        </div>        <div class="notifications">
             <button class="icon-button">
                 <i class="fas fa-bell"></i>
                 <span class="badge">3</span>
             </button>
         </div>
-        <div class="theme-toggle">
-            <button id="theme-toggle-btn" class="icon-button">
-                <i class="fas fa-moon"></i>
-            </button>
-        </div>        <div class="user-profile">
+        <div class="user-profile">
             <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="Usuário">
             <div class="user-info">
                 <span class="user-name">{{ request.user.first_name }} {{ request.user.last_name|default:request.user.username }}</span>

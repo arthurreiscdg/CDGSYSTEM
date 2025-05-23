@@ -444,31 +444,7 @@
     animation-delay: 0.4s;
   }
   .form-nav-button:nth-child(5) {
-    animation-delay: 0.5s;
-  }
-  
-  /* Estilos para o tema escuro/claro toggle */
-  .theme-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--primary-color);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 100;
-    transition: background-color 0.3s;
-  }
-  
-  body.dark-theme .theme-toggle {
-    background-color: var(--dark-accent-blue);
-  }
+    animation-delay: 0.5s;  }
   
   /* Responsividade */
   @media (max-width: 768px) {

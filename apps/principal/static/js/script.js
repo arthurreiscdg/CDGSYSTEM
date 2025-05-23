@@ -1,36 +1,14 @@
 // Elementos DOM
-const themeToggleBtn = document.getElementById("theme-toggle-btn")
 const sidebarToggle = document.getElementById("toggle-sidebar")
 const sidebar = document.getElementById("sidebar")
 const moduleCards = document.querySelectorAll(".module-card")
 const quickActionBtns = document.querySelectorAll(".quick-action-btn")
 
-// Toggle do tema (claro/escuro)
-themeToggleBtn.addEventListener("click", () => {
-  document.body.classList.toggle("dark-theme")
-
-  // Atualiza o ícone do botão
-  const icon = themeToggleBtn.querySelector("i")
-  if (document.body.classList.contains("dark-theme")) {
-    icon.classList.remove("fa-moon")
-    icon.classList.add("fa-sun")
-    localStorage.setItem("theme", "dark")
-  } else {
-    icon.classList.remove("fa-sun")
-    icon.classList.add("fa-moon")
-    localStorage.setItem("theme", "light")
-  }
-})
-
-// Verifica se há um tema salvo no localStorage
+// Forçar tema escuro sempre
 document.addEventListener("DOMContentLoaded", () => {
-  const savedTheme = localStorage.getItem("theme")
-  if (savedTheme === "dark") {
-    document.body.classList.add("dark-theme")
-    const icon = themeToggleBtn.querySelector("i")
-    icon.classList.remove("fa-moon")
-    icon.classList.add("fa-sun")
-  }
+  document.body.classList.add("dark-theme")
+  // Remove qualquer configuração de tema salva anteriormente
+  localStorage.removeItem("theme")
 })
 
 // Toggle do sidebar em dispositivos móveis

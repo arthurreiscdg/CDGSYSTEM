@@ -6,33 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const navLinks = document.querySelector(".nav-links")
     const formNavButtons = document.querySelectorAll(".form-nav-button")
   
-    // Adicionar o botão de toggle de tema se não existir
-    if (!document.querySelector(".theme-toggle")) {
-      const themeToggle = document.createElement("div")
-      themeToggle.className = "theme-toggle"
-      themeToggle.innerHTML = "<i>🌙</i>" // Usando emoji como ícone
-      document.body.appendChild(themeToggle)
-  
-      // Verificar se há um tema salvo
-      const savedTheme = localStorage.getItem("theme")
-      if (savedTheme === "dark") {
-        document.body.classList.add("dark-theme")
-        themeToggle.innerHTML = "<i>☀️</i>" // Usando emoji como ícone
-      }
-  
-      // Adicionar evento de clique para alternar o tema
-      themeToggle.addEventListener("click", () => {
-        document.body.classList.toggle("dark-theme")
-  
-        if (document.body.classList.contains("dark-theme")) {
-          localStorage.setItem("theme", "dark")
-          themeToggle.innerHTML = "<i>☀️</i>" // Usando emoji como ícone
-        } else {
-          localStorage.setItem("theme", "light")
-          themeToggle.innerHTML = "<i>🌙</i>" // Usando emoji como ícone
-        }
-      })
-    }
+    // Forçar tema escuro sempre
+    document.body.classList.add("dark-theme")
+    // Remove qualquer configuração de tema salva anteriormente
+    localStorage.removeItem("theme")
   
     // Toggle do menu mobile
     if (hamburger) {
