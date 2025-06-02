@@ -145,7 +145,7 @@
 
 .dark-theme .logo-cdg,
 .dark-theme .logo-zerohum {
-    height: 70px;
+    height: 90px;
     filter: brightness(0) invert(1);
     transition: all 0.3s ease;
 }
