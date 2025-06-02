@@ -19,12 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // URLs para os diferentes tipos de formulário (usando caminhos completos)
     const urlFormManual = '/formularios/formZeroHum/';
     const urlFormExcel = '/formularios/formZeroHumEx/';
-    
-    // Elementos do modal
+      // Elementos do modal
     const statusModal = document.getElementById('statusModal');
     const closeModal = document.getElementById('closeModal');
     const modalContent = document.getElementById('modalContent');
     const modalActionButton = document.getElementById('modalActionButton');
+    
+    // Variável para controle de estado do modal
+    let isProcessing = false;
     
     // Elementos do modal de PDF
     const pdfModal = document.getElementById('pdfModal');
@@ -371,13 +373,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Funções para manipulação do modal de status
     function showModal() {
         statusModal.classList.add('active');
-    }
-
-    function hideModal() {
+    }    function hideModal() {
+        // Dupla verificação para não permitir fechar se estiver processando
+        if (isProcessing) {
+            console.log('Não é possível fechar o modal durante o processamento');
+            return; // Impede qualquer tentativa de fechar
+        }
         statusModal.classList.remove('active');
-    }
-
-    function showProcessingStatus() {
+    }    function showProcessingWarning() {
+        // Obter o elemento indicador
+        const processingIndicator = document.getElementById('processingIndicator');
+        if (!processingIndicator) return;
+        
+        // Limpar timeout anterior se existir
+        if (window.warningTimeoutId) {
+            clearTimeout(window.warningTimeoutId);
+        }
+        
+        // Mostrar o indicador de processamento
+        processingIndicator.classList.add('show');
+        
+        // Esconder o aviso após 3 segundos
+        window.warningTimeoutId = setTimeout(() => {
+            processingIndicator.classList.remove('show');
+        }, 3000);
+    }    function showProcessingStatus() {
+        isProcessing = true; // Ativa o bloqueio do modal
         modalContent.innerHTML = `
             <div class="status-icon status-processing">
                 <div class="spinner"></div>
@@ -388,10 +409,16 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         modalActionButton.style.display = 'none';
+        // Desabilitar botão de fechar durante o processamento
+        closeModal.style.display = 'none';
+        // Adiciona classe de processamento ao modal
+        statusModal.classList.add('processing');
         showModal();
-    }
-
-    function showSuccessStatus(arquivos = []) {
+    }    function showSuccessStatus(arquivos = []) {
+        isProcessing = false; // Desativa o bloqueio do modal
+        // Remove a classe de processamento
+        statusModal.classList.remove('processing');
+        
         let listaArquivos = '';
         if (arquivos.length > 0) {
             listaArquivos = `
@@ -416,12 +443,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${listaArquivos}
             </div>
         `;
+        // Reativa botões de fechar
+        closeModal.style.display = 'flex';
         modalActionButton.style.display = 'block';
         modalActionButton.textContent = 'Fechar';
         showModal();
-    }
-
-    function showErrorStatus(mensagem = 'Ocorreu um problema ao processar seu pedido. Por favor, tente novamente ou entre em contato conosco.') {
+    }    function showErrorStatus(mensagem = 'Ocorreu um problema ao processar seu pedido. Por favor, tente novamente ou entre em contato conosco.') {
+        isProcessing = false; // Desativa o bloqueio do modal
+        // Remove a classe de processamento
+        statusModal.classList.remove('processing');
+        
         modalContent.innerHTML = `
             <div class="status-icon status-error">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -435,6 +466,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p class="status-description">${mensagem}</p>
             </div>
         `;
+        // Reativa botões de fechar
+        closeModal.style.display = 'flex';
         modalActionButton.style.display = 'block';
         modalActionButton.textContent = 'Tentar Novamente';
         showModal();
@@ -593,16 +626,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 pdfModal.classList.remove('active');
             }
         });
+    }    if (closeModal) {
+        // Adiciona evento para fechar o modal, mas apenas se não estiver processando
+        closeModal.addEventListener('click', function() {
+            if (isProcessing) {
+                showProcessingWarning();
+            } else {
+                hideModal();
+            }
+        });
+    }    if (modalActionButton) {
+        // Adiciona evento para o botão de ação, mas apenas se não estiver processando
+        modalActionButton.addEventListener('click', function() {
+            if (isProcessing) {
+                showProcessingWarning();
+            } else {
+                hideModal();
+            }
+        });
     }
-    
-    if (closeModal) {
-        closeModal.addEventListener('click', hideModal);
+      // Prevenir clique fora do modal durante processamento
+    if (statusModal) {
+        statusModal.addEventListener('click', function(e) {
+            if (e.target === statusModal) {
+                if (isProcessing) {
+                    showProcessingWarning();
+                } else {
+                    hideModal();
+                }
+            }
+        });
     }
-    
-    if (modalActionButton) {
-        modalActionButton.addEventListener('click', hideModal);
-    }
-    
+      // Prevenir fechamento do modal com tecla ESC durante processamento
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && statusModal && statusModal.classList.contains('active')) {
+            if (isProcessing) {
+                e.preventDefault();
+                e.stopPropagation();
+                showProcessingWarning();
+                return false;
+            }
+        }
+    });
+
     // Event listener para o formulário
     if (form) {
         form.addEventListener('submit', async function(event) {

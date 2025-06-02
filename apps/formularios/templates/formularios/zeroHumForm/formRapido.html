@@ -18,6 +18,10 @@
                 {% csrf_token %}
                 <input type="hidden" id="formType" name="formType" value="manual">
                 <div class="form-header">
+                    <div class="header-logos">
+                        <img src="{% static 'imgs/cdg_logo.svg' %}" alt="Logo Casa da Gráfica" class="logo-cdg">
+                        <img src="{% static 'imgs/zerohum_logo.svg' %}" alt="Logo ZeroHum" class="logo-zerohum">
+                    </div>
                     <h1>Formulário ZeroHum de Pedido de Produção</h1>
                     <p>Preencha os detalhes abaixo para solicitar a produção do seu material</p>
                 </div>

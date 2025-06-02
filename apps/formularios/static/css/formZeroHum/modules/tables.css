@@ -8,36 +8,37 @@
     margin-bottom: 1rem;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    background-color: white;
-    border: 1px solid var(--gray-200);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-primary);
 }
   
 table {
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
-    background-color: white;
+    background-color: var(--bg-card);
 }
   
 table th,
 table td {
     padding: 0.75rem 1rem;
     text-align: left;
-    border-bottom: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-primary);
 }
   
 table th {
-    background-color: var(--gray-50);
+    background-color: var(--bg-tertiary);
     font-weight: 600;
-    color: var(--gray-700);
+    color: var(--text-primary);
     position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0 1px 0 var(--gray-200);
+    box-shadow: 0 1px 0 var(--border-primary);
 }
   
 table tr:hover {
-    background-color: var(--gray-50);
+    background-color: var(--gray-200);
 }
   
 table tr:last-child td {
@@ -48,9 +49,18 @@ table input[type="number"] {
     width: 100%;
     min-width: 80px;
     padding: 0.5rem;
-    border: 1px solid var(--gray-300);
+    border: 1px solid var(--border-secondary);
     border-radius: var(--border-radius);
     text-align: center;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+table input[type="number"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    outline: none;
 }
   
 /* Estilo melhorado para área de rolagem */
@@ -59,7 +69,7 @@ table input[type="number"] {
     max-height: 550px;
     border-radius: var(--border-radius);
     scrollbar-width: thin;
-    scrollbar-color: var(--gray-400) var(--gray-100);
+    scrollbar-color: var(--primary-color) var(--bg-secondary);
 }
   
 #scroll-icon::-webkit-scrollbar {
@@ -68,12 +78,12 @@ table input[type="number"] {
 }
   
 #scroll-icon::-webkit-scrollbar-track {
-    background: var(--gray-100);
+    background: var(--bg-secondary);
     border-radius: var(--border-radius);
 }
   
 #scroll-icon::-webkit-scrollbar-thumb {
-    background-color: var(--gray-400);
+    background-color: var(--primary-color);
     border-radius: 20px;
-    border: 2px solid var(--gray-100);
+    border: 2px solid var(--bg-secondary);
 }

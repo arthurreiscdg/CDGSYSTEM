@@ -5,11 +5,11 @@
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
-    background-color: white;
+    background-color: var(--bg-tertiary);
     border-radius: var(--border-radius);
-    padding: 1.25rem;
+    padding: 1.5rem;
     box-shadow: var(--box-shadow);
-    border: 1px solid var(--gray-200);
+    border: 1px solid var(--border-primary);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
   
@@ -22,9 +22,9 @@
     font-size: 1.125rem;
     font-weight: 600;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--gray-200);
-    margin-bottom: 0.5rem;
-    color: var(--gray-800);
+    border-bottom: 1px solid var(--border-secondary);
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
     position: relative;
 }
   
@@ -33,7 +33,7 @@
     position: absolute;
     bottom: -1px;
     left: 0;
-    width: 2.5rem;
+    width: 3rem;
     height: 3px;
     background-color: var(--primary-color);
     border-radius: 3px;
@@ -53,6 +53,7 @@
     transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
+    letter-spacing: 0.01em;
 }
   
 .btn::after {
@@ -78,7 +79,7 @@
 .btn-primary {
     background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
     color: white;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
 }
   
 .btn-primary:hover {
@@ -170,9 +171,10 @@
     border: 3px solid var(--gray-200);
     border-radius: 50%;
     border-top: 3px solid var(--primary-color);
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     animation: spin 1s linear infinite;
+    margin: 0 auto 1.5rem;
 }
 
 /* Ícones SVG inline */

@@ -1,0 +1,52 @@
+/* Estilos para indicação visual de processamento */
+.processing-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10000;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid #6366f1;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.processing-indicator.show {
+    opacity: 1;
+    animation: bounce-in 0.5s ease forwards;
+}
+
+/* Estilo especial para alerta de não fechar durante processamento */
+.processing-warning {
+    color: #ff4757;
+    font-weight: bold;
+    display: block;
+    padding: 10px 0;
+    line-height: 1.4;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+@keyframes bounce-in {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+    70% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.dark-theme .processing-indicator {
+    background-color: rgba(20, 20, 30, 0.95);
+    border: 2px solid #6366f1;
+}

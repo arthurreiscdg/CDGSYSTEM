@@ -4,17 +4,50 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeModal = document.getElementById('closeModal');
     const modalContent = document.getElementById('modalContent');
     const modalActionButton = document.getElementById('modalActionButton');
-    const form = document.getElementById('formZeroHum');
+    const processingIndicator = document.getElementById('processingIndicator');
+    const form = document.getElementById('formZeroHum');    
+    let isProcessing = false;
+    let warningTimeoutId = null;
 
     function showModal() {
         statusModal.classList.add('active');
-    }
-
-    function hideModal() {
+    }    function hideModal() {
+        // Dupla verificação para não permitir fechar se estiver processando
+        if (isProcessing) {
+            console.log('Não é possível fechar o modal durante o processamento');
+            return; // Impede qualquer tentativa de fechar
+        }
         statusModal.classList.remove('active');
     }
-
-    function showProcessingStatus() {
+      // Prevenir clique fora do modal durante processamento
+    statusModal?.addEventListener('click', function(e) {
+        if (e.target === statusModal) {
+            if (isProcessing) {
+                showProcessingWarning();
+            } else {
+                hideModal();
+            }
+        }
+    });
+    
+    // Função para mostrar aviso durante o processamento
+    function showProcessingWarning() {
+        // Limpar timeout anterior se existir
+        if (warningTimeoutId) {
+            clearTimeout(warningTimeoutId);
+        }
+        
+        // Mostrar o indicador de processamento
+        if (processingIndicator) {
+            processingIndicator.classList.add('show');
+            
+            // Esconder o aviso após 3 segundos
+            warningTimeoutId = setTimeout(() => {
+                processingIndicator.classList.remove('show');
+            }, 3000);
+        }
+    }function showProcessingStatus() {
+        isProcessing = true; // Ativa o bloqueio do modal
         modalContent.innerHTML = `
             <div class="status-icon status-processing">
                 <div class="spinner"></div>
@@ -25,10 +58,16 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         `;
         modalActionButton.style.display = 'none';
+        // Desabilitar botão de fechar durante o processamento
+        closeModal.style.display = 'none';
+        // Adiciona classe de processamento ao modal
+        statusModal.classList.add('processing');
         showModal();
-    }
-
-    function showSuccessStatus(arquivos = []) {
+    }    function showSuccessStatus(arquivos = []) {
+        isProcessing = false; // Desativa o bloqueio do modal
+        // Remove a classe de processamento
+        statusModal.classList.remove('processing');
+        
         let listaArquivos = '';
         if (arquivos.length > 0) {
             listaArquivos = `
@@ -53,12 +92,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 ${listaArquivos}
             </div>
         `;
+        // Reativa botões de fechar
+        closeModal.style.display = 'flex';
         modalActionButton.style.display = 'block';
         modalActionButton.textContent = 'Fechar';
         showModal();
-    }
-
-    function showErrorStatus(mensagem = 'Ocorreu um problema ao processar seu pedido. Por favor, tente novamente ou entre em contato conosco.') {
+    }    function showErrorStatus(mensagem = 'Ocorreu um problema ao processar seu pedido. Por favor, tente novamente ou entre em contato conosco.') {
+        isProcessing = false; // Desativa o bloqueio do modal
+        // Remove a classe de processamento
+        statusModal.classList.remove('processing');
+        
         modalContent.innerHTML = `
             <div class="status-icon status-error">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -72,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p class="status-description">${mensagem}</p>
             </div>
         `;
+        // Reativa botões de fechar
+        closeModal.style.display = 'flex';
         modalActionButton.style.display = 'block';
         modalActionButton.textContent = 'Tentar Novamente';
         showModal();
@@ -108,8 +153,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 showErrorStatus();
             }
         });
-    }
-
-    closeModal?.addEventListener('click', hideModal);
-    modalActionButton?.addEventListener('click', hideModal);
+    }    // Adiciona evento para fechar o modal, mas apenas se não estiver processando    closeModal?.addEventListener('click', function() {
+        if (isProcessing) {
+            showProcessingWarning();
+        } else {
+            hideModal();
+        }
+    });
+    
+    // Adiciona evento para o botão de ação, mas apenas se não estiver processando
+    modalActionButton?.addEventListener('click', function() {
+        if (isProcessing) {
+            showProcessingWarning();
+        } else {
+            hideModal();
+        }
+    });
+      // Prevenir fechamento do modal com tecla ESC durante processamento
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && statusModal.classList.contains('active')) {
+            if (isProcessing) {
+                e.preventDefault();
+                e.stopPropagation();
+                showProcessingWarning();
+                return false;
+            }
+        }
+    });
 });

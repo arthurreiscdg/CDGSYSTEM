@@ -26,3 +26,9 @@
 
 /* Importando media queries e responsividade */
 @import url('./modules/responsive.css');
+
+/* Importando tema escuro adicional */
+@import url('./dark-theme.css');
+
+/* Importando indicador de processamento */
+@import url('./processing-indicator.css');

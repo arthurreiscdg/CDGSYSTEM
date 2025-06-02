@@ -24,7 +24,7 @@
 }
   
 .modal {
-    background-color: white;
+    background-color: var(--bg-secondary);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow-lg);
     width: 90%;
@@ -34,6 +34,7 @@
     transform: scale(0.95);
     opacity: 0;
     transition: transform 0.3s ease, opacity 0.3s ease;
+    border: 1px solid var(--border-primary);
 }
   
 .modal-overlay.active .modal {
@@ -43,16 +44,17 @@
   
 .modal-header {
     padding: 1.25rem;
-    border-bottom: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--border-primary);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: var(--bg-tertiary);
 }
   
 .modal-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--gray-800);
+    color: var(--text-primary);
 }
   
 .modal-close {
@@ -60,7 +62,7 @@
     border: none;
     cursor: pointer;
     color: var(--gray-500);
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, background-color 0.2s ease;
     width: 2rem;
     height: 2rem;
     display: flex;
@@ -70,21 +72,22 @@
 }
   
 .modal-close:hover {
-    color: var(--gray-800);
-    background-color: var(--gray-100);
+    color: var(--text-primary);
+    background-color: var(--gray-300);
 }
   
 .modal-body {
     padding: 1.5rem;
+    color: var(--text-primary);
 }
   
 .modal-footer {
     padding: 1rem 1.5rem;
-    border-top: 1px solid var(--gray-200);
+    border-top: 1px solid var(--border-primary);
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
-    background-color: var(--gray-50);
+    background-color: var(--bg-tertiary);
 }
 
 /* Estilos para pré-visualização de PDF */

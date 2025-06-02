@@ -1,0 +1,274 @@
+/* Tema Escuro Adicional - ZeroHum */
+
+/* Estiliza o fundo do formulário */
+.dark-theme .form-container {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+}
+
+.dark-theme .form-header {
+    background: linear-gradient(135deg, #1e1e1e 0%, #121212 100%);
+}
+
+.dark-theme .form-steps::before {
+    background-color: #404040;
+}
+
+.dark-theme .step-item.active .step-number {
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
+}
+
+/* Estiliza as tabelas */
+.dark-theme table {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme table th {
+    background-color: #222;
+    font-weight: 600;
+    color: #e0e0e0;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.dark-theme table td {
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+}
+
+.dark-theme table input[type="number"] {
+    background-color: #333;
+    border-color: #444;
+    color: #e0e0e0;
+    transition: all 0.2s ease;
+}
+
+.dark-theme table input[type="number"]:hover {
+    border-color: #666;
+    background-color: #3a3a3a;
+}
+
+.dark-theme table input[type="number"]:focus {
+    border-color: var(--primary-color);
+    background-color: #3a3a3a;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+}
+
+/* Estiliza os botões de navegação */
+.dark-theme .next-step, 
+.dark-theme .submit-form {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    border: none;
+    font-weight: 500;
+}
+
+.dark-theme .next-step:hover, 
+.dark-theme .submit-form:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(99, 102, 241, 0.4);
+}
+
+.dark-theme .prev-step {
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+.dark-theme .prev-step:hover {
+    background-color: #444;
+    border-color: #555;
+}
+
+/* Estiliza os cards do método */
+.dark-theme .method-card {
+    background-color: #222;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+.dark-theme .method-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), 0 0 15px rgba(99, 102, 241, 0.2);
+    border-color: var(--primary-color);
+}
+
+.dark-theme .method-option input[type="radio"]:checked + .method-card {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.05) 100%);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.dark-theme .method-icon {
+    filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.5));
+}
+
+/* Estiliza os inputs e formulários */
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+    background-color: #333;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+.dark-theme label {
+    color: #e0e0e0;
+}
+
+/* Logo styling */
+.dark-theme .header-logos {
+    padding: 1.5rem 0;
+    margin-bottom: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+    position: relative;
+}
+
+.dark-theme .header-logos::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(99, 102, 241, 0.3) 25%,
+        rgba(99, 102, 241, 0.6) 50%,
+        rgba(99, 102, 241, 0.3) 75%,
+        transparent 100%);
+}
+
+.dark-theme .logo-cdg,
+.dark-theme .logo-zerohum {
+    height: 70px;
+    filter: brightness(0) invert(1);
+    transition: all 0.3s ease;
+}
+
+.dark-theme .logo-cdg:hover,
+.dark-theme .logo-zerohum:hover {
+    transform: scale(1.05);
+    filter: brightness(0) invert(1) drop-shadow(0 0 5px var(--primary-color));
+}
+
+/* Scrollbars */
+.dark-theme #scroll-icon::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+.dark-theme #scroll-icon::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border: 2px solid #1e1e1e;
+}
+
+/* Modals */
+.dark-theme .modal {
+    background-color: #222;
+    border: 1px solid #333;
+}
+
+.dark-theme .modal-header {
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+}
+
+.dark-theme .modal-footer {
+    background-color: #1a1a1a;
+    border-top: 1px solid #333;
+}
+
+.dark-theme .modal-title {
+    color: #e0e0e0;
+}
+
+/* Melhorando o estilo do modal de processamento */
+.dark-theme .status-processing .spinner {
+    border: 4px solid rgba(99, 102, 241, 0.2);
+    border-top: 4px solid var(--primary-color);
+    width: 3.5rem;
+    height: 3.5rem;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+.dark-theme .modal-close {
+    background-color: #333;
+    color: #e0e0e0;
+    width: 32px;
+    height: 32px;
+}
+
+.dark-theme .modal-close:hover {
+    background-color: #444;
+    color: white;
+}
+
+.dark-theme .status-message .status-title {
+    color: var(--text-primary);
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+}
+
+.dark-theme .status-message .status-description {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    max-width: 90%;
+    margin: 0 auto 1.5rem auto;
+    line-height: 1.6;
+}
+
+/* Efeitos adicionais */
+.dark-theme .form-section {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #333;
+    background-color: #1a1a1a;
+}
+
+.dark-theme .form-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(99, 102, 241, 0.1);
+}
+
+/* Melhorando o contraste da mensagem de consentimento */
+.dark-theme .alert {
+    background-color: #2d2d5a;
+    border-left: 4px solid var(--primary-color);
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+}
+
+/* Estilo para o modal em processamento */
+.dark-theme .modal-overlay.processing {
+    cursor: not-allowed;
+}
+
+.dark-theme .modal-overlay.processing .modal {
+    border: 1px solid #6366f1;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+/* Destaque especial para o spinner durante o processamento */
+.dark-theme .status-processing .spinner {
+    border-top-color: #6366f1;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    animation: spin 1s linear infinite, glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px rgba(99, 102, 241, 0.4);
+    }
+    to {
+        box-shadow: 0 0 25px rgba(99, 102, 241, 0.8);
+    }
+}
