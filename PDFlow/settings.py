@@ -87,16 +87,14 @@ WSGI_APPLICATION = 'PDFlow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'CDGSYSTEMPDF',  # Nome do banco extraído da URL
-        'USER': 'n8e1p6',
-        'PASSWORD': os.environ.get('XATA_API_KEY'),  # Usar a chave API do Xata diretamente
-        'HOST': 'us-east-1.sql.xata.sh',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'M38XaI17hWmHcfs1',
+        'HOST': 'db.lrdjzuxbywhdmbpnvtmr.supabase.co',
         'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
     }
 }
+
     # Fallback para SQLite em ambiente de desenvolvimento
 #DATABASES = {
 #    'default': {
